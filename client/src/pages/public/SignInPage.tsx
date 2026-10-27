@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { useEvent } from '../../context/EventContext';
+import { signInWithGooglePopup } from '../../config/firebase';
 import { ArrowLeft, AlertCircle, Lock, Mail } from 'lucide-react';
 
 export const SignInPage: React.FC = () => {
   const navigate = useNavigate();
   const { signin, googleAuth } = useAuth();
+  const { loadUserWorkspace } = useEvent();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -19,6 +22,7 @@ export const SignInPage: React.FC = () => {
 
     try {
       await signin(email, password);
+      await loadUserWorkspace();
       navigate('/app/overview');
     } catch (err: any) {
       setError(err.message || 'Failed to sign in. Please verify your credentials.');
@@ -27,21 +31,22 @@ export const SignInPage: React.FC = () => {
     }
   };
 
-  const handleSimulatedGoogleSignIn = async () => {
+  const handleGoogleSignIn = async () => {
     setError(null);
     setLoading(true);
     try {
-      // In development / demo environment without Google OAuth client secrets,
-      // we check for existing account or prompt sign up
-      const mockGoogleCredential = btoa(JSON.stringify({
-        email: email || 'demo.organizer@eventpilot.com',
-        name: 'Demo Organizer',
-        sub: 'google-uid-demo-12345',
-      }));
-      await googleAuth(mockGoogleCredential, 'signin');
+      const { idToken, user } = await signInWithGooglePopup();
+      await googleAuth(idToken, 'signin');
+      await loadUserWorkspace(user.displayName);
       navigate('/app/overview');
     } catch (err: any) {
-      setError(err.message || 'No existing EventPilot account associated with this Google identity. Please sign up first.');
+      if (err.code === 'auth/popup-closed-by-user') {
+        setError('Google sign-in popup was closed before completion.');
+      } else if (err.code === 'auth/cancelled-popup-request') {
+        setError('Google sign-in popup request was cancelled.');
+      } else {
+        setError(err.message || 'No existing EventPilot account associated with this Google identity. Please sign up first.');
+      }
     } finally {
       setLoading(false);
     }
@@ -154,7 +159,7 @@ export const SignInPage: React.FC = () => {
             <div className="mt-6">
               <button
                 type="button"
-                onClick={handleSimulatedGoogleSignIn}
+                onClick={handleGoogleSignIn}
                 disabled={loading}
                 className="w-full inline-flex justify-center items-center gap-2 py-2.5 px-4 border border-slate-300 rounded-xl bg-white text-sm font-semibold text-slate-700 hover:bg-slate-50 focus:outline-none transition-colors"
               >

@@ -1,12 +1,11 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { OAuth2Client } from 'google-auth-library';
+import { getFirebaseAuth } from '../config/firebase.js';
 import { UserRepository } from '../repositories/userRepository.js';
 import { AuthRequest } from '../middleware/authMiddleware.js';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'eventpilot_jwt_super_secret_development_key_change_in_production';
-const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 function generateToken(userId: string, email: string): string {
   return jwt.sign({ userId, email }, JWT_SECRET, { expiresIn: '7d' });
@@ -139,21 +138,25 @@ export class AuthController {
 
       let payload: any = null;
       try {
-        if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_ID !== 'your_google_client_id_here') {
-          const ticket = await googleClient.verifyIdToken({
-            idToken: credential,
-            audience: process.env.GOOGLE_CLIENT_ID,
-          });
-          payload = ticket.getPayload();
-        } else {
-          throw new Error('Google Client ID not configured or in development mode');
-        }
-      } catch {
-        // Fallback 1: Standard JWT token decode
+        const firebaseAuth = getFirebaseAuth();
+        const decoded = await firebaseAuth.verifyIdToken(credential);
+        payload = {
+          email: decoded.email,
+          sub: decoded.uid || decoded.sub,
+          name: decoded.name || (decoded as any).displayName,
+          picture: decoded.picture || (decoded as any).photoURL,
+        };
+      } catch (fbErr: any) {
+        // Fallback 1: Standard JWT token decode (for dev/offline testing)
         try {
           const decoded = jwt.decode(credential) as any;
           if (decoded && (decoded.email || decoded.sub)) {
-            payload = decoded;
+            payload = {
+              email: decoded.email,
+              sub: decoded.uid || decoded.sub,
+              name: decoded.name || decoded.displayName,
+              picture: decoded.picture || decoded.photoURL,
+            };
           }
         } catch {}
 
@@ -179,7 +182,7 @@ export class AuthController {
         }
 
         if (!payload || !payload.email) {
-          res.status(401).json({ error: 'Invalid Google credential token.' });
+          res.status(401).json({ error: 'Invalid Firebase authentication credential.' });
           return;
         }
       }

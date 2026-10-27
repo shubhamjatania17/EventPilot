@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { UserProfile } from '../types';
 import { api, getAuthToken, setAuthToken } from '../services/api';
+import { auth, signOut } from '../config/firebase';
 
 interface AuthContextType {
   user: UserProfile | null;
@@ -63,6 +64,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const signout = () => {
     setAuthToken(null);
     setUser(null);
+    signOut(auth).catch(() => {});
   };
 
   return (

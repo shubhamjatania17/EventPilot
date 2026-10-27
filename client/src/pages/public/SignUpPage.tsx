@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useEvent } from '../../context/EventContext';
+import { signInWithGooglePopup } from '../../config/firebase';
 import { ArrowLeft, AlertCircle, Lock, Mail, User } from 'lucide-react';
 
 export const SignUpPage: React.FC = () => {
   const navigate = useNavigate();
   const { signup, googleAuth } = useAuth();
-  const { seedSample } = useEvent();
+  const { loadUserWorkspace } = useEvent();
 
   const [displayName, setDisplayName] = useState('');
   const [email, setEmail] = useState('');
@@ -34,7 +35,7 @@ export const SignUpPage: React.FC = () => {
 
     try {
       await signup(email, password, displayName);
-      await seedSample();
+      await loadUserWorkspace(displayName);
       navigate('/app/overview');
     } catch (err: any) {
       setError(err.message || 'Failed to create account. Please try again.');
@@ -43,20 +44,22 @@ export const SignUpPage: React.FC = () => {
     }
   };
 
-  const handleSimulatedGoogleSignUp = async () => {
+  const handleGoogleSignUp = async () => {
     setError(null);
     setLoading(true);
     try {
-      const mockGoogleCredential = btoa(JSON.stringify({
-        email: email || 'demo.organizer@eventpilot.com',
-        name: displayName || 'Demo Organizer',
-        sub: 'google-uid-demo-' + Date.now(),
-      }));
-      await googleAuth(mockGoogleCredential, 'signup');
-      await seedSample();
+      const { idToken, user } = await signInWithGooglePopup();
+      await googleAuth(idToken, 'signup');
+      await loadUserWorkspace(user.displayName || displayName);
       navigate('/app/overview');
     } catch (err: any) {
-      setError(err.message || 'Google account creation failed.');
+      if (err.code === 'auth/popup-closed-by-user') {
+        setError('Google sign-in popup was closed before completion.');
+      } else if (err.code === 'auth/cancelled-popup-request') {
+        setError('Google sign-in popup request was cancelled.');
+      } else {
+        setError(err.message || 'Google account creation failed.');
+      }
     } finally {
       setLoading(false);
     }
@@ -197,7 +200,7 @@ export const SignUpPage: React.FC = () => {
             <div className="mt-6">
               <button
                 type="button"
-                onClick={handleSimulatedGoogleSignUp}
+                onClick={handleGoogleSignUp}
                 disabled={loading}
                 className="w-full inline-flex justify-center items-center gap-2 py-2.5 px-4 border border-slate-300 rounded-xl bg-white text-sm font-semibold text-slate-700 hover:bg-slate-50 focus:outline-none transition-colors"
               >
