@@ -76,9 +76,9 @@ When circumstances change in the real world—such as increasing guest count fro
 ### 🛡️ Multi-Model Gemini Cascading Fallback
 
 - Production-hardened multi-model execution preventing downtime or rate-limit failures:
-  1. **Primary Model:** `gemini-2.5-flash` (Flagship speed & structured JSON mode)
-  2. **Secondary Fallback:** `gemini-2.0-flash` (Next-gen fast model)
-  3. **Tertiary Fallback:** `gemini-1.5-flash` (High availability & quota ceiling)
+  1. **Primary Model:** `gemini-3.8-flash` (Flagship speed & structured JSON mode)
+  2. **Secondary Fallback:** `gemini-3.6-flash` (Next-gen fast model)
+  3. **Tertiary Fallback:** `gemini-2.5-flash` (High availability & quota ceiling)
   4. **Quaternary Fallback:** `gemini-2.5-pro` (Deep reasoning fallback)
   5. **Deterministic Floor:** If all Gemini API calls fail or offline, pure deterministic engines deliver valid structured plans, ensuring **zero 500 crashes**.
 
