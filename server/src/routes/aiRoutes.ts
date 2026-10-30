@@ -11,3 +11,9 @@ aiRouter.post('/tradeoffs', requireAuth, AIController.recommendTradeoffs);
 aiRouter.post('/trade-offs', requireAuth, AIController.recommendTradeoffs);
 aiRouter.post('/extract-quote', requireAuth, AIController.extractQuote);
 aiRouter.post('/ask', requireAuth, AIController.askQuestion);
+
+// New AI Suite Endpoints
+aiRouter.post('/incident-response', requireAuth, AIController.respondToIncident);
+aiRouter.post('/negotiate-vendor', requireAuth, AIController.negotiateVendor);
+aiRouter.post('/decompose-task', requireAuth, AIController.decomposeTask);
+aiRouter.post('/concept-studio', requireAuth, AIController.generateConceptStudio);

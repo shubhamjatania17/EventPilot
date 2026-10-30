@@ -1,4 +1,11 @@
-import { EventState, UserProfile } from '../types';
+import { 
+  EventState, 
+  UserProfile, 
+  IncidentResponse, 
+  VendorNegotiation, 
+  TaskDecomposition, 
+  ConceptStudio 
+} from '../types';
 import { simulateGuestCountChange } from '../engines/impactEngine';
 
 const API_BASE = import.meta.env.VITE_API_URL || '/api';
@@ -164,6 +171,55 @@ export const api = {
     return request<any>('/ai/ask', {
       method: 'POST',
       body: JSON.stringify({ eventId, question }),
+    });
+  },
+
+  async respondToIncident(payload: {
+    eventId: string;
+    incident: string;
+    currentItemTitle?: string;
+    severity?: 'low' | 'medium' | 'high' | 'critical';
+  }) {
+    return request<IncidentResponse>('/ai/incident-response', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    });
+  },
+
+  async negotiateVendor(payload: {
+    eventId: string;
+    vendorName: string;
+    category: string;
+    quotedAmount: number;
+    targetBudget?: number;
+    notes?: string;
+  }) {
+    return request<VendorNegotiation>('/ai/negotiate-vendor', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    });
+  },
+
+  async decomposeTask(payload: {
+    eventId: string;
+    taskTitle: string;
+    category?: string;
+    dueDateOffsetDays?: number;
+  }) {
+    return request<TaskDecomposition>('/ai/decompose-task', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    });
+  },
+
+  async generateConceptStudio(payload: {
+    eventId: string;
+    theme?: string;
+    vibeNotes?: string;
+  }) {
+    return request<ConceptStudio>('/ai/concept-studio', {
+      method: 'POST',
+      body: JSON.stringify(payload),
     });
   },
 };

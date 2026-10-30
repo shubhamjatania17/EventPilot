@@ -5,6 +5,10 @@ import {
   TradeoffResponseSchema, 
   AnalysisResponseSchema,
   ChatAnswerSchema,
+  IncidentResponseSchema,
+  VendorNegotiationSchema,
+  TaskDecompositionSchema,
+  ConceptStudioSchema,
   AIService,
   executeWithModelFallback
 } from '../../src/services/aiService.js';
@@ -270,5 +274,80 @@ describe('Multi-Model Fallback Execution Engine', () => {
     });
 
     expect(result.answer).toBe('This was fenced in markdown');
+  });
+});
+
+describe('New AI Suite Endpoints (Incident, Negotiation, Decomposition, Concept Studio)', () => {
+  const dummyEvent: any = {
+    id: 'ev-test-1',
+    userId: 'u1',
+    meta: {
+      name: 'Sahil & Riya Wedding',
+      type: 'wedding',
+      date: '2026-12-15',
+      location: 'Grand Ballroom, Mumbai',
+      guestCount: 200,
+      totalBudget: 1000000,
+      contingencyPercent: 10,
+    },
+    budgetCategories: [
+      { id: 'c1', name: 'Catering', allocated: 400000, color: '#10B981' },
+      { id: 'c2', name: 'Decor', allocated: 250000, color: '#F59E0B' },
+    ],
+    tasks: [],
+    eventDaySchedule: [
+      { id: 'sch-1', time: '17:00', title: 'Baraat Arrival', lead: 'Groom Family', location: 'Main Gate', status: 'completed' },
+      { id: 'sch-2', time: '18:00', title: 'Varmala & Pheras', lead: 'Panditji', location: 'Mandap', status: 'pending' },
+      { id: 'sch-3', time: '20:00', title: 'Grand Dinner & Reception', lead: 'Catering Manager', location: 'Dining Lawn', status: 'pending' },
+    ],
+  };
+
+  it('validates IncidentResponseSchema and executes fallback safely', async () => {
+    const res = await AIService.respondToIncident(dummyEvent, {
+      incident: 'Heavy sudden rain on open reception lawn',
+    });
+
+    expect(IncidentResponseSchema.safeParse(res).success).toBe(true);
+    expect(res.recommendedDelayMinutes).toBeGreaterThan(0);
+    expect(res.emceeScript).toContain('Ladies and gentlemen');
+    expect(res.scheduleShifts.length).toBeGreaterThan(0);
+  });
+
+  it('validates VendorNegotiationSchema and generates counter-offer strategy', async () => {
+    const res = await AIService.negotiateVendor(dummyEvent, {
+      vendorName: 'Royal Decorators',
+      category: 'Decor',
+      quotedAmount: 320000,
+      targetBudget: 250000,
+    });
+
+    expect(VendorNegotiationSchema.safeParse(res).success).toBe(true);
+    expect(res.potentialSavings).toBe(70000);
+    expect(res.negotiationEmail).toContain('Royal Decorators');
+    expect(res.suggestedCompromises.length).toBeGreaterThan(0);
+  });
+
+  it('validates TaskDecompositionSchema and generates actionable subtasks', async () => {
+    const res = await AIService.decomposeTask(dummyEvent, {
+      taskTitle: 'Finalize Stage Lighting & Audio Setup',
+      category: 'Production',
+    });
+
+    expect(TaskDecompositionSchema.safeParse(res).success).toBe(true);
+    expect(res.subtasks.length).toBeGreaterThanOrEqual(3);
+    expect(res.subtasks[0].title).toBeDefined();
+    expect(res.subtasks[0].priority).toBeDefined();
+  });
+
+  it('validates ConceptStudioSchema and crafts aesthetic palette & invitation copy', async () => {
+    const res = await AIService.generateConceptStudio(dummyEvent, {
+      theme: 'Royal Heritage with Contemporary Gold',
+    });
+
+    expect(ConceptStudioSchema.safeParse(res).success).toBe(true);
+    expect(res.colorPalette.length).toBeGreaterThanOrEqual(3);
+    expect(res.invitationTemplates.whatsappShort).toContain('Sahil & Riya Wedding');
+    expect(res.signatureMoments.length).toBeGreaterThanOrEqual(2);
+    expect(res.hashtags.length).toBeGreaterThanOrEqual(2);
   });
 });

@@ -302,3 +302,65 @@ export interface UserProfile {
   isGoogleLinked?: boolean;
   createdAt?: string;
 }
+
+export interface IncidentResponse {
+  incidentSummary: string;
+  severity: 'low' | 'medium' | 'high' | 'critical';
+  immediateActionSteps: string[];
+  recommendedDelayMinutes: number;
+  scheduleShifts: Array<{
+    scheduleItemId?: string;
+    title: string;
+    originalTime: string;
+    newTime: string;
+    reason: string;
+  }>;
+  emceeScript: string;
+  coordinatorNotes: string;
+}
+
+export interface VendorNegotiation {
+  strategySummary: string;
+  quotedAmount: number;
+  targetBudget: number;
+  proposedCounterOffer: number;
+  potentialSavings: number;
+  suggestedCompromises: string[];
+  negotiationEmail: string;
+  phoneTalkingPoints: string[];
+}
+
+export interface TaskDecomposition {
+  parentTask: string;
+  category: string;
+  subtasks: Array<{
+    id: string;
+    title: string;
+    description?: string;
+    dueDateOffsetDays: number;
+    priority: Priority;
+    recommendedOwner: string;
+  }>;
+}
+
+export interface ConceptStudio {
+  themeName: string;
+  vibeSummary: string;
+  colorPalette: Array<{
+    name: string;
+    hex: string;
+    usage: string;
+  }>;
+  invitationTemplates: {
+    whatsappShort: string;
+    emailFormal: string;
+  };
+  signatureMoments: Array<{
+    title: string;
+    description: string;
+    estimatedCost: number;
+    impact: 'high' | 'medium' | 'exceptional';
+  }>;
+  dressCodeAdvice: string;
+  socialHashtags: string[];
+}

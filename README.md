@@ -68,6 +68,35 @@ When circumstances change in the real world—such as increasing guest count fro
 - Converts unstructured vendor emails, messages, and quote texts into structured line items, taxes, payment terms, and deadline constraints.
 - Built-in prompt-injection defense isolating untrusted text inside strict XML boundary delimiters (`<QUOTE_DATA>`).
 
+### 🤝 AI Vendor Negotiation & Counter-Offer Drafter
+
+- Evaluates vendor quotes against category budgets and targets.
+- Formulates data-driven counter-offer amounts with computed potential savings.
+- Recommends actionable compromise levers (e.g. flexible setup timing, cash advances) and phone talking points.
+- Drafts ready-to-dispatch negotiation messages for WhatsApp or formal email with 1-click clipboard copy.
+
+### 📋 AI Smart Task Decomposer
+
+- Breaks down broad milestones (e.g., "Stage & AV Setup", "Catering Finalization") into sequential, operational subtasks.
+- Automatically calculates recommended due dates based on event lead times ($T - X\text{ days}$).
+- Assigns priority rankings and suggested operational owners.
+- Allows one-click batch insertion of selected subtasks directly into the active event's topological timeline DAG.
+
+### 🎨 AI Theme, Decor & Invitation Studio
+
+- Curates holistic event aesthetic concepts tailored to event type and venue vibe.
+- Generates a 4-color palette with hex codes, color names, and usage rules with one-click hex copying.
+- Formulates tailored dress code guidance and curated social hashtags.
+- Provides ready-to-send invitation copy for both WhatsApp/chat and formal email invitations.
+- Suggests signature guest experience moments with estimated costs and one-click adoption into planned budget items and action tasks.
+
+### 🚨 AI Crisis & Incident Responder for Event Day
+
+- Real-time incident triage during live event execution (e.g. rain, catering delay, AV power failure, VIP traffic).
+- Calculates recommended schedule buffer minutes and actionable coordinator dispatch steps.
+- Generates a professional public emcee/host script to preserve guest poise and tranquility with one-click copy.
+- **One-Click Run-of-Show Shift:** Directly applies downstream time delays across active event schedule blocks without manual arithmetic.
+
 ### 🎪 Event Day Execution (Run-of-Show Mode)
 
 - Live ceremony tracking with run-of-show timeline schedules.
