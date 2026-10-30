@@ -89,7 +89,7 @@ export const NoEventsOnboarding: React.FC<NoEventsOnboardingProps> = ({ onOpenNe
             <button
               key={c.type}
               onClick={() => onOpenNewEvent(c.type)}
-              className={`text-left p-5 bg-white rounded-2xl border border-slate-200 hover:shadow-md transition-all group relative overflow-hidden bg-gradient-to-b ${c.accent}`}
+              className={`text-left p-5 bg-white rounded-2xl border border-slate-200 hover:shadow-md transition-all group relative overflow-hidden bg-linear-to-b ${c.accent}`}
             >
               <div className="flex items-start justify-between">
                 <div className="w-10 h-10 rounded-xl bg-white shadow-xs border border-slate-200 flex items-center justify-center">
