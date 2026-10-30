@@ -20,6 +20,8 @@ export const TimelinePage: React.FC = () => {
   const [newTaskPriority, setNewTaskPriority] = useState<'low' | 'medium' | 'high' | 'critical'>('medium');
   const [showAddTask, setShowAddTask] = useState(false);
 
+  if (!activeEvent) return null;
+
   const handleToggleTask = async (taskId: string) => {
     const updatedTasks = activeEvent.tasks.map(t => {
       if (t.id === taskId) {

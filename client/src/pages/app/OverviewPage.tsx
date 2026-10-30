@@ -19,6 +19,7 @@ export const OverviewPage: React.FC = () => {
   const [aiInsight, setAiInsight] = useState<string | null>(null);
 
   const handleRunAnalysis = async () => {
+    if (!activeEvent) return;
     setAnalyzing(true);
     try {
       const res = await api.analyzeEvent(activeEvent.id);
@@ -34,6 +35,8 @@ export const OverviewPage: React.FC = () => {
 
   const topRisks = risks.slice(0, 3);
   const criticalTasks = timeline.overdueTasks.slice(0, 3);
+
+  if (!activeEvent) return null;
 
   return (
     <div className="space-y-8">

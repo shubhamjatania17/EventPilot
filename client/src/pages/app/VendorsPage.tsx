@@ -28,6 +28,8 @@ export const VendorsPage: React.FC = () => {
   const [vendorCategory, setVendorCategory] = useState('Catering');
   const [vendorQuoteAmount, setVendorQuoteAmount] = useState('');
 
+  if (!activeEvent) return null;
+
   const handleExtractQuote = async () => {
     if (!rawQuoteText.trim()) return;
     setExtracting(true);

@@ -73,7 +73,7 @@ EventPilot should calculate the deterministic consequences and use Gemini to exp
 
 This project is being built for:
 
-**Virtual Prompt Wars: Build with AI — Challenge 5**
+**Production Event Planning Assistant**
 
 Challenge:
 

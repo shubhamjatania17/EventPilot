@@ -15,6 +15,3 @@ eventRouter.delete('/:id', EventController.deleteEvent);
 
 // Deterministic What-if simulation
 eventRouter.post('/:id/simulate', EventController.simulateImpact);
-
-// Seed sample event for demo / judging
-eventRouter.post('/seed/sample', EventController.seedSampleEvent);

@@ -1,5 +1,4 @@
 import { EventState, UserProfile } from '../types';
-import { SAMPLE_EVENT } from '../data/sampleEvent';
 import { simulateGuestCountChange } from '../engines/impactEngine';
 
 const API_BASE = import.meta.env.VITE_API_URL || '/api';
@@ -90,42 +89,11 @@ export const api = {
 
   // Events
   async getEvents() {
-    try {
-      return await request<{ events: any[] }>('/events');
-    } catch {
-      // Local demo fallback
-      return {
-        events: [
-          {
-            id: SAMPLE_EVENT.id,
-            meta: SAMPLE_EVENT.meta,
-            budgetSummary: {
-              total: SAMPLE_EVENT.meta.totalBudget,
-              forecast: 759000,
-              remaining: 41000,
-              isOverBudget: false,
-            },
-            timelineSummary: {
-              daysRemaining: 29,
-              overdueCount: 0,
-              progressPercent: 28,
-            },
-            updatedAt: SAMPLE_EVENT.updatedAt,
-          },
-        ],
-      };
-    }
+    return request<{ events: any[] }>('/events');
   },
 
   async getEventById(id: string) {
-    if (id === SAMPLE_EVENT.id || id === 'sample') {
-      return { event: SAMPLE_EVENT };
-    }
-    try {
-      return await request<{ event: EventState }>('/events/' + id);
-    } catch {
-      return { event: SAMPLE_EVENT };
-    }
+    return request<{ event: EventState }>('/events/' + id);
   },
 
   async createEvent(eventData: Partial<EventState>) {
@@ -136,10 +104,6 @@ export const api = {
   },
 
   async updateEvent(id: string, updates: Partial<EventState>) {
-    if (id === SAMPLE_EVENT.id || id === 'sample') {
-      Object.assign(SAMPLE_EVENT, updates);
-      return { event: SAMPLE_EVENT };
-    }
     return request<{ event: EventState }>('/events/' + id, {
       method: 'PUT',
       body: JSON.stringify(updates),
@@ -152,26 +116,11 @@ export const api = {
     });
   },
 
-  async seedSampleEvent() {
-    try {
-      return await request<{ message: string; event: EventState }>('/events/seed/sample', {
-        method: 'POST',
-      });
-    } catch {
-      return { message: 'Sample event loaded in local demo mode', event: SAMPLE_EVENT };
-    }
-  },
-
   async simulateImpact(id: string, newGuestCount: number) {
-    try {
-      return await request<{ simulation: any }>(`/events/${id}/simulate`, {
-        method: 'POST',
-        body: JSON.stringify({ newGuestCount }),
-      });
-    } catch {
-      const sim = simulateGuestCountChange(SAMPLE_EVENT, newGuestCount);
-      return { simulation: sim };
-    }
+    return request<{ simulation: any }>(`/events/${id}/simulate`, {
+      method: 'POST',
+      body: JSON.stringify({ newGuestCount }),
+    });
   },
 
   // AI Endpoints

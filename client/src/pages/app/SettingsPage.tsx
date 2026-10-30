@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Shield, User, Trash2, AlertTriangle, CheckCircle2 } from 'lucide-react';
+import { Shield, User, Trash2, AlertTriangle, CheckCircle2, Calendar } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import { useEvent } from '../../context/EventContext';
 import { api } from '../../services/api';
 
 export const SettingsPage: React.FC = () => {
   const navigate = useNavigate();
   const { user, signout, refreshProfile } = useAuth();
+  const { activeEvent, eventsList, deleteEvent } = useEvent();
 
   // Profile Edit State
   const [displayName, setDisplayName] = useState(user?.displayName || '');
@@ -18,10 +20,27 @@ export const SettingsPage: React.FC = () => {
   const [passwordMessage, setPasswordMessage] = useState<string | null>(null);
   const [passwordError, setPasswordError] = useState<string | null>(null);
 
+  // Event Deletion State
+  const [showEventDeleteModal, setShowEventDeleteModal] = useState(false);
+  const [isDeletingEvent, setIsDeletingEvent] = useState(false);
+
   // Account Deletion State
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteConfirmationText, setDeleteConfirmationText] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
+
+  const handleDeleteActiveEvent = async () => {
+    if (!activeEvent) return;
+    setIsDeletingEvent(true);
+    try {
+      await deleteEvent(activeEvent.id);
+      setShowEventDeleteModal(false);
+    } catch (err) {
+      console.error('Failed to delete active event:', err);
+    } finally {
+      setIsDeletingEvent(false);
+    }
+  };
 
   const handleUpdateProfile = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -186,7 +205,53 @@ export const SettingsPage: React.FC = () => {
         )}
       </div>
 
-      {/* 3. Danger Zone: Destructive Account Deletion */}
+      {/* 3. Active Event Management */}
+      {activeEvent && (
+        <div className="p-6 bg-white rounded-2xl border border-slate-200 shadow-xs space-y-4">
+          <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+            <div className="flex items-center gap-2">
+              <Calendar className="w-4 h-4 text-slate-700" />
+              <h2 className="font-bold text-sm text-slate-900">Active Event Management</h2>
+            </div>
+            <button
+              onClick={() => navigate('/app/events')}
+              className="text-xs font-bold text-indigo-600 hover:text-indigo-800"
+            >
+              All Events ({eventsList.length}) →
+            </button>
+          </div>
+
+          <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <div className="font-bold text-sm text-slate-900">{activeEvent.meta.name}</div>
+              <div className="text-xs text-slate-500 mt-0.5">
+                {activeEvent.meta.type?.toUpperCase()} • {activeEvent.meta.location} • {activeEvent.meta.date}
+              </div>
+              <div className="text-xs text-slate-500 mt-1">
+                Budget: ₹{activeEvent.meta.totalBudget.toLocaleString('en-IN')} • {activeEvent.meta.guestCount} guests
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2 shrink-0">
+              <button
+                onClick={() => navigate('/app/events')}
+                className="px-3.5 py-2 bg-white border border-slate-300 hover:bg-slate-100 text-slate-800 rounded-xl text-xs font-semibold transition-colors shadow-2xs"
+              >
+                Switch / Edit
+              </button>
+              <button
+                onClick={() => setShowEventDeleteModal(true)}
+                className="px-3.5 py-2 bg-red-50 hover:bg-red-100 border border-red-200 text-red-600 rounded-xl text-xs font-semibold transition-colors inline-flex items-center gap-1.5"
+              >
+                <Trash2 className="w-3.5 h-3.5 text-red-600" />
+                Delete Event
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 4. Danger Zone: Destructive Account Deletion */}
       <div className="p-6 bg-red-50/50 rounded-2xl border border-red-200 shadow-xs space-y-4">
         <div className="flex items-center gap-2 pb-3 border-b border-red-100">
           <Trash2 className="w-4 h-4 text-red-600" />
@@ -247,6 +312,43 @@ export const SettingsPage: React.FC = () => {
                 className="px-4 py-2 text-xs font-semibold bg-red-600 hover:bg-red-700 text-white rounded-xl disabled:opacity-40 transition-colors shadow-xs"
               >
                 {isDeleting ? 'Deleting Everything...' : 'Confirm Account Deletion'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Active Event Deletion Confirmation Modal */}
+      {showEventDeleteModal && activeEvent && (
+        <div className="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl space-y-4">
+            <div className="w-10 h-10 rounded-full bg-red-100 text-red-600 flex items-center justify-center">
+              <AlertTriangle className="w-5 h-5" />
+            </div>
+            <div>
+              <h3 className="font-bold text-base text-slate-900">
+                Delete "{activeEvent.meta.name}"?
+              </h3>
+              <p className="text-xs text-slate-500 mt-1 leading-relaxed">
+                This will permanently erase all budget items, timeline tasks, vendor quotes, and guest entries associated with this plan. This action cannot be undone.
+              </p>
+            </div>
+            <div className="flex justify-end gap-3 pt-2">
+              <button
+                type="button"
+                disabled={isDeletingEvent}
+                onClick={() => setShowEventDeleteModal(false)}
+                className="px-3.5 py-2 text-xs font-semibold text-slate-600 hover:text-slate-800"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                disabled={isDeletingEvent}
+                onClick={handleDeleteActiveEvent}
+                className="px-4 py-2 text-xs font-semibold bg-red-600 hover:bg-red-700 text-white rounded-xl shadow-xs transition-colors disabled:opacity-50"
+              >
+                {isDeletingEvent ? 'Deleting...' : 'Confirm Delete'}
               </button>
             </div>
           </div>

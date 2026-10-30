@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
-import { NavLink, Outlet, useNavigate } from 'react-router-dom';
+import React, { useState, useRef, useEffect } from 'react';
+import { NavLink, Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { 
   LayoutDashboard, 
+  Layers,
   Wallet, 
   CalendarDays, 
   Users, 
@@ -13,32 +14,75 @@ import {
   Sparkles, 
   LogOut, 
   Send, 
-  MessageSquare, 
   X,
-  AlertCircle
+  AlertCircle,
+  Plus,
+  ChevronDown,
+  Check,
+  Calendar,
+  MapPin,
+  Lock
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useEvent } from '../context/EventContext';
 import { api } from '../services/api';
+import { NewEventModal } from './NewEventModal';
+import { NoEventsOnboarding } from './NoEventsOnboarding';
 
 export const AppLayout: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { user, signout } = useAuth();
-  const { activeEvent, timeline, budget, risks } = useEvent();
+  const { 
+    activeEvent, 
+    eventsList, 
+    hasEvents,
+    loading,
+    timeline, 
+    budget, 
+    risks, 
+    switchEvent,
+    isNewEventModalOpen,
+    setIsNewEventModalOpen,
+    newEventDefaultType,
+    setNewEventDefaultType
+  } = useEvent();
 
+  // Event Switcher Dropdown
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Copilot Drawer
   const [copilotOpen, setCopilotOpen] = useState(false);
   const [copilotQuery, setCopilotQuery] = useState('');
-  const [copilotMessages, setCopilotMessages] = useState<Array<{ role: 'user' | 'assistant'; text: string; actions?: any[] }>>([
-    {
-      role: 'assistant',
-      text: `Hello! I am your EventPilot copilot for "${activeEvent.meta.name}". You have ${timeline.daysRemaining} days remaining with ₹${budget.remaining.toLocaleString('en-IN')} budget balance. How can I assist with your plan today?`,
-    },
-  ]);
+  const [copilotMessages, setCopilotMessages] = useState<Array<{ role: 'user' | 'assistant'; text: string; actions?: any[] }>>([]);
   const [copilotLoading, setCopilotLoading] = useState(false);
+
+  useEffect(() => {
+    if (activeEvent) {
+      setCopilotMessages([
+        {
+          role: 'assistant',
+          text: `Hello! I am your EventPilot copilot for "${activeEvent.meta.name}". You have ${timeline.daysRemaining} days remaining with ₹${budget.remaining.toLocaleString('en-IN')} budget balance. How can I assist with your plan today?`,
+        },
+      ]);
+    }
+  }, [activeEvent?.id]);
+
+  // Close dropdown on click outside
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setDropdownOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const handleCopilotSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!copilotQuery.trim() || copilotLoading) return;
+    if (!copilotQuery.trim() || copilotLoading || !activeEvent) return;
 
     const userText = copilotQuery.trim();
     setCopilotQuery('');
@@ -70,6 +114,7 @@ export const AppLayout: React.FC = () => {
 
   const navItems = [
     { label: 'Overview', to: '/app/overview', icon: LayoutDashboard },
+    { label: 'Events', to: '/app/events', icon: Layers },
     { label: 'Budget & What-If', to: '/app/budget', icon: Wallet },
     { label: 'Timeline', to: '/app/timeline', icon: CalendarDays },
     { label: 'Vendors', to: '/app/vendors', icon: Briefcase },
@@ -79,6 +124,17 @@ export const AppLayout: React.FC = () => {
     { label: 'Event Day', to: '/app/event-day', icon: Clock },
     { label: 'Settings', to: '/app/settings', icon: Settings },
   ];
+
+  const isPageAllowedWithoutEvent = (pathname: string) => {
+    return pathname === '/app/events' || pathname === '/app/settings';
+  };
+
+  // Redirect to /app/events if user tries to access a locked page with no events configured
+  useEffect(() => {
+    if (!loading && !hasEvents && !isPageAllowedWithoutEvent(location.pathname)) {
+      navigate('/app/events', { replace: true });
+    }
+  }, [loading, hasEvents, location.pathname, navigate]);
 
   const handleSignout = () => {
     signout();
@@ -105,29 +161,68 @@ export const AppLayout: React.FC = () => {
           </span>
         </div>
 
-        {/* Active Event Card Summary */}
+        {/* Active Event Card Summary / Quick Switcher in Sidebar */}
         <div className="p-4 border-b border-slate-100 bg-slate-50/70">
-          <div className="text-xs text-slate-500 font-medium">Active Living Plan</div>
-          <div className="font-bold text-sm text-slate-900 truncate mt-0.5">
-            {activeEvent.meta.name}
-          </div>
-          <div className="flex items-center gap-2 mt-2 text-xs">
-            <span className="px-2 py-0.5 bg-indigo-50 text-indigo-700 font-semibold rounded">
-              {timeline.daysRemaining > 0 ? `${timeline.daysRemaining} days left` : 'Event Day'}
-            </span>
-            {criticalRisksCount > 0 && (
-              <span className="px-2 py-0.5 bg-red-50 text-red-700 font-semibold rounded flex items-center gap-1">
-                <AlertCircle className="w-3 h-3" />
-                {criticalRisksCount} critical
-              </span>
-            )}
-          </div>
+          {activeEvent ? (
+            <>
+              <div className="flex items-center justify-between text-xs text-slate-500 font-medium">
+                <span>Active Living Plan</span>
+                <NavLink to="/app/events" className="text-indigo-600 hover:text-indigo-800 font-bold text-[11px]">
+                  All Events →
+                </NavLink>
+              </div>
+              <div className="font-bold text-sm text-slate-900 truncate mt-1">
+                {activeEvent.meta.name}
+              </div>
+              <div className="flex items-center gap-2 mt-2 text-xs">
+                <span className="px-2 py-0.5 bg-indigo-50 text-indigo-700 font-semibold rounded">
+                  {timeline.daysRemaining > 0 ? `${timeline.daysRemaining} days left` : 'Event Day'}
+                </span>
+                {criticalRisksCount > 0 && (
+                  <span className="px-2 py-0.5 bg-red-50 text-red-700 font-semibold rounded flex items-center gap-1">
+                    <AlertCircle className="w-3 h-3" />
+                    {criticalRisksCount} critical
+                  </span>
+                )}
+              </div>
+            </>
+          ) : (
+            <div className="space-y-2">
+              <div className="text-xs text-slate-500">No active event selected</div>
+              <button
+                onClick={() => setIsNewEventModalOpen(true)}
+                className="w-full inline-flex items-center justify-center gap-1.5 px-3 py-1.5 bg-slate-900 text-white font-semibold rounded-lg text-xs hover:bg-slate-800 transition-colors shadow-xs"
+              >
+                <Plus className="w-3.5 h-3.5" />
+                New Event
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Navigation links */}
         <nav className="p-3 space-y-1 flex-1 overflow-y-auto">
           {navItems.map(item => {
             const Icon = item.icon;
+            const isAllowed = hasEvents || isPageAllowedWithoutEvent(item.to);
+
+            if (!isAllowed) {
+              return (
+                <div
+                  key={item.to}
+                  onClick={() => setIsNewEventModalOpen(true)}
+                  className="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-400 opacity-40 cursor-not-allowed select-none transition-all hover:opacity-70 hover:bg-slate-50 group"
+                  title="Add an event first to unlock this section"
+                >
+                  <div className="flex items-center gap-3">
+                    <Icon className="w-4 h-4 shrink-0 text-slate-400" />
+                    <span>{item.label}</span>
+                  </div>
+                  <Lock className="w-3.5 h-3.5 text-slate-400 shrink-0 group-hover:text-slate-600 transition-colors" />
+                </div>
+              );
+            }
+
             return (
               <NavLink
                 key={item.to}
@@ -155,10 +250,10 @@ export const AppLayout: React.FC = () => {
             </div>
             <div className="truncate text-xs">
               <div className="font-bold text-slate-900 truncate">
-                {user?.displayName || 'Demo Organizer'}
+                {user?.displayName || 'Organizer'}
               </div>
               <div className="text-slate-500 truncate text-[11px]">
-                {user?.email || 'demo@eventpilot.com'}
+                {user?.email || ''}
               </div>
             </div>
           </div>
@@ -175,35 +270,121 @@ export const AppLayout: React.FC = () => {
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col min-w-0 overflow-y-auto">
         {/* Top Header Bar */}
-        <header className="h-16 bg-white border-b border-slate-200 px-6 flex items-center justify-between shrink-0">
-          <div className="flex items-center gap-4">
-            <h2 className="font-heading text-lg font-bold text-slate-900 truncate">
-              {activeEvent.meta.name}
-            </h2>
-            <span className="text-xs text-slate-500 hidden sm:inline-block">
-              {activeEvent.meta.location} • {activeEvent.meta.date}
-            </span>
+        <header className="h-16 bg-white border-b border-slate-200 px-4 sm:px-6 flex items-center justify-between shrink-0">
+          {/* Left: Interactive Event Selector Dropdown */}
+          <div className="relative" ref={dropdownRef}>
+            {activeEvent ? (
+              <button
+                type="button"
+                onClick={() => setDropdownOpen(prev => !prev)}
+                className="flex items-center gap-2 px-3 py-1.5 rounded-xl hover:bg-slate-100 text-left transition-colors max-w-xs sm:max-w-md"
+              >
+                <div className="truncate">
+                  <div className="font-heading text-sm sm:text-base font-bold text-slate-900 truncate flex items-center gap-1.5">
+                    {activeEvent.meta.name}
+                    <ChevronDown className="w-4 h-4 text-slate-400 shrink-0" />
+                  </div>
+                  <div className="text-[11px] text-slate-500 truncate hidden sm:block">
+                    {activeEvent.meta.location} • {activeEvent.meta.date}
+                  </div>
+                </div>
+              </button>
+            ) : (
+              <div className="text-sm font-semibold text-slate-500">
+                EventPilot Workspace
+              </div>
+            )}
+
+            {/* Dropdown Menu for Event Switching */}
+            {dropdownOpen && (
+              <div className="absolute left-0 mt-2 w-72 sm:w-80 bg-white rounded-2xl shadow-xl border border-slate-200 py-2 z-50 animate-in fade-in zoom-in-95 duration-100">
+                <div className="px-4 py-2 border-b border-slate-100 flex items-center justify-between text-xs text-slate-500 font-semibold uppercase tracking-wider">
+                  <span>Switch Event</span>
+                  <span className="text-[10px] text-slate-400 font-normal">{eventsList.length} total</span>
+                </div>
+
+                <div className="max-h-60 overflow-y-auto py-1">
+                  {eventsList.map(ev => {
+                    const isSelected = activeEvent?.id === ev.id;
+                    return (
+                      <button
+                        key={ev.id}
+                        onClick={() => {
+                          switchEvent(ev.id);
+                          setDropdownOpen(false);
+                        }}
+                        className={`w-full text-left px-4 py-2.5 hover:bg-slate-50 transition-colors flex items-center justify-between gap-3 text-xs ${
+                          isSelected ? 'bg-indigo-50/60 font-bold text-indigo-950' : 'text-slate-800'
+                        }`}
+                      >
+                        <div className="truncate">
+                          <div className="truncate text-xs font-semibold">{ev.meta?.name}</div>
+                          <div className="text-[11px] text-slate-500 truncate flex items-center gap-2 mt-0.5">
+                            <span>{ev.meta?.date}</span>
+                            <span>•</span>
+                            <span>{ev.meta?.guestCount || 0} guests</span>
+                          </div>
+                        </div>
+                        {isSelected && <Check className="w-4 h-4 text-indigo-600 shrink-0" />}
+                      </button>
+                    );
+                  })}
+                </div>
+
+                <div className="p-2 border-t border-slate-100">
+                  <button
+                    onClick={() => {
+                      setDropdownOpen(false);
+                      setIsNewEventModalOpen(true);
+                    }}
+                    className="w-full flex items-center justify-center gap-1.5 py-2 px-3 bg-slate-900 text-white rounded-xl text-xs font-semibold hover:bg-slate-800 transition-colors"
+                  >
+                    <Plus className="w-3.5 h-3.5" />
+                    New Event
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
 
-          <div className="flex items-center gap-3">
+          {/* Right Header Action Buttons */}
+          <div className="flex items-center gap-2.5">
             <button
-              onClick={() => setCopilotOpen(true)}
-              className="inline-flex items-center gap-2 text-xs font-semibold bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 px-3 py-1.5 rounded-lg transition-colors shadow-xs"
+              onClick={() => setIsNewEventModalOpen(true)}
+              className="inline-flex items-center gap-1.5 text-xs font-semibold bg-slate-900 hover:bg-slate-800 text-white px-3 py-1.5 rounded-lg transition-colors shadow-xs"
             >
-              <Sparkles className="w-3.5 h-3.5 text-indigo-600" />
-              Ask EventPilot
+              <Plus className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">New Event</span>
+              <span className="sm:hidden">New</span>
             </button>
+
+            {activeEvent && (
+              <button
+                onClick={() => setCopilotOpen(true)}
+                className="inline-flex items-center gap-1.5 text-xs font-semibold bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 px-3 py-1.5 rounded-lg transition-colors shadow-xs"
+              >
+                <Sparkles className="w-3.5 h-3.5 text-indigo-600" />
+                <span className="hidden sm:inline">Ask EventPilot</span>
+              </button>
+            )}
           </div>
         </header>
 
         {/* Page Content Outlet */}
-        <main className="flex-1 p-6 lg:p-8 max-w-7xl w-full mx-auto">
+        <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto">
           <Outlet />
         </main>
       </div>
 
+      {/* Global New Event Modal */}
+      <NewEventModal
+        isOpen={isNewEventModalOpen}
+        onClose={() => setIsNewEventModalOpen(false)}
+        defaultType={newEventDefaultType}
+      />
+
       {/* Copilot Drawer / Modal */}
-      {copilotOpen && (
+      {copilotOpen && activeEvent && (
         <div className="fixed inset-0 z-50 bg-slate-950/40 backdrop-blur-xs flex justify-end">
           <div className="bg-white w-full max-w-md h-full shadow-2xl flex flex-col border-l border-slate-200">
             <div className="h-16 px-6 border-b border-slate-200 flex items-center justify-between bg-slate-50">

@@ -12,6 +12,8 @@ export const EventDayPage: React.FC = () => {
   const [itemLead, setItemLead] = useState('');
   const [replanningNotes, setReplanningNotes] = useState<string | null>(null);
 
+  if (!activeEvent) return null;
+
   const handleUpdateStatus = async (itemId: string, status: EventDayItem['status']) => {
     const updated = activeEvent.eventDaySchedule.map(item =>
       item.id === itemId ? { ...item, status } : item

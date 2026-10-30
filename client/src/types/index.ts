@@ -1,4 +1,4 @@
-export type EventType = 'wedding' | 'birthday' | 'community';
+export type EventType = 'wedding' | 'birthday' | 'corporate' | 'community' | 'gathering' | 'custom' | string;
 
 export type EventStatus = 'planning' | 'confirmed' | 'in_progress' | 'completed' | 'cancelled';
 
@@ -171,6 +171,20 @@ export interface EventMeta {
   contingencyPercent?: number;
   priorities?: string[];
   theme?: string;
+  // Type-specific creative configurations
+  coupleNames?: string;
+  weddingStyle?: string;
+  cateringStyle?: string;
+  celebrantName?: string;
+  celebrantAge?: number | string;
+  partyHighlights?: string[];
+  companyName?: string;
+  eventFormat?: string;
+  techNeeds?: string[];
+  targetOutcome?: string;
+  stallsCount?: number;
+  safetyNeeds?: string[];
+  notes?: string;
 }
 
 export interface EventState {

@@ -1,6 +1,5 @@
 # EventPilot — Living Event Intelligence
 
-> **Virtual Prompt Wars: Build with AI — Challenge 5 Submission**  
 > *GenAI-Powered Living Event Planning Assistant*  
 > **Target Stack:** Express.js, React, Node.js, Firebase Realtime Database, TypeScript, Tailwind CSS, Google Gemini 2.5
 

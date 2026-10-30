@@ -35,9 +35,9 @@ export const SignInPage: React.FC = () => {
     setError(null);
     setLoading(true);
     try {
-      const { idToken, user } = await signInWithGooglePopup();
+      const { idToken } = await signInWithGooglePopup();
       await googleAuth(idToken, 'signin');
-      await loadUserWorkspace(user.displayName);
+      await loadUserWorkspace();
       navigate('/app/overview');
     } catch (err: any) {
       if (err.code === 'auth/popup-closed-by-user') {

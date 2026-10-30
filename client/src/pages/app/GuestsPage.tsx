@@ -14,7 +14,9 @@ export const GuestsPage: React.FC = () => {
   const [needsAccom, setNeedsAccom] = useState(false);
   const [needsTransport, setNeedsTransport] = useState(false);
 
-  const confirmedGuests = activeEvent.guests
+  if (!activeEvent) return null;
+
+  const confirmedGuests = (activeEvent.guests || [])
     .filter(g => g.rsvp === 'attending')
     .reduce((sum, g) => sum + (g.adults + g.children), 0);
 

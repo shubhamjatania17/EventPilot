@@ -1,37 +1,73 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { EventState, BudgetCalculations, TimelineCalculations, Risk } from '../types';
-import { SAMPLE_EVENT } from '../data/sampleEvent';
 import { calculateBudget } from '../engines/budgetEngine';
 import { calculateTimeline } from '../engines/timelineEngine';
 import { evaluateRisks } from '../engines/riskEngine';
 import { api, getAuthToken } from '../services/api';
 
+const EMPTY_BUDGET: BudgetCalculations = {
+  totalBudget: 0,
+  allocated: 0,
+  committed: 0,
+  paid: 0,
+  forecast: 0,
+  remaining: 0,
+  variance: 0,
+  contingencyAmount: 0,
+  categoryBreakdown: [],
+  isOverBudget: false,
+  overrunAmount: 0,
+};
+
+const EMPTY_TIMELINE: TimelineCalculations = {
+  daysRemaining: 0,
+  isPast: false,
+  overdueTasks: [],
+  upcomingTasks: [],
+  completedTasksCount: 0,
+  totalTasksCount: 0,
+  progressPercent: 0,
+  criticalPath: [],
+  hasCircularDependency: false,
+  blockedTasks: [],
+};
+
 interface EventContextType {
-  activeEvent: EventState;
+  activeEvent: EventState | null;
   eventsList: any[];
+  hasEvents: boolean;
   loading: boolean;
   budget: BudgetCalculations;
   timeline: TimelineCalculations;
   risks: Risk[];
   loadEvent: (id: string) => Promise<void>;
+  switchEvent: (id: string) => Promise<void>;
   updateActiveEvent: (updates: Partial<EventState>) => Promise<void>;
-  createNewUserEvent: (name?: string) => Promise<void>;
-  loadUserWorkspace: (displayName?: string) => Promise<void>;
-  seedSample: () => Promise<void>;
+  createNewUserEvent: (payload: Partial<EventState>) => Promise<void>;
+  deleteEvent: (id: string) => Promise<void>;
+  loadUserWorkspace: () => Promise<void>;
   refreshEvents: () => Promise<void>;
+  isNewEventModalOpen: boolean;
+  setIsNewEventModalOpen: (open: boolean) => void;
+  newEventDefaultType: string;
+  setNewEventDefaultType: (type: string) => void;
 }
 
 const EventContext = createContext<EventContextType | undefined>(undefined);
 
 export const EventProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [activeEvent, setActiveEvent] = useState<EventState>(SAMPLE_EVENT);
+  const [activeEvent, setActiveEvent] = useState<EventState | null>(null);
   const [eventsList, setEventsList] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
-  // Derived deterministic states
-  const budget = calculateBudget(activeEvent);
-  const timeline = calculateTimeline(activeEvent);
-  const risks = evaluateRisks(activeEvent);
+  // New Event Modal State
+  const [isNewEventModalOpen, setIsNewEventModalOpen] = useState(false);
+  const [newEventDefaultType, setNewEventDefaultType] = useState('wedding');
+
+  // Derived deterministic states (safely handled when activeEvent is null)
+  const budget = activeEvent ? calculateBudget(activeEvent) : EMPTY_BUDGET;
+  const timeline = activeEvent ? calculateTimeline(activeEvent) : EMPTY_TIMELINE;
+  const risks = activeEvent ? evaluateRisks(activeEvent) : [];
 
   const refreshEvents = async () => {
     try {
@@ -45,126 +81,93 @@ export const EventProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const loadEvent = async (id: string) => {
     setLoading(true);
     try {
-      if (id === 'sample' || id === SAMPLE_EVENT.id) {
-        setActiveEvent(SAMPLE_EVENT);
-      } else {
-        const res = await api.getEventById(id);
-        setActiveEvent(res.event);
-      }
+      const res = await api.getEventById(id);
+      setActiveEvent(res.event);
+      localStorage.setItem('eventpilot_active_event_id', id);
     } catch (err) {
-      console.error('Failed to load event:', err);
-      setActiveEvent(SAMPLE_EVENT);
+      console.error('Failed to load event details:', err);
     } finally {
       setLoading(false);
     }
   };
 
-  const createNewUserEvent = async (name?: string) => {
+  const switchEvent = async (id: string) => {
+    await loadEvent(id);
+  };
+
+  const createNewUserEvent = async (payload: Partial<EventState>) => {
     setLoading(true);
     try {
-      const eventName = name || 'My Wedding & Reception';
-      const targetDate = new Date(Date.now() + 60 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
-
-      const newEventPayload: Partial<EventState> = {
-        meta: {
-          name: eventName,
-          type: 'wedding',
-          location: 'City Palace / Banquet Hall',
-          date: targetDate,
-          guestCount: 150,
-          venueCapacity: 200,
-          cateringCostPerGuest: 1500,
-          totalBudget: 600000,
-          contingencyPercent: 10,
-          priorities: ['Budget adherence', 'Guest experience', 'Quality catering'],
-          theme: 'Modern Indian Elegance',
-        },
-        budgetCategories: [
-          { id: 'cat-venue', name: 'Venue & Lawns', allocated: 200000, committed: 0, paid: 0, color: '#3B82F6' },
-          { id: 'cat-catering', name: 'Catering & Beverages', allocated: 225000, committed: 0, paid: 0, color: '#10B981' },
-          { id: 'cat-decor', name: 'Floral & Stage Decor', allocated: 75000, committed: 0, paid: 0, color: '#F59E0B' },
-          { id: 'cat-photo', name: 'Cinematography & Photo', allocated: 50000, committed: 0, paid: 0, color: '#8B5CF6' },
-          { id: 'cat-contingency', name: 'Contingency Reserve', allocated: 50000, committed: 0, paid: 0, color: '#6B7280' },
-        ],
-        budgetItems: [],
-        tasks: [
-          { id: 'task-1', title: 'Confirm Venue Contract & Pay Token Advance', dueDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], status: 'todo', priority: 'critical', owner: 'Organizer', dependencies: [] },
-          { id: 'task-2', title: 'Draft and Finalize Guest List', dueDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], status: 'todo', priority: 'high', owner: 'Organizer', dependencies: [] },
-          { id: 'task-3', title: 'Schedule Food Tasting with Caterer', dueDate: new Date(Date.now() + 21 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], status: 'todo', priority: 'medium', owner: 'Organizer', dependencies: ['task-1'] },
-        ],
-        milestones: [
-          { id: 'ms-1', title: 'Venue Booking Confirmed', targetDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], completed: false, relatedTaskId: 'task-1' },
-          { id: 'ms-2', title: 'Guest List Finalized', targetDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], completed: false, relatedTaskId: 'task-2' },
-        ],
-        vendors: [],
-        guests: [],
-        ideas: [],
-        risks: [],
-        eventDaySchedule: [
-          { id: 'sched-1', time: '09:00', title: 'Venue Setup & Sound Check', responsiblePerson: 'Coordinator', status: 'upcoming', notes: 'Stage and audio gear ready' },
-          { id: 'sched-2', time: '12:00', title: 'Guest Arrival & Welcome', responsiblePerson: 'Host', status: 'upcoming', notes: 'Refreshments served' },
-        ],
-        activities: [
-          { id: 'act-1', timestamp: new Date().toISOString(), type: 'create', description: 'Personalized event workspace initialized', actor: 'System' },
-        ],
-      };
-
-      const res = await api.createEvent(newEventPayload);
-      setActiveEvent(res.event);
+      const res = await api.createEvent(payload);
+      const newEvent = res.event;
+      setActiveEvent(newEvent);
+      localStorage.setItem('eventpilot_active_event_id', newEvent.id);
       await refreshEvents();
     } catch (err) {
       console.error('Failed to create new user event:', err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const loadUserWorkspace = async (displayName?: string) => {
-    setLoading(true);
-    try {
-      const res = await api.getEvents();
-      const events = res.events || [];
-      setEventsList(events);
-
-      // Check if user has an existing real event in Firebase
-      const realEvents = events.filter((e: any) => e.id !== SAMPLE_EVENT.id && e.id !== 'sample');
-      if (realEvents.length > 0) {
-        const primaryEvent = realEvents[0];
-        const detailRes = await api.getEventById(primaryEvent.id);
-        setActiveEvent(detailRes.event);
-      } else {
-        // First-time user: initialize their personalized clean event in Firebase
-        const eventTitle = displayName ? `${displayName}'s Wedding & Reception` : 'My Wedding & Reception';
-        await createNewUserEvent(eventTitle);
-      }
-    } catch (err) {
-      console.warn('Could not load user workspace:', err);
+      throw err;
     } finally {
       setLoading(false);
     }
   };
 
   const updateActiveEvent = async (updates: Partial<EventState>) => {
+    if (!activeEvent) return;
     const updated = { ...activeEvent, ...updates, updatedAt: new Date().toISOString() };
     setActiveEvent(updated);
 
     try {
-      if (activeEvent.id && activeEvent.id !== 'sample-event-jaipur') {
-        await api.updateEvent(activeEvent.id, updates);
-      }
+      await api.updateEvent(activeEvent.id, updates);
+      await refreshEvents();
     } catch (err) {
       console.warn('Could not persist update to server, preserved locally:', err);
     }
   };
 
-  const seedSample = async () => {
+  const deleteEvent = async (id: string) => {
     setLoading(true);
     try {
-      const res = await api.seedSampleEvent();
-      setActiveEvent(res.event);
-      await refreshEvents();
+      await api.deleteEvent(id);
+      const res = await api.getEvents();
+      const remainingEvents = res.events || [];
+      setEventsList(remainingEvents);
+
+      if (activeEvent?.id === id) {
+        if (remainingEvents.length > 0) {
+          await loadEvent(remainingEvents[0].id);
+        } else {
+          setActiveEvent(null);
+          localStorage.removeItem('eventpilot_active_event_id');
+        }
+      }
     } catch (err) {
-      setActiveEvent(SAMPLE_EVENT);
+      console.error('Failed to delete event:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const loadUserWorkspace = async () => {
+    setLoading(true);
+    try {
+      const res = await api.getEvents();
+      const events = res.events || [];
+      setEventsList(events);
+
+      if (events.length > 0) {
+        const storedId = localStorage.getItem('eventpilot_active_event_id');
+        const target = events.find(e => e.id === storedId) || events[0];
+        const detailRes = await api.getEventById(target.id);
+        setActiveEvent(detailRes.event);
+        localStorage.setItem('eventpilot_active_event_id', target.id);
+      } else {
+        // User has no events - empty workspace
+        setActiveEvent(null);
+        localStorage.removeItem('eventpilot_active_event_id');
+      }
+    } catch (err) {
+      console.warn('Could not load user workspace:', err);
+      setActiveEvent(null);
     } finally {
       setLoading(false);
     }
@@ -175,7 +178,8 @@ export const EventProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     if (token) {
       loadUserWorkspace();
     } else {
-      refreshEvents();
+      setEventsList([]);
+      setActiveEvent(null);
       setLoading(false);
     }
   }, []);
@@ -185,16 +189,22 @@ export const EventProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       value={{
         activeEvent,
         eventsList,
+        hasEvents: eventsList.length > 0 && activeEvent !== null,
         loading,
         budget,
         timeline,
         risks,
         loadEvent,
+        switchEvent,
         updateActiveEvent,
         createNewUserEvent,
+        deleteEvent,
         loadUserWorkspace,
-        seedSample,
         refreshEvents,
+        isNewEventModalOpen,
+        setIsNewEventModalOpen,
+        newEventDefaultType,
+        setNewEventDefaultType,
       }}
     >
       {children}

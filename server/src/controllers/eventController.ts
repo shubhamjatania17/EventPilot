@@ -5,7 +5,6 @@ import { calculateBudget } from '../engines/budgetEngine.js';
 import { calculateTimeline } from '../engines/timelineEngine.js';
 import { evaluateRisks } from '../engines/riskEngine.js';
 import { simulateGuestCountChange } from '../engines/impactEngine.js';
-import { getSampleEvent } from '../data/sampleEvent.js';
 import { EventState } from '../types/index.js';
 
 export class EventController {
@@ -197,26 +196,6 @@ export class EventController {
     } catch (err: any) {
       console.error('simulateImpact error:', err);
       res.status(500).json({ error: 'Failed to simulate impact.' });
-    }
-  }
-
-  /**
-   * Seed Sample Event (Rahul & Ananya Wedding)
-   */
-  static async seedSampleEvent(req: AuthRequest, res: Response): Promise<void> {
-    try {
-      const userId = req.user!.id;
-      const sample = getSampleEvent(userId);
-
-      const created = await EventRepository.create(userId, sample as any);
-
-      res.status(201).json({
-        message: 'Rahul & Ananya sample event loaded successfully into Firebase Realtime Database.',
-        event: created,
-      });
-    } catch (err: any) {
-      console.error('seedSampleEvent error:', err);
-      res.status(500).json({ error: 'Failed to seed sample event.' });
     }
   }
 }

@@ -2,7 +2,7 @@
   "name": "eventpilot-monorepo",
   "version": "1.0.0",
   "private": true,
-  "description": "EventPilot — GenAI-powered living event planning assistant for Virtual Prompt Wars Challenge 5",
+  "description": "EventPilot — GenAI-powered living event planning assistant",
   "workspaces": [
     "server",
     "client"

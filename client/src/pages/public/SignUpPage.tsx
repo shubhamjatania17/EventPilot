@@ -35,7 +35,7 @@ export const SignUpPage: React.FC = () => {
 
     try {
       await signup(email, password, displayName);
-      await loadUserWorkspace(displayName);
+      await loadUserWorkspace();
       navigate('/app/overview');
     } catch (err: any) {
       setError(err.message || 'Failed to create account. Please try again.');
@@ -48,9 +48,9 @@ export const SignUpPage: React.FC = () => {
     setError(null);
     setLoading(true);
     try {
-      const { idToken, user } = await signInWithGooglePopup();
+      const { idToken } = await signInWithGooglePopup();
       await googleAuth(idToken, 'signup');
-      await loadUserWorkspace(user.displayName || displayName);
+      await loadUserWorkspace();
       navigate('/app/overview');
     } catch (err: any) {
       if (err.code === 'auth/popup-closed-by-user') {

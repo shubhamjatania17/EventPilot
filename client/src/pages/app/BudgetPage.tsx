@@ -17,7 +17,7 @@ export const BudgetPage: React.FC = () => {
 
   // What-If Simulator State (Open by default for judging & interactive exploration)
   const [whatIfActive, setWhatIfActive] = useState(true);
-  const [simulatedGuestCount, setSimulatedGuestCount] = useState(activeEvent.meta.guestCount || 180);
+  const [simulatedGuestCount, setSimulatedGuestCount] = useState(activeEvent?.meta?.guestCount || 150);
   const [recommendations, setRecommendations] = useState<AIRecommendation[]>([]);
   const [aiAssessment, setAiAssessment] = useState<string | null>(null);
   const [loadingAi, setLoadingAi] = useState(false);
@@ -29,7 +29,9 @@ export const BudgetPage: React.FC = () => {
   const [showAddCat, setShowAddCat] = useState(false);
 
   // Compute live local simulation
-  const simulation = simulateGuestCountChange(activeEvent, simulatedGuestCount);
+  const simulation = activeEvent ? simulateGuestCountChange(activeEvent, simulatedGuestCount) : ({} as any);
+
+  if (!activeEvent) return null;
 
   const handleRunTradeoffs = async () => {
     setLoadingAi(true);

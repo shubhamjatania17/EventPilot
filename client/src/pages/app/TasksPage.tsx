@@ -12,7 +12,9 @@ export const TasksPage: React.FC = () => {
   const [priority, setPriority] = useState<Task['priority']>('medium');
   const [owner, setOwner] = useState('');
 
-  const filteredTasks = activeEvent.tasks.filter(t => {
+  if (!activeEvent) return null;
+
+  const filteredTasks = (activeEvent.tasks || []).filter(t => {
     if (filter === 'all') return true;
     return t.status === filter;
   });

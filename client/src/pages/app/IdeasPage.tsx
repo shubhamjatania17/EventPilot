@@ -11,6 +11,8 @@ export const IdeasPage: React.FC = () => {
   const [ideaCost, setIdeaCost] = useState('');
   const [ideaReason, setIdeaReason] = useState('');
 
+  if (!activeEvent) return null;
+
   const handleAdoptIdea = async (idea: Idea) => {
     // 1. Mark idea adopted
     const updatedIdeas = activeEvent.ideas.map(i =>
