@@ -5,10 +5,12 @@ import { getFirebaseAuth } from '../config/firebase.js';
 import { UserRepository } from '../repositories/userRepository.js';
 import { AuthRequest } from '../middleware/authMiddleware.js';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'eventpilot_jwt_super_secret_development_key_change_in_production';
+function getJwtSecret(): string {
+  return process.env.JWT_SECRET || 'eventpilot_jwt_super_secret_development_key_change_in_production';
+}
 
 function generateToken(userId: string, email: string): string {
-  return jwt.sign({ userId, email }, JWT_SECRET, { expiresIn: '7d' });
+  return jwt.sign({ userId, email }, getJwtSecret(), { expiresIn: '7d' });
 }
 
 export class AuthController {
