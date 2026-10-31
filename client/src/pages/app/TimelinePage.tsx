@@ -16,9 +16,10 @@ export const TimelinePage: React.FC = () => {
   const [showAddTask, setShowAddTask] = useState(false);
 
   if (!activeEvent) return null;
+  const tasks = activeEvent.tasks || [];
 
   const handleToggleTask = async (taskId: string) => {
-    const updatedTasks = activeEvent.tasks.map(t => {
+    const updatedTasks = tasks.map(t => {
       if (t.id === taskId) {
         return {
           ...t,
@@ -45,7 +46,7 @@ export const TimelinePage: React.FC = () => {
     };
 
     await updateActiveEvent({
-      tasks: [...activeEvent.tasks, newTask],
+      tasks: [...tasks, newTask],
     });
 
     setNewTaskTitle('');
@@ -94,7 +95,7 @@ export const TimelinePage: React.FC = () => {
 
         <div className="flex flex-wrap gap-1.5">
           {timeline.criticalPath.map((taskId, i) => {
-            const task = activeEvent.tasks.find(t => t.id === taskId);
+            const task = tasks.find(t => t.id === taskId);
             return (
               <span
                 key={taskId}
@@ -174,7 +175,12 @@ export const TimelinePage: React.FC = () => {
 
       {/* Timeline Tasks List */}
       <div className="metallic-card rounded-2xl divide-y divide-white/10">
-        {activeEvent.tasks.map(task => {
+        {tasks.length === 0 ? (
+          <div className="p-8 text-center text-xs text-zinc-400">
+            No tasks scheduled yet. Add critical timeline deliverables above.
+          </div>
+        ) : (
+          tasks.map(task => {
           const isOverdue = timeline.overdueTasks.some(t => t.id === task.id);
           const isCritical = timeline.criticalPath.includes(task.id);
 
@@ -223,7 +229,8 @@ export const TimelinePage: React.FC = () => {
               </div>
             </div>
           );
-        })}
+        })
+      )}
       </div>
     </div>
   );

@@ -15,14 +15,15 @@ export const GuestsPage: React.FC = () => {
   const [needsTransport, setNeedsTransport] = useState(false);
 
   if (!activeEvent) return null;
+  const guests = activeEvent.guests || [];
 
-  const confirmedGuests = (activeEvent.guests || [])
+  const confirmedGuests = guests
     .filter(g => g.rsvp === 'attending')
-    .reduce((sum, g) => sum + (g.adults + g.children), 0);
+    .reduce((sum, g) => sum + ((g.adults || 0) + (g.children || 0)), 0);
 
-  const pendingGuests = activeEvent.guests
+  const pendingGuests = guests
     .filter(g => g.rsvp === 'pending')
-    .reduce((sum, g) => sum + (g.adults + g.children), 0);
+    .reduce((sum, g) => sum + ((g.adults || 0) + (g.children || 0)), 0);
 
   const handleAddGuest = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,7 +41,7 @@ export const GuestsPage: React.FC = () => {
     };
 
     await updateActiveEvent({
-      guests: [...activeEvent.guests, newGuest],
+      guests: [...guests, newGuest],
     });
 
     setGuestName('');
@@ -48,7 +49,7 @@ export const GuestsPage: React.FC = () => {
   };
 
   const handleUpdateRSVP = async (guestId: string, status: Guest['rsvp']) => {
-    const updated = activeEvent.guests.map(g =>
+    const updated = guests.map(g =>
       g.id === guestId ? { ...g, rsvp: status } : g
     );
     await updateActiveEvent({ guests: updated });
@@ -195,7 +196,12 @@ export const GuestsPage: React.FC = () => {
 
       {/* Guests Table */}
       <div className="metallic-card rounded-2xl divide-y divide-white/10">
-        {activeEvent.guests.map(guest => (
+        {guests.length === 0 ? (
+          <div className="p-8 text-center text-xs text-zinc-400">
+            No guest parties added yet. Click "Add Guest Party" above to start tracking RSVPs and accommodations.
+          </div>
+        ) : (
+          guests.map(guest => (
           <div key={guest.id} className="p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 text-xs">
             <div>
               <div className="flex flex-wrap items-center gap-2">
@@ -251,7 +257,8 @@ export const GuestsPage: React.FC = () => {
               </button>
             </div>
           </div>
-        ))}
+        ))
+      )}
       </div>
     </div>
   );

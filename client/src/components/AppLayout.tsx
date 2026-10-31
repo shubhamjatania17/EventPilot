@@ -28,6 +28,7 @@ import { useAuth } from '../context/AuthContext';
 import { useEvent } from '../context/EventContext';
 import { api, getAuthToken } from '../services/api';
 import { NewEventModal } from './NewEventModal';
+import { ErrorBoundary } from './ErrorBoundary';
 
 export const AppLayout: React.FC = () => {
   const navigate = useNavigate();
@@ -631,7 +632,9 @@ export const AppLayout: React.FC = () => {
 
         {/* Page Content Outlet with Mobile Safe Margin for Bottom Navigation - ONLY THIS SCROLLS */}
         <main className="flex-1 overflow-y-auto p-3.5 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto pb-[calc(5rem+env(safe-area-inset-bottom,0px))] md:pb-8 min-w-0">
-          <Outlet />
+          <ErrorBoundary key={location.pathname}>
+            <Outlet />
+          </ErrorBoundary>
         </main>
       </div>
 

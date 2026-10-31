@@ -34,16 +34,17 @@ export const EventDayPage: React.FC = () => {
   const [copiedEmcee, setCopiedEmcee] = useState(false);
 
   if (!activeEvent) return null;
+  const eventDaySchedule = activeEvent.eventDaySchedule || [];
 
   const handleUpdateStatus = async (itemId: string, status: EventDayItem['status']) => {
-    const updated = activeEvent.eventDaySchedule.map(item =>
+    const updated = eventDaySchedule.map(item =>
       item.id === itemId ? { ...item, status } : item
     );
     await updateActiveEvent({ eventDaySchedule: updated });
   };
 
   const handleApplyDelay = async (itemId: string, delayMinutes: number) => {
-    const updated = activeEvent.eventDaySchedule.map(item =>
+    const updated = eventDaySchedule.map(item =>
       item.id === itemId ? { ...item, delayMinutes, status: 'delayed' as const } : item
     );
     await updateActiveEvent({ eventDaySchedule: updated });
@@ -66,7 +67,7 @@ export const EventDayPage: React.FC = () => {
     };
 
     await updateActiveEvent({
-      eventDaySchedule: [...activeEvent.eventDaySchedule, newItem],
+      eventDaySchedule: [...eventDaySchedule, newItem],
     });
 
     setItemTime('');
@@ -85,7 +86,7 @@ export const EventDayPage: React.FC = () => {
     setIncidentResult(null);
 
     try {
-      const currentItem = activeEvent.eventDaySchedule.find(i => i.status === 'current') || activeEvent.eventDaySchedule[0];
+      const currentItem = eventDaySchedule.find(i => i.status === 'current') || eventDaySchedule[0];
       const res = await api.respondToIncident({
         eventId: activeEvent.id,
         incident: query,
@@ -112,7 +113,7 @@ export const EventDayPage: React.FC = () => {
     if (!incidentResult) return;
     const delay = incidentResult.recommendedDelayMinutes || 15;
 
-    const updated = activeEvent.eventDaySchedule.map(item => {
+    const updated = eventDaySchedule.map(item => {
       if (item.status === 'current' || item.status === 'upcoming') {
         return {
           ...item,
@@ -417,7 +418,12 @@ export const EventDayPage: React.FC = () => {
 
       {/* Hourly Timeline */}
       <div className="space-y-4">
-        {activeEvent.eventDaySchedule.map((item, index) => (
+        {eventDaySchedule.length === 0 ? (
+          <div className="p-8 text-center text-xs text-zinc-400 metallic-card rounded-2xl">
+            No milestones or ceremonies scheduled for event day yet. Add key timeline items above.
+          </div>
+        ) : (
+          eventDaySchedule.map((item, index) => (
           <div 
             key={item.id}
             className={`p-5 rounded-2xl border transition-all ${
@@ -503,7 +509,8 @@ export const EventDayPage: React.FC = () => {
               </div>
             </div>
           </div>
-        ))}
+        ))
+      )}
       </div>
     </div>
   );

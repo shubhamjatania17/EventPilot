@@ -32,6 +32,7 @@ export const BudgetPage: React.FC = () => {
   const simulation = activeEvent ? simulateGuestCountChange(activeEvent, simulatedGuestCount) : ({} as any);
 
   if (!activeEvent) return null;
+  const categories = activeEvent.budgetCategories || [];
 
   const handleRunTradeoffs = async () => {
     setLoadingAi(true);
@@ -80,7 +81,7 @@ export const BudgetPage: React.FC = () => {
   const handleApplyTradeoff = async (rec: AIRecommendation) => {
     // Apply deterministic update to categories
     const savings = rec.estimatedSavings;
-    const updatedCategories = activeEvent.budgetCategories.map(cat => {
+    const updatedCategories = categories.map(cat => {
       if (cat.name.includes('Decor') || cat.name.includes('Floral')) {
         return { ...cat, allocated: Math.max(0, cat.allocated - savings) };
       }
@@ -111,7 +112,7 @@ export const BudgetPage: React.FC = () => {
     };
 
     await updateActiveEvent({
-      budgetCategories: [...activeEvent.budgetCategories, newCat],
+      budgetCategories: [...categories, newCat],
     });
 
     setNewCatName('');

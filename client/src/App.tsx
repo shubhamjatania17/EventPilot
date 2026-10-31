@@ -6,6 +6,7 @@ import { LandingPage } from './pages/public/LandingPage';
 import { SignInPage } from './pages/public/SignInPage';
 import { SignUpPage } from './pages/public/SignUpPage';
 import { AppLayout } from './components/AppLayout';
+import { ErrorBoundary } from './components/ErrorBoundary';
 import { OverviewPage } from './pages/app/OverviewPage';
 import { EventsPage } from './pages/app/EventsPage';
 import { BudgetPage } from './pages/app/BudgetPage';
@@ -34,30 +35,32 @@ export const App: React.FC = () => {
     <BrowserRouter>
       <AuthProvider>
         <EventProvider>
-          <Routes>
-            {/* Public Routes - Landing page stays on landing page */}
-            <Route path="/" element={<LandingPage />} />
-            <Route path="/signin" element={<SignInPage />} />
-            <Route path="/signup" element={<SignUpPage />} />
+          <ErrorBoundary>
+            <Routes>
+              {/* Public Routes - Landing page stays on landing page */}
+              <Route path="/" element={<LandingPage />} />
+              <Route path="/signin" element={<SignInPage />} />
+              <Route path="/signup" element={<SignUpPage />} />
 
-            {/* Authenticated Workspace Routes */}
-            <Route path="/app" element={<AppLayout />}>
-              <Route index element={<AppIndex />} />
-              <Route path="overview" element={<OverviewPage />} />
-              <Route path="events" element={<EventsPage />} />
-              <Route path="budget" element={<BudgetPage />} />
-              <Route path="timeline" element={<TimelinePage />} />
-              <Route path="vendors" element={<VendorsPage />} />
-              <Route path="guests" element={<GuestsPage />} />
-              <Route path="tasks" element={<TasksPage />} />
-              <Route path="ideas" element={<IdeasPage />} />
-              <Route path="event-day" element={<EventDayPage />} />
-              <Route path="settings" element={<SettingsPage />} />
-            </Route>
+              {/* Authenticated Workspace Routes */}
+              <Route path="/app" element={<AppLayout />}>
+                <Route index element={<AppIndex />} />
+                <Route path="overview" element={<OverviewPage />} />
+                <Route path="events" element={<EventsPage />} />
+                <Route path="budget" element={<BudgetPage />} />
+                <Route path="timeline" element={<TimelinePage />} />
+                <Route path="vendors" element={<VendorsPage />} />
+                <Route path="guests" element={<GuestsPage />} />
+                <Route path="tasks" element={<TasksPage />} />
+                <Route path="ideas" element={<IdeasPage />} />
+                <Route path="event-day" element={<EventDayPage />} />
+                <Route path="settings" element={<SettingsPage />} />
+              </Route>
 
-            {/* Fallback */}
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Routes>
+              {/* Fallback */}
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+          </ErrorBoundary>
         </EventProvider>
       </AuthProvider>
     </BrowserRouter>

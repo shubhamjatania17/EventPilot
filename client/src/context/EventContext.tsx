@@ -53,6 +53,24 @@ interface EventContextType {
   setNewEventDefaultType: (type: string) => void;
 }
 
+export const sanitizeEventState = (raw: any): EventState | null => {
+  if (!raw) return null;
+  return {
+    ...raw,
+    meta: raw.meta || {},
+    budgetCategories: Array.isArray(raw.budgetCategories) ? raw.budgetCategories : [],
+    budgetItems: Array.isArray(raw.budgetItems) ? raw.budgetItems : [],
+    tasks: Array.isArray(raw.tasks) ? raw.tasks : [],
+    milestones: Array.isArray(raw.milestones) ? raw.milestones : [],
+    vendors: Array.isArray(raw.vendors) ? raw.vendors : [],
+    guests: Array.isArray(raw.guests) ? raw.guests : [],
+    ideas: Array.isArray(raw.ideas) ? raw.ideas : [],
+    risks: Array.isArray(raw.risks) ? raw.risks : [],
+    eventDaySchedule: Array.isArray(raw.eventDaySchedule) ? raw.eventDaySchedule : [],
+    activities: Array.isArray(raw.activities) ? raw.activities : [],
+  };
+};
+
 const EventContext = createContext<EventContextType | undefined>(undefined);
 
 export const EventProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -82,7 +100,7 @@ export const EventProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     setLoading(true);
     try {
       const res = await api.getEventById(id);
-      setActiveEvent(res.event);
+      setActiveEvent(sanitizeEventState(res.event));
       localStorage.setItem('eventpilot_active_event_id', id);
     } catch (err) {
       console.error('Failed to load event details:', err);
@@ -99,9 +117,11 @@ export const EventProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     setLoading(true);
     try {
       const res = await api.createEvent(payload);
-      const newEvent = res.event;
+      const newEvent = sanitizeEventState(res.event);
       setActiveEvent(newEvent);
-      localStorage.setItem('eventpilot_active_event_id', newEvent.id);
+      if (newEvent) {
+        localStorage.setItem('eventpilot_active_event_id', newEvent.id);
+      }
       await refreshEvents();
     } catch (err) {
       console.error('Failed to create new user event:', err);
@@ -113,8 +133,10 @@ export const EventProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   const updateActiveEvent = async (updates: Partial<EventState>) => {
     if (!activeEvent) return;
-    const updated = { ...activeEvent, ...updates, updatedAt: new Date().toISOString() };
-    setActiveEvent(updated);
+    const updated = sanitizeEventState({ ...activeEvent, ...updates, updatedAt: new Date().toISOString() });
+    if (updated) {
+      setActiveEvent(updated);
+    }
 
     try {
       await api.updateEvent(activeEvent.id, updates);
@@ -158,7 +180,7 @@ export const EventProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         const storedId = localStorage.getItem('eventpilot_active_event_id');
         const target = events.find(e => e.id === storedId) || events[0];
         const detailRes = await api.getEventById(target.id);
-        setActiveEvent(detailRes.event);
+        setActiveEvent(sanitizeEventState(detailRes.event));
         localStorage.setItem('eventpilot_active_event_id', target.id);
       } else {
         // User has no events - empty workspace

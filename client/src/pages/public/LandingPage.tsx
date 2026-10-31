@@ -179,7 +179,7 @@ export const LandingPage: React.FC = () => {
         </h1>
 
         <p className="mt-6 text-lg sm:text-xl text-zinc-400 max-w-2xl mx-auto leading-relaxed">
-          EventPilot is a living event plan that connects budget, timeline, vendors, guests, and risks. 
+          EventPilot is a event planning intelligence platform that connects budget, timeline, vendors, guests, and risks. 
           When real circumstances change, it calculates the deterministic consequences and uses Gemini to recommend verified trade-offs.
         </p>
 

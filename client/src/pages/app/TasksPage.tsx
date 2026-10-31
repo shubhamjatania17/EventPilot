@@ -31,14 +31,15 @@ export const TasksPage: React.FC = () => {
   const [successNote, setSuccessNote] = useState<string | null>(null);
 
   if (!activeEvent) return null;
+  const tasks = activeEvent.tasks || [];
 
-  const filteredTasks = (activeEvent.tasks || []).filter(t => {
+  const filteredTasks = tasks.filter(t => {
     if (filter === 'all') return true;
     return t.status === filter;
   });
 
   const handleToggle = async (taskId: string) => {
-    const updated = activeEvent.tasks.map(t => {
+    const updated = tasks.map(t => {
       if (t.id === taskId) {
         return {
           ...t,
@@ -65,7 +66,7 @@ export const TasksPage: React.FC = () => {
     };
 
     await updateActiveEvent({
-      tasks: [...activeEvent.tasks, newTask],
+      tasks: [...tasks, newTask],
     });
 
     setTaskTitle('');
@@ -144,7 +145,7 @@ export const TasksPage: React.FC = () => {
     });
 
     await updateActiveEvent({
-      tasks: [...activeEvent.tasks, ...newTasks],
+      tasks: [...tasks, ...newTasks],
     });
 
     setSuccessNote(`✨ Added ${newTasks.length} sequential subtasks to the project timeline!`);
@@ -170,7 +171,7 @@ export const TasksPage: React.FC = () => {
         <div className="flex flex-wrap items-center gap-2 sm:gap-3">
           <button
             onClick={() => {
-              setDecomposeTitle(activeEvent.tasks[0]?.title || 'Finalize Venue Catering & Floor Plan');
+              setDecomposeTitle(tasks[0]?.title || 'Finalize Venue Catering & Floor Plan');
               setDecomposeCategory('Logistics');
               setDecomposeOffsetDays('14');
               setDecompositionResult(null);
@@ -374,7 +375,7 @@ export const TasksPage: React.FC = () => {
                 : 'text-zinc-400 hover:text-white hover:bg-white/[0.05]'
             }`}
           >
-            {tab.replace('_', ' ')} ({tab === 'all' ? activeEvent.tasks.length : activeEvent.tasks.filter(t => t.status === tab).length})
+            {tab.replace('_', ' ')} ({tab === 'all' ? tasks.length : tasks.filter(t => t.status === tab).length})
           </button>
         ))}
       </div>

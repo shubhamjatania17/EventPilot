@@ -42,6 +42,7 @@ export const VendorsPage: React.FC = () => {
   const [copiedEmail, setCopiedEmail] = useState(false);
 
   if (!activeEvent) return null;
+  const vendors = activeEvent.vendors || [];
 
   const handleExtractQuote = async () => {
     if (!rawQuoteText.trim()) return;
@@ -94,7 +95,7 @@ export const VendorsPage: React.FC = () => {
     };
 
     await updateActiveEvent({
-      vendors: [...activeEvent.vendors, newVendor],
+      vendors: [...vendors, newVendor],
     });
 
     setExtractedQuote(null);
@@ -116,7 +117,7 @@ export const VendorsPage: React.FC = () => {
     };
 
     await updateActiveEvent({
-      vendors: [...activeEvent.vendors, newVendor],
+      vendors: [...vendors, newVendor],
     });
 
     setVendorName('');
@@ -180,7 +181,7 @@ export const VendorsPage: React.FC = () => {
 
   const handleApplyNegotiationStatus = async () => {
     if (targetVendorId) {
-      const updated = activeEvent.vendors.map(v =>
+      const updated = vendors.map(v =>
         v.id === targetVendorId ? { ...v, status: 'negotiating' as const } : v
       );
       await updateActiveEvent({ vendors: updated });
@@ -208,9 +209,9 @@ export const VendorsPage: React.FC = () => {
           <button
             onClick={() => {
               setTargetVendorId(null);
-              setNegotiateVendorName(activeEvent.vendors[0]?.name || '');
-              setNegotiateCategory(activeEvent.vendors[0]?.category || 'Catering');
-              setNegotiateQuotedAmount(activeEvent.vendors[0]?.quoteAmount ? String(activeEvent.vendors[0].quoteAmount) : '');
+              setNegotiateVendorName(vendors[0]?.name || '');
+              setNegotiateCategory(vendors[0]?.category || 'Catering');
+              setNegotiateQuotedAmount(vendors[0]?.quoteAmount ? String(vendors[0].quoteAmount) : '');
               setNegotiateTargetBudget('');
               setNegotiateNotes('');
               setNegotiationResult(null);
@@ -618,12 +619,12 @@ export const VendorsPage: React.FC = () => {
 
       {/* Vendors List */}
       <div className="metallic-card rounded-2xl divide-y divide-white/10">
-        {activeEvent.vendors.length === 0 ? (
+        {vendors.length === 0 ? (
           <div className="p-8 text-center text-xs text-zinc-400">
             No vendors registered yet. Add a vendor or extract one from a quote above.
           </div>
         ) : (
-          activeEvent.vendors.map(vendor => (
+          vendors.map(vendor => (
             <div key={vendor.id} className="p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs">
               <div>
                 <div className="flex items-center gap-2">
@@ -638,7 +639,7 @@ export const VendorsPage: React.FC = () => {
                       ? 'border-zinc-500 bg-zinc-800 text-zinc-200'
                       : 'border-zinc-700 bg-zinc-900 text-zinc-300'
                   }`}>
-                    {vendor.status.replace('_', ' ')}
+                    {(vendor.status || 'discovered').replace('_', ' ')}
                   </span>
                 </div>
                 <div className="text-[11px] text-zinc-400 mt-1">
@@ -651,11 +652,11 @@ export const VendorsPage: React.FC = () => {
               <div className="flex flex-wrap items-center justify-between sm:justify-end gap-3 sm:gap-6 text-left sm:text-right pt-2 sm:pt-0 border-t sm:border-t-0 border-white/5">
                 <div>
                   <span className="text-zinc-500 text-[11px] block">Contract Amount</span>
-                  <span className="font-bold text-white text-sm">₹{vendor.quoteAmount.toLocaleString('en-IN')}</span>
+                  <span className="font-bold text-white text-sm">₹{(vendor.quoteAmount ?? 0).toLocaleString('en-IN')}</span>
                 </div>
                 <div>
                   <span className="text-zinc-500 text-[11px] block">Paid Advance</span>
-                  <span className="font-semibold text-zinc-300">₹{vendor.paidAmount.toLocaleString('en-IN')}</span>
+                  <span className="font-semibold text-zinc-300">₹{(vendor.paidAmount ?? 0).toLocaleString('en-IN')}</span>
                 </div>
                 <button
                   onClick={() => openNegotiatorForVendor(vendor)}

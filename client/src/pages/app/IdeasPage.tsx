@@ -34,6 +34,10 @@ export const IdeasPage: React.FC = () => {
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
 
   if (!activeEvent) return null;
+  const ideas = activeEvent.ideas || [];
+  const budgetCategories = activeEvent.budgetCategories || [];
+  const budgetItems = activeEvent.budgetItems || [];
+  const tasks = activeEvent.tasks || [];
 
   const copyToClipboard = (text: string, key: string) => {
     navigator.clipboard.writeText(text);
@@ -42,13 +46,13 @@ export const IdeasPage: React.FC = () => {
   };
 
   const handleAdoptIdea = async (idea: Idea) => {
-    const updatedIdeas = activeEvent.ideas.map(i =>
+    const updatedIdeas = ideas.map(i =>
       i.id === idea.id ? { ...i, adopted: true } : i
     );
 
     const newItem = {
       id: `item-idea-${Date.now()}`,
-      categoryId: activeEvent.budgetCategories[0]?.id || 'cat-general',
+      categoryId: budgetCategories[0]?.id || 'cat-general',
       title: idea.title,
       estimatedCost: idea.estimatedCost,
       actualCost: 0,
@@ -67,8 +71,8 @@ export const IdeasPage: React.FC = () => {
 
     await updateActiveEvent({
       ideas: updatedIdeas,
-      budgetItems: [...activeEvent.budgetItems, newItem],
-      tasks: [...activeEvent.tasks, newTask],
+      budgetItems: [...budgetItems, newItem],
+      tasks: [...tasks, newTask],
     });
   };
 
@@ -87,7 +91,7 @@ export const IdeasPage: React.FC = () => {
 
     const newItem = {
       id: `item-moment-${Date.now()}`,
-      categoryId: activeEvent.budgetCategories[0]?.id || 'cat-general',
+      categoryId: budgetCategories[0]?.id || 'cat-general',
       title: moment.title,
       estimatedCost: moment.estimatedCost,
       actualCost: 0,
@@ -105,9 +109,9 @@ export const IdeasPage: React.FC = () => {
     };
 
     await updateActiveEvent({
-      ideas: [...activeEvent.ideas, newIdea],
-      budgetItems: [...activeEvent.budgetItems, newItem],
-      tasks: [...activeEvent.tasks, newTask],
+      ideas: [...ideas, newIdea],
+      budgetItems: [...budgetItems, newItem],
+      tasks: [...tasks, newTask],
     });
   };
 
@@ -128,7 +132,7 @@ export const IdeasPage: React.FC = () => {
     };
 
     await updateActiveEvent({
-      ideas: [...activeEvent.ideas, newIdea],
+      ideas: [...ideas, newIdea],
     });
 
     setIdeaTitle('');
@@ -267,7 +271,7 @@ export const IdeasPage: React.FC = () => {
             {studioResult && (
               <div className="p-4 bg-zinc-900/90 rounded-xl border border-white/10 space-y-5 text-xs max-h-[75vh] overflow-y-auto pr-1">
                 {/* Theme Header */}
-                <div className="p-4 bg-white/[0.03] rounded-xl border border-white/10 space-y-1">
+                <div className="p-4 bg-white/3 rounded-xl border border-white/10 space-y-1">
                   <div className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">
                     Curated Concept
                   </div>
@@ -289,7 +293,7 @@ export const IdeasPage: React.FC = () => {
                       <div
                         key={idx}
                         onClick={() => copyToClipboard(color.hex, `hex-${idx}`)}
-                        className="p-3 bg-white/[0.03] rounded-xl border border-white/10 cursor-pointer hover:border-white/30 transition-all text-center group"
+                        className="p-3 bg-white/3 rounded-xl border border-white/10 cursor-pointer hover:border-white/30 transition-all text-center group"
                       >
                         <div
                           className="h-12 w-full rounded-lg mb-2 shadow-inner border border-white/20 group-hover:scale-[1.02] transition-transform"
@@ -316,8 +320,8 @@ export const IdeasPage: React.FC = () => {
 
                 {/* Dress Code & Hashtags */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div className="p-3 bg-white/[0.03] rounded-xl border border-white/10">
-                    <span className="font-bold text-white text-[11px] uppercase tracking-wider block mb-1 flex items-center gap-1">
+                  <div className="p-3 bg-white/3 rounded-xl border border-white/10">
+                    <span className="font-bold text-white text-[11px] uppercase tracking-wider block mb-1 items-center gap-1">
                       <Shirt className="w-3.5 h-3.5 text-white" /> Dress Code Advice
                     </span>
                     <p className="text-zinc-300 text-[11px] leading-relaxed">
@@ -325,8 +329,8 @@ export const IdeasPage: React.FC = () => {
                     </p>
                   </div>
 
-                  <div className="p-3 bg-white/[0.03] rounded-xl border border-white/10">
-                    <span className="font-bold text-white text-[11px] uppercase tracking-wider block mb-1 flex items-center gap-1">
+                  <div className="p-3 bg-white/3 rounded-xl border border-white/10">
+                    <span className="font-bold text-white text-[11px] uppercase tracking-wider mb-1 flex items-center gap-1">
                       <Hash className="w-3.5 h-3.5 text-white" /> Curated Social Hashtags
                     </span>
                     <div className="flex flex-wrap gap-1.5 mt-1">
@@ -350,7 +354,7 @@ export const IdeasPage: React.FC = () => {
                   </h5>
 
                   {/* WhatsApp Invite */}
-                  <div className="p-3 bg-white/[0.03] rounded-xl border border-white/10 space-y-2">
+                  <div className="p-3 bg-white/3 rounded-xl border border-white/10 space-y-2">
                     <div className="flex items-center justify-between">
                       <span className="font-bold text-white text-xs flex items-center gap-1.5">
                         <MessageSquare className="w-3.5 h-3.5 text-white" /> WhatsApp / Direct Message Copy
@@ -376,7 +380,7 @@ export const IdeasPage: React.FC = () => {
                   </div>
 
                   {/* Formal Email Invite */}
-                  <div className="p-3 bg-white/[0.03] rounded-xl border border-white/10 space-y-2">
+                  <div className="p-3 bg-white/3 rounded-xl border border-white/10 space-y-2">
                     <div className="flex items-center justify-between">
                       <span className="font-bold text-white text-xs flex items-center gap-1.5">
                         <Mail className="w-3.5 h-3.5 text-white" /> Formal Email Invitation Template
@@ -409,7 +413,7 @@ export const IdeasPage: React.FC = () => {
                   </h5>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     {studioResult.signatureMoments.map((moment, idx) => (
-                      <div key={idx} className="p-3.5 bg-white/[0.03] rounded-xl border border-white/15 flex flex-col justify-between">
+                      <div key={idx} className="p-3.5 bg-white/3 rounded-xl border border-white/15 flex flex-col justify-between">
                         <div>
                           <div className="flex items-center justify-between">
                             <span className="font-bold text-white text-xs">{moment.title}</span>
@@ -508,12 +512,12 @@ export const IdeasPage: React.FC = () => {
 
       {/* Ideas Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {activeEvent.ideas.length === 0 ? (
+        {ideas.length === 0 ? (
           <div className="p-8 text-center text-xs text-zinc-400 md:col-span-2 metallic-card rounded-2xl">
             No custom ideas proposed yet. Click "AI Theme & Invitation Studio" above or "Propose Idea" to get started.
           </div>
         ) : (
-          activeEvent.ideas.map(idea => (
+          ideas.map(idea => (
             <div key={idea.id} className="p-6 rounded-2xl metallic-card-interactive flex flex-col justify-between">
               <div>
                 <div className="flex items-center justify-between">

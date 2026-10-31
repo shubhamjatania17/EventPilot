@@ -37,6 +37,7 @@ export const OverviewPage: React.FC = () => {
   const criticalTasks = timeline.overdueTasks.slice(0, 3);
 
   if (!activeEvent) return null;
+  const milestones = activeEvent.milestones || [];
 
   return (
     <div className="space-y-8 text-slate-100">
@@ -209,42 +210,48 @@ export const OverviewPage: React.FC = () => {
           </div>
 
           <div className="mt-4 space-y-3 flex-1">
-            {activeEvent.milestones.map(m => (
-              <div 
-                key={m.id}
-                className={`p-3.5 rounded-xl border text-xs flex items-center justify-between ${
-                  m.completed ? 'bg-white/[0.04] border-white/20' : 'bg-zinc-900/90 border-white/10'
-                }`}
-              >
-                <div>
-                  <div className="flex items-center gap-2">
-                    <span className="font-bold text-white">{m.title}</span>
-                    {m.completed && (
-                      <span className="text-[10px] metallic-pill px-1.5 py-0.5 rounded font-bold text-white border-white/30">
-                        DONE
-                      </span>
-                    )}
-                  </div>
-                  <span className="text-zinc-400 text-[11px] mt-0.5 block">
-                    Target Date: {m.targetDate}
-                  </span>
-                </div>
-
-                {!m.completed && (
-                  <button
-                    onClick={() => {
-                      const updated = activeEvent.milestones.map(item =>
-                        item.id === m.id ? { ...item, completed: true } : item
-                      );
-                      updateActiveEvent({ milestones: updated });
-                    }}
-                    className="metallic-btn-secondary px-2.5 py-1 text-[11px] font-semibold rounded-md"
-                  >
-                    Mark Done
-                  </button>
-                )}
+            {milestones.length === 0 ? (
+              <div className="p-6 text-center text-xs text-zinc-400 bg-zinc-900/40 rounded-xl border border-white/5">
+                No key milestones set yet. Track deadlines in your timeline.
               </div>
-            ))}
+            ) : (
+              milestones.map(m => (
+                <div 
+                  key={m.id}
+                  className={`p-3.5 rounded-xl border text-xs flex items-center justify-between ${
+                    m.completed ? 'bg-white/[0.04] border-white/20' : 'bg-zinc-900/90 border-white/10'
+                  }`}
+                >
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="font-bold text-white">{m.title}</span>
+                      {m.completed && (
+                        <span className="text-[10px] metallic-pill px-1.5 py-0.5 rounded font-bold text-white border-white/30">
+                          DONE
+                        </span>
+                      )}
+                    </div>
+                    <span className="text-zinc-400 text-[11px] mt-0.5 block">
+                      Target Date: {m.targetDate}
+                    </span>
+                  </div>
+
+                  {!m.completed && (
+                    <button
+                      onClick={() => {
+                        const updated = milestones.map(item =>
+                          item.id === m.id ? { ...item, completed: true } : item
+                        );
+                        updateActiveEvent({ milestones: updated });
+                      }}
+                      className="metallic-btn-secondary px-2.5 py-1 text-[11px] font-semibold rounded-md"
+                    >
+                      Mark Done
+                    </button>
+                  )}
+                </div>
+              ))
+            )}
           </div>
         </div>
       </div>
