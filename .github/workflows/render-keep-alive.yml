@@ -1,0 +1,44 @@
+name: Render Keep-Alive Ping
+
+on:
+  schedule:
+    # Run every 14 minutes (Render free tier sleeps after 15 minutes of inactivity)
+    - cron: '*/14 * * * *'
+  workflow_dispatch: # Allows manual trigger from the GitHub Actions UI
+
+jobs:
+  keep-alive:
+    name: Ping Render Health Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send Keep-Alive Ping
+        env:
+          # Set RENDER_APP_URL in your GitHub Repo -> Settings -> Secrets and variables -> Actions
+          # If not set, it defaults to the URL below
+          RENDER_URL: ${{ secrets.RENDER_APP_URL || 'https://eventpilot.onrender.com' }}
+        run: |
+          # Strip trailing slash if present
+          CLEAN_URL="${RENDER_URL%/}"
+          TARGET_URL="${CLEAN_URL}/health"
+
+          echo "Pinging Render instance at: $TARGET_URL"
+          
+          # Perform HTTP GET request with timeout and print HTTP response code
+          HTTP_RESPONSE=$(curl -s -o response.json -w "%{http_code}" --max-time 60 "$TARGET_URL")
+
+          echo "HTTP Status Code: $HTTP_RESPONSE"
+          
+          if [ -f response.json ]; then
+            echo "Response Body:"
+            cat response.json
+            echo ""
+          fi
+
+          if [ "$HTTP_RESPONSE" -ge 200 ] && [ "$HTTP_RESPONSE" -lt 400 ]; then
+            echo "✓ Render service is ALIVE and healthy."
+            exit 0
+          else
+            echo "⚠ Ping returned HTTP status $HTTP_RESPONSE. Render service may be waking up from sleep."
+            # Do not fail workflow so schedule continues normally
+            exit 0
+          fi
