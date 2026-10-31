@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { InteractiveDemoPlayer } from '../../components/InteractiveDemoPlayer';
 import { 
   Sparkles, 
   ArrowRight, 
@@ -9,6 +8,7 @@ import {
   GitFork, 
   FileText, 
   CheckCircle2, 
+  Play, 
   ShieldCheck, 
   Clock, 
   TrendingUp, 
@@ -296,11 +296,23 @@ export const LandingPage: React.FC = () => {
             From initial event setup to quote extraction and real-time What-If replanning.
           </p>
 
-          <div className="mt-10 max-w-5xl mx-auto">
-            <InteractiveDemoPlayer 
-              userLoggedIn={!!user} 
-              onOpenFullscreen={() => setShowVideoModal(true)} 
-            />
+          <div className="mt-10 max-w-4xl mx-auto metallic-card border border-white/15 rounded-2xl overflow-hidden shadow-2xl relative aspect-video flex items-center justify-center group">
+            {/* Playable Video Poster */}
+            <div className="absolute inset-0 bg-linear-to-tr from-black via-zinc-950 to-zinc-900/60 flex flex-col items-center justify-center p-8 text-center">
+              <button
+                onClick={() => setShowVideoModal(true)}
+                className="w-20 h-20 rounded-full metallic-btn-primary flex items-center justify-center shadow-2xl transition-transform transform group-hover:scale-105"
+                aria-label="Play Product Walkthrough Video"
+              >
+                <Play className="w-8 h-8 fill-current ml-1 text-black" />
+              </button>
+              <h3 className="mt-6 text-xl font-bold text-white">
+                Interactive Guided Walkthrough
+              </h3>
+              <p className="text-xs text-zinc-400 mt-2 max-w-md">
+                Click to explore the step-by-step hero flow: Add 40 guests, observe budget impact, review Gemini trade-off suggestions, and confirm plan adaptation.
+              </p>
+            </div>
           </div>
         </div>
       </section>
@@ -383,36 +395,38 @@ export const LandingPage: React.FC = () => {
 
       {/* 6. Video Walkthrough Modal */}
       {showVideoModal && (
-        <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-6">
-          <div className="metallic-card rounded-2xl max-w-5xl w-full p-4 sm:p-6 shadow-2xl border border-white/15 text-white flex flex-col max-h-[95vh] overflow-y-auto">
-            <div className="flex items-center justify-between pb-3 border-b border-white/10 mb-3">
-              <div className="flex items-center gap-2">
-                <span className="text-xs font-bold uppercase tracking-wider text-zinc-400 metallic-pill px-2.5 py-0.5 rounded-full">
-                  Fullscreen Walkthrough
-                </span>
-                <h3 className="text-base sm:text-lg font-bold text-white">EventPilot Interactive Demonstration</h3>
-              </div>
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
+          <div className="metallic-card rounded-2xl max-w-2xl w-full p-6 shadow-2xl border border-white/15 text-white">
+            <div className="flex items-center justify-between pb-4 border-b border-white/10">
+              <h3 className="text-lg font-bold text-white">EventPilot Guided Tour</h3>
               <button
                 onClick={() => setShowVideoModal(false)}
-                className="text-zinc-400 hover:text-white font-bold text-xl px-2 py-1 rounded-lg hover:bg-white/10 transition-colors"
-                aria-label="Close modal"
+                className="text-zinc-400 hover:text-white font-bold text-xl px-2"
               >
                 ✕
               </button>
             </div>
-            
-            <div className="my-auto">
-              <InteractiveDemoPlayer userLoggedIn={!!user} />
-            </div>
-
-            <div className="flex items-center justify-between pt-4 mt-3 border-t border-white/10 text-xs">
-              <span className="text-zinc-400">Step-by-step verified flow with zero math hallucinations.</span>
-              <button
-                onClick={() => setShowVideoModal(false)}
-                className="px-4 py-2 text-xs font-semibold text-zinc-300 hover:text-white bg-white/5 hover:bg-white/10 rounded-lg transition-colors"
-              >
-                Close Viewer
-              </button>
+            <div className="mt-4 space-y-4">
+              <div className="p-4 rounded-xl bg-zinc-900 border border-white/10 text-sm text-zinc-300">
+                <p className="font-semibold text-white mb-1">Interactive Event Architecture</p>
+                To experience the complete responsive flow directly in your browser, configure your own event plan. EventPilot generates real-time budgets, critical path dependency trees, and run-of-show schedules.
+              </div>
+              <div className="flex justify-end gap-3 pt-2">
+                <button
+                  onClick={() => setShowVideoModal(false)}
+                  className="px-4 py-2 text-sm font-semibold text-zinc-400 hover:text-white"
+                >
+                  Close
+                </button>
+                <Link
+                  to={user ? "/app/overview" : "/signup"}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="metallic-btn-primary px-4 py-2 text-sm font-bold rounded-xl"
+                >
+                  {user ? "Open Dashboard" : "Get Started Free"}
+                </Link>
+              </div>
             </div>
           </div>
         </div>
