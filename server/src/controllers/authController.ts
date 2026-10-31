@@ -204,69 +204,31 @@ export class AuthController {
         user = await UserRepository.findByEmail(email);
       }
 
-      if (intent === 'signin') {
-        if (!user) {
-          res.status(404).json({
-            error: 'No EventPilot account found for this Google email. Please create an account first.',
-            code: 'ACCOUNT_NOT_FOUND',
-          });
-          return;
-        }
-
-        if (!user.googleId) {
-          await UserRepository.update(user.id, { googleId });
-        }
-
-        const token = generateToken(user.id, user.email);
-        res.status(200).json({
-          token,
-          user: {
-            id: user.id,
-            email: user.email,
-            displayName: user.displayName,
-            photoURL: user.photoURL,
-            preferences: user.preferences,
-          },
+      // Seamlessly sign in or auto-create account on verified Google OAuth
+      if (!user) {
+        user = await UserRepository.create({
+          email,
+          googleId,
+          displayName,
+          photoURL,
         });
-        return;
+      } else if (!user.googleId) {
+        await UserRepository.update(user.id, { googleId });
       }
 
-      // Intent is 'signup'
-      if (user) {
-        const token = generateToken(user.id, user.email);
-        res.status(200).json({
-          message: 'Existing account verified.',
-          token,
-          user: {
-            id: user.id,
-            email: user.email,
-            displayName: user.displayName,
-            photoURL: user.photoURL,
-            preferences: user.preferences,
-          },
-        });
-        return;
-      }
-
-      const newUser = await UserRepository.create({
-        email,
-        googleId,
-        displayName,
-        photoURL,
-      });
-
-      const token = generateToken(newUser.id, newUser.email);
-      res.status(201).json({
-        message: 'Account created with Google successfully.',
+      const token = generateToken(user.id, user.email);
+      res.status(200).json({
+        message: 'Google authentication successful.',
         token,
         user: {
-          id: newUser.id,
-          email: newUser.email,
-          displayName: newUser.displayName,
-          photoURL: newUser.photoURL,
-          preferences: newUser.preferences,
+          id: user.id,
+          email: user.email,
+          displayName: user.displayName,
+          photoURL: user.photoURL,
+          preferences: user.preferences,
         },
       });
+      return;
     } catch (err: any) {
       console.error('Google Auth error:', err);
       res.status(500).json({ error: 'Google authentication failed.' });
