@@ -189,17 +189,17 @@ export const VendorsPage: React.FC = () => {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 text-slate-100">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-200">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-white/10">
         <div>
-          <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
+          <span className="text-xs font-bold uppercase tracking-wider text-zinc-400">
             Vendor Directory
           </span>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-950 mt-1">
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-white mt-1">
             Vendors & Quote Analyzer
           </h1>
-          <p className="text-xs sm:text-sm text-slate-600 mt-1">
+          <p className="text-xs sm:text-sm text-zinc-400 mt-1">
             Track quotes, contracts, and use AI to extract line items and draft budget-aligned counter-offers.
           </p>
         </div>
@@ -216,23 +216,23 @@ export const VendorsPage: React.FC = () => {
               setNegotiationResult(null);
               setShowNegotiator(true);
             }}
-            className="inline-flex items-center gap-2 text-xs font-semibold bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 px-3.5 py-2 rounded-xl transition-colors shadow-xs"
+            className="metallic-btn-secondary inline-flex items-center gap-2 text-xs font-semibold px-3.5 py-2 rounded-xl transition-all"
           >
-            <Handshake className="w-3.5 h-3.5 text-emerald-700" />
+            <Handshake className="w-3.5 h-3.5 text-white" />
             AI Negotiator
           </button>
 
           <button
             onClick={() => setShowQuoteExtractor(!showQuoteExtractor)}
-            className="inline-flex items-center gap-2 text-xs font-semibold bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 px-3.5 py-2 rounded-xl transition-colors"
+            className="metallic-btn-secondary inline-flex items-center gap-2 text-xs font-semibold px-3.5 py-2 rounded-xl transition-all"
           >
-            <Sparkles className="w-3.5 h-3.5 text-indigo-600" />
+            <Sparkles className="w-3.5 h-3.5 text-white" />
             AI Quote Extractor
           </button>
 
           <button
             onClick={() => setShowAddVendor(true)}
-            className="inline-flex items-center gap-1.5 text-xs font-semibold bg-slate-900 hover:bg-slate-800 text-white px-3.5 py-2 rounded-xl shadow-xs transition-colors"
+            className="metallic-btn-primary inline-flex items-center gap-1.5 text-xs font-bold px-3.5 py-2 rounded-xl transition-all"
           >
             <Plus className="w-3.5 h-3.5" />
             Add Vendor
@@ -242,20 +242,20 @@ export const VendorsPage: React.FC = () => {
 
       {/* AI Quote Extractor Drawer */}
       {showQuoteExtractor && (
-        <div className="p-6 bg-indigo-50 border border-indigo-200 rounded-2xl shadow-sm space-y-4">
+        <div className="p-6 metallic-card border border-white/15 rounded-2xl space-y-4">
           <div className="flex items-center justify-between">
-            <h3 className="font-bold text-sm text-indigo-950 flex items-center gap-2">
-              <FileText className="w-4 h-4 text-indigo-600" />
+            <h3 className="font-bold text-sm text-white flex items-center gap-2">
+              <FileText className="w-4 h-4 text-white" />
               Vendor Quote Extractor
             </h3>
             <button
               onClick={() => setShowQuoteExtractor(false)}
-              className="text-xs text-indigo-700 hover:underline"
+              className="text-xs text-zinc-400 hover:text-white"
             >
               Close
             </button>
           </div>
-          <p className="text-xs text-indigo-900 leading-relaxed">
+          <p className="text-xs text-zinc-400 leading-relaxed">
             Paste any unstructured vendor proposal, WhatsApp chat quote, or email message below. Gemini will extract line items, taxes, payment terms, and compare against your budget.
           </p>
 
@@ -263,90 +263,107 @@ export const VendorsPage: React.FC = () => {
             rows={4}
             value={rawQuoteText}
             onChange={e => setRawQuoteText(e.target.value)}
-            placeholder="Paste quote here: 'Regarding your reception catering for 150 pax, our per plate charge is 1500 INR plus 20000 for live mocktail bar and 5% GST...'"
-            className="w-full p-3 text-xs bg-white border border-indigo-200 rounded-xl focus:outline-none focus:ring-1 focus:ring-indigo-600"
+            placeholder="Paste text like: 'Hi, for the wedding dinner on Dec 29: 150 guests @ 1500/plate = 2,25,000. Mocktail bar: 20,000. Taxes 5% extra. 25% advance to block.'"
+            className="w-full p-3 text-xs metallic-input rounded-xl leading-relaxed"
           />
 
-          <div className="flex justify-end gap-3">
+          <div className="flex justify-end gap-2">
             <button
               onClick={handleExtractQuote}
               disabled={extracting || !rawQuoteText.trim()}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold rounded-xl shadow-xs disabled:opacity-50 transition-colors"
+              className="metallic-btn-primary inline-flex items-center gap-2 text-xs font-bold px-4 py-2 rounded-xl disabled:opacity-50 transition-all"
             >
               <Sparkles className="w-3.5 h-3.5" />
-              {extracting ? 'Analyzing Quote...' : 'Extract Quote Details'}
+              {extracting ? 'Extracting with Gemini...' : 'Analyze & Extract Line Items'}
             </button>
           </div>
 
-          {/* Extracted Results Preview */}
+          {/* Extracted Quote Review Card */}
           {extractedQuote && (
-            <div className="mt-4 p-4 bg-white rounded-xl border border-indigo-200 text-xs space-y-3">
-              <div className="flex justify-between items-center pb-2 border-b border-slate-100">
-                <span className="font-bold text-slate-900 text-sm">
-                  {extractedQuote.vendorName} ({extractedQuote.category})
-                </span>
-                <span className="font-extrabold text-base text-slate-950">
-                  Total: ₹{extractedQuote.total.toLocaleString('en-IN')}
-                </span>
+            <div className="mt-4 p-5 bg-zinc-900/90 rounded-xl border border-white/10 space-y-4">
+              <div className="flex items-center justify-between pb-3 border-b border-white/10">
+                <div>
+                  <h4 className="font-bold text-sm text-white">
+                    {extractedQuote.vendorName} ({extractedQuote.category})
+                  </h4>
+                  <span className="text-[11px] text-zinc-400">
+                    Payment Terms: {extractedQuote.paymentTerms || 'Standard'}
+                  </span>
+                </div>
+                <div className="text-right">
+                  <span className="text-[11px] text-zinc-500 block">Extracted Total</span>
+                  <span className="text-base font-extrabold text-white">
+                    ₹{extractedQuote.total.toLocaleString('en-IN')}
+                  </span>
+                </div>
               </div>
 
-              <div className="divide-y divide-slate-100">
-                {(extractedQuote.lineItems || []).map((item: { description: string; total: number }, idx: number) => (
-                  <div key={idx} className="py-1.5 flex justify-between text-slate-700">
-                    <span>{item.description}</span>
-                    <span className="font-semibold">₹{item.total.toLocaleString('en-IN')}</span>
+              {/* Line Items Table */}
+              <div className="divide-y divide-white/10 text-xs">
+                {(extractedQuote.lineItems || extractedQuote.extractedLineItems || []).map((item, idx) => (
+                  <div key={idx} className="py-2 flex items-center justify-between text-zinc-300">
+                    <div>
+                      <span className="font-medium text-white">{item.description}</span>
+                      {(item.quantity ?? 1) > 1 && (
+                        <span className="text-zinc-500 text-[11px] ml-2">
+                          ({item.quantity} × ₹{(item.unitPrice ?? 0).toLocaleString('en-IN')})
+                        </span>
+                      )}
+                    </div>
+                    <span className="font-bold text-white">₹{item.total.toLocaleString('en-IN')}</span>
                   </div>
                 ))}
               </div>
 
-              {extractedQuote.paymentTerms && (
-                <div className="text-[11px] text-slate-500 pt-1">
-                  <strong>Terms:</strong> {extractedQuote.paymentTerms}
-                </div>
-              )}
-
-              <div className="pt-2 flex justify-end gap-2">
+              <div className="pt-3 border-t border-white/10 flex items-center justify-between">
                 <button
-                  type="button"
                   onClick={openNegotiatorForExtracted}
-                  className="px-3.5 py-1.5 bg-emerald-50 border border-emerald-200 text-emerald-800 hover:bg-emerald-100 font-semibold rounded-lg text-xs transition-colors flex items-center gap-1.5"
+                  className="metallic-btn-secondary inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg"
                 >
-                  <Handshake className="w-3.5 h-3.5 text-emerald-700" />
-                  AI Negotiate This Quote
+                  <Handshake className="w-3.5 h-3.5 text-white" />
+                  Negotiate Extracted Quote
                 </button>
-                <button
-                  onClick={handleConfirmQuote}
-                  className="px-4 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg text-xs transition-colors"
-                >
-                  Confirm & Add to Vendors
-                </button>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => setExtractedQuote(null)}
+                    className="px-3 py-1.5 text-xs text-zinc-400 hover:text-white"
+                  >
+                    Discard
+                  </button>
+                  <button
+                    onClick={handleConfirmQuote}
+                    className="metallic-btn-primary px-4 py-1.5 text-xs font-bold rounded-lg"
+                  >
+                    Save as Vendor
+                  </button>
+                </div>
               </div>
             </div>
           )}
         </div>
       )}
 
-      {/* AI Vendor Negotiator Modal */}
+      {/* AI Negotiator Modal */}
       {showNegotiator && (
-        <div className="fixed inset-0 z-50 bg-slate-950/50 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
-          <div className="bg-white rounded-2xl border border-slate-200 shadow-2xl max-w-2xl w-full p-6 space-y-5 my-8">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="metallic-card border border-white/20 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 space-y-6">
+            <div className="flex items-center justify-between pb-4 border-b border-white/10">
               <div className="flex items-center gap-2.5">
-                <div className="p-2 bg-emerald-100 text-emerald-800 rounded-xl">
+                <div className="p-2 bg-white/10 border border-white/20 rounded-xl text-white">
                   <Handshake className="w-5 h-5" />
                 </div>
                 <div>
-                  <h3 className="font-extrabold text-slate-950 text-base">
+                  <h3 className="font-bold text-base text-white">
                     AI Vendor Negotiation & Counter-Offer Drafter
                   </h3>
-                  <p className="text-xs text-slate-500">
+                  <p className="text-xs text-zinc-400">
                     Calculates strategic counter-offers, trade-off levers, and ready-to-send negotiation letters.
                   </p>
                 </div>
               </div>
               <button
                 onClick={() => setShowNegotiator(false)}
-                className="text-slate-400 hover:text-slate-600 p-1 rounded-lg"
+                className="text-zinc-400 hover:text-white p-1 rounded-lg"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -355,7 +372,7 @@ export const VendorsPage: React.FC = () => {
             {/* Inputs */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label className="text-[11px] font-bold text-slate-700 uppercase block mb-1">
+                <label className="text-[11px] font-bold text-zinc-300 uppercase block mb-1">
                   Vendor Name
                 </label>
                 <input
@@ -363,19 +380,19 @@ export const VendorsPage: React.FC = () => {
                   value={negotiateVendorName}
                   onChange={e => setNegotiateVendorName(e.target.value)}
                   placeholder="e.g. Royal Decorators"
-                  className="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-300 rounded-lg"
+                  className="w-full px-3 py-2 text-xs metallic-input rounded-lg"
                   required
                 />
               </div>
 
               <div>
-                <label className="text-[11px] font-bold text-slate-700 uppercase block mb-1">
+                <label className="text-[11px] font-bold text-zinc-300 uppercase block mb-1">
                   Category
                 </label>
                 <select
                   value={negotiateCategory}
                   onChange={e => setNegotiateCategory(e.target.value)}
-                  className="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-300 rounded-lg"
+                  className="w-full px-3 py-2 text-xs metallic-input rounded-lg"
                 >
                   <option value="Venue">Venue</option>
                   <option value="Catering">Catering</option>
@@ -387,7 +404,7 @@ export const VendorsPage: React.FC = () => {
               </div>
 
               <div>
-                <label className="text-[11px] font-bold text-slate-700 uppercase block mb-1">
+                <label className="text-[11px] font-bold text-zinc-300 uppercase block mb-1">
                   Quoted Amount (₹)
                 </label>
                 <input
@@ -395,13 +412,13 @@ export const VendorsPage: React.FC = () => {
                   value={negotiateQuotedAmount}
                   onChange={e => setNegotiateQuotedAmount(e.target.value)}
                   placeholder="e.g. 250000"
-                  className="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-300 rounded-lg font-semibold"
+                  className="w-full px-3 py-2 text-xs metallic-input rounded-lg font-semibold"
                   required
                 />
               </div>
 
               <div>
-                <label className="text-[11px] font-bold text-slate-700 uppercase block mb-1">
+                <label className="text-[11px] font-bold text-zinc-300 uppercase block mb-1">
                   Target Budget / Desired Cap (₹)
                 </label>
                 <input
@@ -409,12 +426,12 @@ export const VendorsPage: React.FC = () => {
                   value={negotiateTargetBudget}
                   onChange={e => setNegotiateTargetBudget(e.target.value)}
                   placeholder="e.g. 210000"
-                  className="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-300 rounded-lg"
+                  className="w-full px-3 py-2 text-xs metallic-input rounded-lg"
                 />
               </div>
 
               <div className="sm:col-span-2">
-                <label className="text-[11px] font-bold text-slate-700 uppercase block mb-1">
+                <label className="text-[11px] font-bold text-zinc-300 uppercase block mb-1">
                   Negotiation Levers / Notes (Optional)
                 </label>
                 <input
@@ -422,7 +439,7 @@ export const VendorsPage: React.FC = () => {
                   value={negotiateNotes}
                   onChange={e => setNegotiateNotes(e.target.value)}
                   placeholder="e.g. Can pay 50% upfront, flexible on setup time, comparing with another vendor"
-                  className="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-300 rounded-lg"
+                  className="w-full px-3 py-2 text-xs metallic-input rounded-lg"
                 />
               </div>
             </div>
@@ -432,66 +449,66 @@ export const VendorsPage: React.FC = () => {
                 type="button"
                 onClick={handleRunNegotiation}
                 disabled={isNegotiating || !negotiateVendorName.trim() || !negotiateQuotedAmount}
-                className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-semibold rounded-xl shadow-xs disabled:opacity-50 transition-colors"
+                className="metallic-btn-primary inline-flex items-center gap-2 px-4 py-2 text-xs font-bold rounded-xl disabled:opacity-50 transition-all"
               >
-                <Sparkles className="w-3.5 h-3.5" />
+                <Sparkles className="w-3.5 h-3.5 text-black" />
                 {isNegotiating ? 'Generating Counter-Offer...' : 'Formulate Counter-Offer Strategy'}
               </button>
             </div>
 
             {/* Negotiation Results */}
             {negotiationResult && (
-              <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-4 text-xs">
+              <div className="p-4 bg-zinc-900/90 rounded-xl border border-white/10 space-y-4 text-xs">
                 {/* Metric Summary */}
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-center">
-                  <div className="p-3 bg-white rounded-xl border border-slate-200">
-                    <span className="text-[10px] uppercase font-bold text-slate-400 block">Initial Quote</span>
-                    <span className="text-sm font-extrabold text-slate-800">
+                  <div className="p-3 bg-white/[0.04] rounded-xl border border-white/10">
+                    <span className="text-[10px] uppercase font-bold text-zinc-400 block">Initial Quote</span>
+                    <span className="text-sm font-extrabold text-white">
                       ₹{negotiationResult.quotedAmount.toLocaleString('en-IN')}
                     </span>
                   </div>
-                  <div className="p-3 bg-emerald-50 rounded-xl border border-emerald-200">
-                    <span className="text-[10px] uppercase font-bold text-emerald-700 block">Target Counter-Offer</span>
-                    <span className="text-sm font-extrabold text-emerald-900">
+                  <div className="p-3 bg-white/[0.08] rounded-xl border border-white/20">
+                    <span className="text-[10px] uppercase font-bold text-zinc-200 block">Target Counter-Offer</span>
+                    <span className="text-sm font-extrabold text-white">
                       ₹{negotiationResult.proposedCounterOffer.toLocaleString('en-IN')}
                     </span>
                   </div>
-                  <div className="p-3 bg-indigo-50 rounded-xl border border-indigo-200">
-                    <span className="text-[10px] uppercase font-bold text-indigo-700 block flex items-center justify-center gap-1">
-                      <TrendingDown className="w-3 h-3" /> Potential Savings
+                  <div className="p-3 bg-white/[0.04] rounded-xl border border-white/10">
+                    <span className="text-[10px] uppercase font-bold text-zinc-400 block flex items-center justify-center gap-1">
+                      <TrendingDown className="w-3 h-3 text-white" /> Potential Savings
                     </span>
-                    <span className="text-sm font-extrabold text-indigo-950">
+                    <span className="text-sm font-extrabold text-white">
                       ₹{negotiationResult.potentialSavings.toLocaleString('en-IN')}
                     </span>
                   </div>
                 </div>
 
                 {/* Strategy Summary */}
-                <div className="p-3 bg-white rounded-xl border border-slate-200">
-                  <span className="font-bold text-slate-900 text-xs block mb-1">Strategy Overview:</span>
-                  <p className="text-slate-600 leading-relaxed">
+                <div className="p-3 bg-white/[0.02] rounded-xl border border-white/10">
+                  <span className="font-bold text-white text-xs block mb-1">Strategy Overview:</span>
+                  <p className="text-zinc-300 leading-relaxed">
                     {negotiationResult.strategySummary}
                   </p>
                 </div>
 
                 {/* Suggested Compromises & Phone Points */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div className="p-3 bg-white rounded-xl border border-slate-200">
-                    <span className="font-bold text-slate-900 text-[11px] uppercase tracking-wider block mb-2">
+                  <div className="p-3 bg-white/[0.02] rounded-xl border border-white/10">
+                    <span className="font-bold text-white text-[11px] uppercase tracking-wider block mb-2">
                       💡 Suggested Levers & Trade-Offs
                     </span>
-                    <ul className="space-y-1 text-slate-600 list-disc list-inside text-[11px]">
+                    <ul className="space-y-1 text-zinc-300 list-disc list-inside text-[11px]">
                       {negotiationResult.suggestedCompromises.map((item, idx) => (
                         <li key={idx}>{item}</li>
                       ))}
                     </ul>
                   </div>
 
-                  <div className="p-3 bg-white rounded-xl border border-slate-200">
-                    <span className="font-bold text-slate-900 text-[11px] uppercase tracking-wider block mb-2 flex items-center gap-1">
-                      <PhoneCall className="w-3 h-3 text-emerald-700" /> Phone Talking Points
+                  <div className="p-3 bg-white/[0.02] rounded-xl border border-white/10">
+                    <span className="font-bold text-white text-[11px] uppercase tracking-wider block mb-2 flex items-center gap-1">
+                      <PhoneCall className="w-3 h-3 text-white" /> Phone Talking Points
                     </span>
-                    <ul className="space-y-1 text-slate-600 list-disc list-inside text-[11px]">
+                    <ul className="space-y-1 text-zinc-300 list-disc list-inside text-[11px]">
                       {negotiationResult.phoneTalkingPoints.map((item, idx) => (
                         <li key={idx}>{item}</li>
                       ))}
@@ -500,43 +517,43 @@ export const VendorsPage: React.FC = () => {
                 </div>
 
                 {/* Copyable Letter */}
-                <div className="p-3 bg-white rounded-xl border border-slate-200 space-y-2">
+                <div className="p-3 bg-white/[0.02] rounded-xl border border-white/10 space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="font-bold text-slate-900 text-xs">
+                    <span className="font-bold text-white text-xs">
                       ✉️ Ready-to-Send Counter-Offer Message (WhatsApp / Email)
                     </span>
                     <button
                       onClick={handleCopyNegotiationEmail}
-                      className="inline-flex items-center gap-1 text-[11px] font-semibold text-slate-800 bg-slate-100 hover:bg-slate-200 px-2.5 py-1 rounded-md transition-colors"
+                      className="metallic-btn-secondary inline-flex items-center gap-1 text-[11px] font-semibold px-2.5 py-1 rounded-md transition-colors"
                     >
                       {copiedEmail ? (
                         <>
-                          <Check className="w-3 h-3 text-emerald-600" /> Copied!
+                          <Check className="w-3 h-3 text-white" /> Copied!
                         </>
                       ) : (
                         <>
-                          <Copy className="w-3 h-3 text-slate-600" /> Copy Draft
+                          <Copy className="w-3 h-3 text-zinc-300" /> Copy Draft
                         </>
                       )}
                     </button>
                   </div>
-                  <pre className="text-slate-700 whitespace-pre-wrap font-sans text-xs bg-slate-50 p-3 rounded-lg border border-slate-200 leading-relaxed">
+                  <pre className="text-zinc-200 whitespace-pre-wrap font-sans text-xs bg-black/40 p-3 rounded-lg border border-white/10 leading-relaxed">
                     {negotiationResult.negotiationEmail}
                   </pre>
                 </div>
 
                 {/* Action CTAs */}
-                <div className="flex justify-end gap-2 pt-2 border-t border-slate-200">
+                <div className="flex justify-end gap-2 pt-2 border-t border-white/10">
                   <button
                     onClick={() => setShowNegotiator(false)}
-                    className="px-3 py-1.5 text-xs text-slate-600 hover:text-slate-800"
+                    className="px-3 py-1.5 text-xs text-zinc-400 hover:text-white"
                   >
                     Close
                   </button>
                   {targetVendorId && (
                     <button
                       onClick={handleApplyNegotiationStatus}
-                      className="px-4 py-2 bg-emerald-700 hover:bg-emerald-800 text-white font-semibold rounded-xl text-xs transition-colors"
+                      className="metallic-btn-primary px-4 py-2 font-bold rounded-xl text-xs transition-all"
                     >
                       Update Vendor Status to 'Negotiating'
                     </button>
@@ -550,21 +567,21 @@ export const VendorsPage: React.FC = () => {
 
       {/* Add Vendor Form */}
       {showAddVendor && (
-        <form onSubmit={handleAddVendor} className="p-5 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-4">
-          <h3 className="font-bold text-sm text-slate-900">Add New Vendor</h3>
+        <form onSubmit={handleAddVendor} className="p-5 metallic-card rounded-2xl border border-white/15 space-y-4">
+          <h3 className="font-bold text-sm text-white">Add New Vendor</h3>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <input
               type="text"
               placeholder="Vendor Name"
               value={vendorName}
               onChange={e => setVendorName(e.target.value)}
-              className="px-3.5 py-2 text-xs bg-slate-50 border border-slate-300 rounded-lg"
+              className="px-3.5 py-2 text-xs metallic-input rounded-lg"
               required
             />
             <select
               value={vendorCategory}
               onChange={e => setVendorCategory(e.target.value)}
-              className="px-3.5 py-2 text-xs bg-slate-50 border border-slate-300 rounded-lg"
+              className="px-3.5 py-2 text-xs metallic-input rounded-lg"
             >
               <option value="Venue">Venue</option>
               <option value="Catering">Catering</option>
@@ -578,20 +595,20 @@ export const VendorsPage: React.FC = () => {
               placeholder="Estimated Quote (₹)"
               value={vendorQuoteAmount}
               onChange={e => setVendorQuoteAmount(e.target.value)}
-              className="px-3.5 py-2 text-xs bg-slate-50 border border-slate-300 rounded-lg"
+              className="px-3.5 py-2 text-xs metallic-input rounded-lg"
             />
           </div>
           <div className="flex justify-end gap-2">
             <button
               type="button"
               onClick={() => setShowAddVendor(false)}
-              className="px-3 py-1.5 text-xs text-slate-600 hover:text-slate-800"
+              className="px-3 py-1.5 text-xs text-zinc-400 hover:text-white"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-4 py-1.5 text-xs font-semibold bg-slate-900 text-white rounded-lg hover:bg-slate-800"
+              className="metallic-btn-primary px-4 py-1.5 text-xs font-bold rounded-lg"
             >
               Save Vendor
             </button>
@@ -600,9 +617,9 @@ export const VendorsPage: React.FC = () => {
       )}
 
       {/* Vendors List */}
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-xs divide-y divide-slate-100">
+      <div className="metallic-card rounded-2xl divide-y divide-white/10">
         {activeEvent.vendors.length === 0 ? (
-          <div className="p-8 text-center text-xs text-slate-500">
+          <div className="p-8 text-center text-xs text-zinc-400">
             No vendors registered yet. Add a vendor or extract one from a quote above.
           </div>
         ) : (
@@ -610,21 +627,21 @@ export const VendorsPage: React.FC = () => {
             <div key={vendor.id} className="p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs">
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="font-bold text-slate-900 text-sm">{vendor.name}</span>
-                  <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-slate-100 text-slate-700">
+                  <span className="font-bold text-white text-sm">{vendor.name}</span>
+                  <span className="metallic-pill px-2 py-0.5 rounded text-[10px] font-semibold">
                     {vendor.category}
                   </span>
-                  <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase ${
+                  <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase border ${
                     vendor.status === 'confirmed'
-                      ? 'bg-emerald-100 text-emerald-800'
+                      ? 'border-white/50 bg-white/20 text-white'
                       : vendor.status === 'negotiating'
-                      ? 'bg-indigo-100 text-indigo-800'
-                      : 'bg-amber-100 text-amber-800'
+                      ? 'border-zinc-500 bg-zinc-800 text-zinc-200'
+                      : 'border-zinc-700 bg-zinc-900 text-zinc-300'
                   }`}>
                     {vendor.status.replace('_', ' ')}
                   </span>
                 </div>
-                <div className="text-[11px] text-slate-500 mt-1">
+                <div className="text-[11px] text-zinc-400 mt-1">
                   {vendor.contactName && `Contact: ${vendor.contactName} • `}
                   {vendor.phone && `${vendor.phone} • `}
                   {vendor.email || 'No contact email listed'}
@@ -633,19 +650,19 @@ export const VendorsPage: React.FC = () => {
 
               <div className="flex items-center gap-4 sm:gap-6 text-right">
                 <div>
-                  <span className="text-slate-400 text-[11px] block">Contract Amount</span>
-                  <span className="font-bold text-slate-900 text-sm">₹{vendor.quoteAmount.toLocaleString('en-IN')}</span>
+                  <span className="text-zinc-500 text-[11px] block">Contract Amount</span>
+                  <span className="font-bold text-white text-sm">₹{vendor.quoteAmount.toLocaleString('en-IN')}</span>
                 </div>
                 <div>
-                  <span className="text-slate-400 text-[11px] block">Paid Advance</span>
-                  <span className="font-semibold text-emerald-700">₹{vendor.paidAmount.toLocaleString('en-IN')}</span>
+                  <span className="text-zinc-500 text-[11px] block">Paid Advance</span>
+                  <span className="font-semibold text-zinc-300">₹{vendor.paidAmount.toLocaleString('en-IN')}</span>
                 </div>
                 <button
                   onClick={() => openNegotiatorForVendor(vendor)}
-                  className="px-2.5 py-1.5 text-xs font-semibold rounded-lg bg-emerald-50 text-emerald-800 hover:bg-emerald-100 border border-emerald-200 transition-colors flex items-center gap-1 shrink-0"
+                  className="metallic-btn-secondary px-2.5 py-1.5 text-xs font-semibold rounded-lg transition-all flex items-center gap-1 shrink-0"
                   title="Draft AI Counter-Offer"
                 >
-                  <Handshake className="w-3.5 h-3.5" />
+                  <Handshake className="w-3.5 h-3.5 text-white" />
                   Negotiate
                 </button>
               </div>

@@ -8,7 +8,7 @@ import {
   AlertTriangle, 
   Sparkles, 
   Users, 
-  TrendingUp
+  TrendingUp 
 } from 'lucide-react';
 import { useEvent } from '../../context/EventContext';
 import { api } from '../../services/api';
@@ -39,17 +39,17 @@ export const OverviewPage: React.FC = () => {
   if (!activeEvent) return null;
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 text-slate-100">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-200">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-white/10">
         <div>
-          <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
+          <span className="text-xs font-bold uppercase tracking-wider text-zinc-400">
             Command Center
           </span>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-950 mt-1">
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-white mt-1">
             {activeEvent.meta.name}
           </h1>
-          <p className="text-xs sm:text-sm text-slate-600 mt-1">
+          <p className="text-xs sm:text-sm text-zinc-400 mt-1">
             {activeEvent.meta.type.toUpperCase()} • {activeEvent.meta.location} • {activeEvent.meta.date}
           </p>
         </div>
@@ -57,17 +57,17 @@ export const OverviewPage: React.FC = () => {
         <div className="flex items-center gap-3">
           <Link
             to="/app/budget"
-            className="inline-flex items-center gap-2 text-xs font-semibold bg-white hover:bg-slate-50 border border-slate-300 text-slate-800 px-3.5 py-2 rounded-xl shadow-xs transition-colors"
+            className="metallic-btn-secondary inline-flex items-center gap-2 text-xs font-semibold px-3.5 py-2 rounded-xl transition-colors shadow-xs"
           >
-            <TrendingUp className="w-3.5 h-3.5 text-indigo-600" />
+            <TrendingUp className="w-3.5 h-3.5 text-white" />
             What-If Simulator
           </Link>
           <button
             onClick={handleRunAnalysis}
             disabled={analyzing}
-            className="inline-flex items-center gap-2 text-xs font-semibold bg-slate-900 hover:bg-slate-800 text-white px-3.5 py-2 rounded-xl shadow-xs transition-colors disabled:opacity-50"
+            className="metallic-btn-primary inline-flex items-center gap-2 text-xs font-bold px-3.5 py-2 rounded-xl transition-colors disabled:opacity-50"
           >
-            <Sparkles className="w-3.5 h-3.5 text-indigo-300" />
+            <Sparkles className="w-3.5 h-3.5 text-black" />
             {analyzing ? 'Analyzing Plan...' : 'Analyze Event'}
           </button>
         </div>
@@ -75,10 +75,10 @@ export const OverviewPage: React.FC = () => {
 
       {/* AI State Insight Banner (if generated) */}
       {aiInsight && (
-        <div className="p-4 rounded-xl bg-indigo-50 border border-indigo-200 flex items-start gap-3">
-          <Sparkles className="w-5 h-5 text-indigo-600 shrink-0 mt-0.5" />
-          <div className="text-xs text-indigo-950 flex-1">
-            <span className="font-bold">EventPilot Recommendation: </span>
+        <div className="p-4 rounded-xl metallic-card border border-white/20 flex items-start gap-3">
+          <Sparkles className="w-5 h-5 text-white shrink-0 mt-0.5" />
+          <div className="text-xs text-zinc-200 flex-1">
+            <span className="font-bold text-white">EventPilot Recommendation: </span>
             {aiInsight}
           </div>
         </div>
@@ -87,57 +87,57 @@ export const OverviewPage: React.FC = () => {
       {/* 4 Core Health Metric Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Days Countdown */}
-        <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-xs">
-          <div className="flex items-center justify-between text-slate-500 text-xs font-semibold">
+        <div className="p-5 rounded-2xl metallic-card-interactive">
+          <div className="flex items-center justify-between text-zinc-400 text-xs font-semibold">
             <span>Countdown</span>
-            <Calendar className="w-4 h-4 text-slate-400" />
+            <Calendar className="w-4 h-4 text-zinc-400" />
           </div>
-          <div className="text-2xl font-bold text-slate-950 mt-2">
+          <div className="text-2xl font-extrabold text-white mt-2">
             {timeline.daysRemaining > 0 ? `${timeline.daysRemaining} Days` : 'Today'}
           </div>
-          <div className="text-xs text-slate-500 mt-1">
+          <div className="text-xs text-zinc-400 mt-1">
             Target: {activeEvent.meta.date}
           </div>
         </div>
 
         {/* Budget Health */}
-        <div className={`p-5 rounded-2xl bg-white border shadow-xs ${budget.isOverBudget ? 'border-red-300 bg-red-50/20' : 'border-slate-200'}`}>
-          <div className="flex items-center justify-between text-slate-500 text-xs font-semibold">
+        <div className="p-5 rounded-2xl metallic-card-interactive">
+          <div className="flex items-center justify-between text-zinc-400 text-xs font-semibold">
             <span>Budget Balance</span>
-            <Wallet className="w-4 h-4 text-slate-400" />
+            <Wallet className="w-4 h-4 text-zinc-400" />
           </div>
-          <div className={`text-2xl font-bold mt-2 ${budget.isOverBudget ? 'text-red-600' : 'text-slate-950'}`}>
+          <div className="text-2xl font-extrabold text-white mt-2">
             ₹{budget.remaining.toLocaleString('en-IN')}
           </div>
-          <div className="text-xs text-slate-500 mt-1">
+          <div className="text-xs text-zinc-400 mt-1">
             Forecast: ₹{budget.forecast.toLocaleString('en-IN')} / ₹{budget.totalBudget.toLocaleString('en-IN')}
           </div>
         </div>
 
         {/* Timeline Progression */}
-        <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-xs">
-          <div className="flex items-center justify-between text-slate-500 text-xs font-semibold">
+        <div className="p-5 rounded-2xl metallic-card-interactive">
+          <div className="flex items-center justify-between text-zinc-400 text-xs font-semibold">
             <span>Task Progress</span>
-            <CheckCircle2 className="w-4 h-4 text-slate-400" />
+            <CheckCircle2 className="w-4 h-4 text-zinc-400" />
           </div>
-          <div className="text-2xl font-bold text-slate-950 mt-2">
+          <div className="text-2xl font-extrabold text-white mt-2">
             {timeline.progressPercent}%
           </div>
-          <div className="text-xs text-slate-500 mt-1">
+          <div className="text-xs text-zinc-400 mt-1">
             {timeline.completedTasksCount} of {timeline.totalTasksCount} completed
           </div>
         </div>
 
         {/* Guests & Capacity */}
-        <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-xs">
-          <div className="flex items-center justify-between text-slate-500 text-xs font-semibold">
+        <div className="p-5 rounded-2xl metallic-card-interactive">
+          <div className="flex items-center justify-between text-zinc-400 text-xs font-semibold">
             <span>Guest Capacity</span>
-            <Users className="w-4 h-4 text-slate-400" />
+            <Users className="w-4 h-4 text-zinc-400" />
           </div>
-          <div className="text-2xl font-bold text-slate-950 mt-2">
+          <div className="text-2xl font-extrabold text-white mt-2">
             {activeEvent.meta.guestCount} Guests
           </div>
-          <div className="text-xs text-slate-500 mt-1">
+          <div className="text-xs text-zinc-400 mt-1">
             Venue Limit: {activeEvent.meta.venueCapacity || 'Unlimited'}
           </div>
         </div>
@@ -146,49 +146,47 @@ export const OverviewPage: React.FC = () => {
       {/* Two Column Grid: Items Needing Attention & Upcoming Milestones */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Items Needing Attention */}
-        <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-xs flex flex-col">
-          <div className="flex items-center justify-between pb-4 border-b border-slate-100">
-            <h2 className="font-bold text-base text-slate-900 flex items-center gap-2">
-              <AlertTriangle className="w-4 h-4 text-amber-500" />
+        <div className="p-6 rounded-2xl metallic-card flex flex-col">
+          <div className="flex items-center justify-between pb-4 border-b border-white/10">
+            <h2 className="font-bold text-base text-white flex items-center gap-2">
+              <AlertTriangle className="w-4 h-4 text-zinc-300" />
               Items Needing Attention
             </h2>
-            <span className="text-xs font-semibold text-slate-500">
+            <span className="text-xs font-semibold text-zinc-400">
               {topRisks.length + criticalTasks.length} items
             </span>
           </div>
 
           <div className="mt-4 space-y-3 flex-1">
             {topRisks.length === 0 && criticalTasks.length === 0 ? (
-              <div className="py-8 text-center text-xs text-slate-500">
-                <CheckCircle2 className="w-6 h-6 text-emerald-500 mx-auto mb-2" />
+              <div className="py-8 text-center text-xs text-zinc-400">
+                <CheckCircle2 className="w-6 h-6 text-zinc-300 mx-auto mb-2" />
                 All systems healthy. No immediate blockers detected!
               </div>
             ) : (
               <>
                 {topRisks.map(r => (
-                  <div key={r.id} className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs">
+                  <div key={r.id} className="p-3.5 rounded-xl bg-zinc-900/90 border border-white/10 text-xs">
                     <div className="flex items-center justify-between">
-                      <span className="font-bold text-slate-900">{r.title}</span>
-                      <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase ${
-                        r.severity === 'critical' ? 'bg-red-100 text-red-700' : 'bg-amber-100 text-amber-800'
-                      }`}>
+                      <span className="font-bold text-white">{r.title}</span>
+                      <span className="metallic-pill px-2 py-0.5 rounded text-[10px] font-bold uppercase">
                         {r.severity}
                       </span>
                     </div>
-                    <p className="text-slate-600 mt-1">{r.triggerReason}</p>
-                    <div className="text-indigo-700 font-medium mt-2">
+                    <p className="text-zinc-300 mt-1">{r.triggerReason}</p>
+                    <div className="text-white font-medium mt-2">
                       Plan: {r.mitigationPlan}
                     </div>
                   </div>
                 ))}
 
                 {criticalTasks.map(t => (
-                  <div key={t.id} className="p-3 rounded-xl bg-rose-50/50 border border-rose-200 text-xs flex items-center justify-between">
+                  <div key={t.id} className="p-3 rounded-xl bg-zinc-900/90 border border-zinc-700 text-xs flex items-center justify-between">
                     <div>
-                      <span className="font-semibold text-rose-900">{t.title}</span>
-                      <span className="block text-[11px] text-rose-700 mt-0.5">Due: {t.dueDate} (Overdue)</span>
+                      <span className="font-semibold text-white">{t.title}</span>
+                      <span className="block text-[11px] text-zinc-400 mt-0.5">Due: {t.dueDate} (Overdue)</span>
                     </div>
-                    <Link to="/app/tasks" className="text-rose-700 font-bold hover:underline">
+                    <Link to="/app/tasks" className="text-white font-bold hover:underline">
                       View Task →
                     </Link>
                   </div>
@@ -199,13 +197,13 @@ export const OverviewPage: React.FC = () => {
         </div>
 
         {/* Upcoming Milestones & Next Actions */}
-        <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-xs flex flex-col">
-          <div className="flex items-center justify-between pb-4 border-b border-slate-100">
-            <h2 className="font-bold text-base text-slate-900 flex items-center gap-2">
-              <Clock className="w-4 h-4 text-indigo-600" />
+        <div className="p-6 rounded-2xl metallic-card flex flex-col">
+          <div className="flex items-center justify-between pb-4 border-b border-white/10">
+            <h2 className="font-bold text-base text-white flex items-center gap-2">
+              <Clock className="w-4 h-4 text-white" />
               Upcoming Milestones
             </h2>
-            <Link to="/app/timeline" className="text-xs font-bold text-indigo-600 hover:underline">
+            <Link to="/app/timeline" className="text-xs font-bold text-zinc-300 hover:text-white transition-colors">
               View Timeline →
             </Link>
           </div>
@@ -215,19 +213,19 @@ export const OverviewPage: React.FC = () => {
               <div 
                 key={m.id}
                 className={`p-3.5 rounded-xl border text-xs flex items-center justify-between ${
-                  m.completed ? 'bg-emerald-50/40 border-emerald-200' : 'bg-slate-50 border-slate-200'
+                  m.completed ? 'bg-white/[0.04] border-white/20' : 'bg-zinc-900/90 border-white/10'
                 }`}
               >
                 <div>
                   <div className="flex items-center gap-2">
-                    <span className="font-bold text-slate-900">{m.title}</span>
+                    <span className="font-bold text-white">{m.title}</span>
                     {m.completed && (
-                      <span className="text-[10px] bg-emerald-100 text-emerald-800 px-1.5 py-0.5 rounded font-bold">
+                      <span className="text-[10px] metallic-pill px-1.5 py-0.5 rounded font-bold text-white border-white/30">
                         DONE
                       </span>
                     )}
                   </div>
-                  <span className="text-slate-500 text-[11px] mt-0.5 block">
+                  <span className="text-zinc-400 text-[11px] mt-0.5 block">
                     Target Date: {m.targetDate}
                   </span>
                 </div>
@@ -240,7 +238,7 @@ export const OverviewPage: React.FC = () => {
                       );
                       updateActiveEvent({ milestones: updated });
                     }}
-                    className="px-2.5 py-1 text-[11px] font-semibold bg-white border border-slate-300 rounded-md hover:bg-slate-100 transition-colors"
+                    className="metallic-btn-secondary px-2.5 py-1 text-[11px] font-semibold rounded-md"
                   >
                     Mark Done
                   </button>

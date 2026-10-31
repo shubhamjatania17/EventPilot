@@ -53,40 +53,42 @@ export const SignInPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-[#090a0f] flex flex-col justify-center py-12 sm:px-6 lg:px-8 text-slate-100">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <Link
           to="/"
-          className="inline-flex items-center gap-2 text-xs font-semibold text-slate-500 hover:text-slate-800 mb-6 transition-colors"
+          className="inline-flex items-center gap-2 text-xs font-semibold text-zinc-400 hover:text-white mb-6 transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           Back to EventPilot
         </Link>
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-lg bg-slate-900 text-white flex items-center justify-center font-bold text-lg">
-            EP
-          </div>
-          <span className="font-heading text-2xl font-bold tracking-tight text-slate-900">
+          <img
+            src="/logo.png"
+            alt="EventPilot"
+            className="w-9 h-9 rounded-lg object-contain shadow-xs border border-white/15"
+          />
+          <span className="font-heading text-2xl font-bold tracking-tight metallic-chrome-text">
             EventPilot
           </span>
         </div>
-        <h1 className="mt-4 text-2xl font-bold tracking-tight text-slate-950">
+        <h1 className="mt-4 text-2xl font-bold tracking-tight text-white">
           Sign In
         </h1>
-        <p className="mt-1 text-sm text-slate-600">
+        <p className="mt-1 text-sm text-zinc-400">
           Access your private event workspace and active plans.
         </p>
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white py-8 px-4 shadow-sm border border-slate-200 sm:rounded-2xl sm:px-10">
+        <div className="metallic-card py-8 px-4 border border-white/15 shadow-2xl sm:rounded-2xl sm:px-10">
           {error && (
-            <div className="mb-6 p-4 rounded-xl bg-red-50 border border-red-200 flex items-start gap-3 text-sm text-red-800">
-              <AlertCircle className="w-5 h-5 text-red-600 shrink-0 mt-0.5" />
+            <div className="mb-6 p-4 rounded-xl bg-zinc-900 border border-zinc-700 flex items-start gap-3 text-sm text-zinc-200">
+              <AlertCircle className="w-5 h-5 text-white shrink-0 mt-0.5" />
               <div>
                 <p className="font-semibold">{error}</p>
                 {error.includes('Create an account first') || error.includes('sign up first') ? (
-                  <Link to="/signup" className="text-red-700 underline font-bold mt-1 inline-block">
+                  <Link to="/signup" className="text-white underline font-bold mt-1 inline-block">
                     Go to Sign Up →
                   </Link>
                 ) : null}
@@ -96,11 +98,11 @@ export const SignInPage: React.FC = () => {
 
           <form className="space-y-5" onSubmit={handleSubmit}>
             <div>
-              <label htmlFor="email" className="block text-xs font-semibold text-slate-700 uppercase tracking-wider">
+              <label htmlFor="email" className="block text-xs font-semibold text-zinc-300 uppercase tracking-wider">
                 Email address
               </label>
               <div className="mt-1.5 relative">
-                <Mail className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
+                <Mail className="w-4 h-4 text-zinc-400 absolute left-3.5 top-3" />
                 <input
                   id="email"
                   name="email"
@@ -110,17 +112,17 @@ export const SignInPage: React.FC = () => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="organizer@event.com"
-                  className="block w-full pl-10 pr-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900"
+                  className="block w-full pl-10 pr-3.5 py-2.5 metallic-input rounded-xl text-white text-sm placeholder:text-zinc-500"
                 />
               </div>
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-xs font-semibold text-slate-700 uppercase tracking-wider">
+              <label htmlFor="password" className="block text-xs font-semibold text-zinc-300 uppercase tracking-wider">
                 Password
               </label>
               <div className="mt-1.5 relative">
-                <Lock className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
+                <Lock className="w-4 h-4 text-zinc-400 absolute left-3.5 top-3" />
                 <input
                   id="password"
                   name="password"
@@ -130,7 +132,7 @@ export const SignInPage: React.FC = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="block w-full pl-10 pr-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900"
+                  className="block w-full pl-10 pr-3.5 py-2.5 metallic-input rounded-xl text-white text-sm placeholder:text-zinc-500"
                 />
               </div>
             </div>
@@ -138,7 +140,7 @@ export const SignInPage: React.FC = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full flex justify-center py-2.5 px-4 border border-transparent rounded-xl shadow-sm text-sm font-semibold text-white bg-slate-900 hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-900 disabled:opacity-50 transition-all"
+              className="w-full flex justify-center py-2.5 px-4 metallic-btn-primary rounded-xl text-sm font-bold disabled:opacity-50"
             >
               {loading ? 'Signing in...' : 'Sign In'}
             </button>
@@ -147,10 +149,10 @@ export const SignInPage: React.FC = () => {
           <div className="mt-6">
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-slate-200" />
+                <div className="w-full border-t border-white/10" />
               </div>
               <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-white px-2 text-slate-500 font-semibold tracking-wider">
+                <span className="bg-[#0e1015] px-2 text-zinc-400 font-semibold tracking-wider">
                   Or continue with
                 </span>
               </div>
@@ -161,7 +163,7 @@ export const SignInPage: React.FC = () => {
                 type="button"
                 onClick={handleGoogleSignIn}
                 disabled={loading}
-                className="w-full inline-flex justify-center items-center gap-2 py-2.5 px-4 border border-slate-300 rounded-xl bg-white text-sm font-semibold text-slate-700 hover:bg-slate-50 focus:outline-none transition-colors"
+                className="w-full inline-flex justify-center items-center gap-2 py-2.5 px-4 metallic-btn-secondary rounded-xl text-sm font-semibold text-slate-200 transition-colors"
               >
                 <svg className="w-4 h-4" viewBox="0 0 24 24">
                   <path
@@ -186,9 +188,9 @@ export const SignInPage: React.FC = () => {
             </div>
           </div>
 
-          <div className="mt-8 text-center text-xs text-slate-600">
+          <div className="mt-8 text-center text-xs text-zinc-400">
             Don't have an EventPilot account?{' '}
-            <Link to="/signup" className="font-bold text-slate-900 hover:underline">
+            <Link to="/signup" className="font-bold text-white hover:underline">
               Create an account
             </Link>
           </div>

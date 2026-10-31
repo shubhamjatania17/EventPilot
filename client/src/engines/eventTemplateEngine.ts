@@ -18,13 +18,18 @@ export interface NewEventFormData {
   cateringCostPerGuest?: number;
   celebrantName?: string;
   celebrantAge?: number | string;
+  birthdayTheme?: string;
   partyHighlights?: string[];
+  selectedHighlights?: string[];
   companyName?: string;
   eventFormat?: string;
   techNeeds?: string[];
+  selectedTechNeeds?: string[];
   targetOutcome?: string;
   stallsCount?: number;
+  venueNature?: string;
   safetyNeeds?: string[];
+  selectedSafetyNeeds?: string[];
   notes?: string;
 }
 

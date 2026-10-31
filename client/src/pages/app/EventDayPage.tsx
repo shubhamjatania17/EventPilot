@@ -131,17 +131,17 @@ export const EventDayPage: React.FC = () => {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 text-slate-100">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-200">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-white/10">
         <div>
-          <div className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded">
-            <Clock className="w-3.5 h-3.5" /> Live Execution Mode
+          <div className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider metallic-pill px-2.5 py-1 rounded">
+            <Clock className="w-3.5 h-3.5 text-white" /> Live Execution Mode
           </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-950 mt-1">
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-white mt-1">
             Event Day Run-of-Show
           </h1>
-          <p className="text-xs sm:text-sm text-slate-600 mt-1">
+          <p className="text-xs sm:text-sm text-zinc-400 mt-1">
             Hour-by-hour operational itinerary with instant delay replanning and coordinator dispatch.
           </p>
         </div>
@@ -149,15 +149,15 @@ export const EventDayPage: React.FC = () => {
         <div className="flex items-center gap-3">
           <button
             onClick={() => setShowIncidentModal(true)}
-            className="inline-flex items-center gap-2 text-xs font-semibold bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 px-3.5 py-2.5 rounded-xl transition-colors shadow-xs"
+            className="metallic-btn-secondary inline-flex items-center gap-2 text-xs font-semibold px-3.5 py-2.5 rounded-xl transition-all"
           >
-            <ShieldAlert className="w-4 h-4 text-rose-600 animate-pulse" />
+            <ShieldAlert className="w-4 h-4 text-white" />
             AI Crisis & Incident Responder
           </button>
 
           <button
             onClick={() => setShowAddItem(true)}
-            className="inline-flex items-center gap-1.5 text-xs font-semibold bg-slate-900 hover:bg-slate-800 text-white px-4 py-2.5 rounded-xl shadow-xs transition-colors"
+            className="metallic-btn-primary inline-flex items-center gap-1.5 text-xs font-bold px-4 py-2.5 rounded-xl transition-all"
           >
             <Plus className="w-3.5 h-3.5" />
             Add Schedule Block
@@ -167,14 +167,14 @@ export const EventDayPage: React.FC = () => {
 
       {/* Delay Replanning Feedback Alert */}
       {replanningNotes && (
-        <div className="p-4 rounded-xl bg-amber-50 border border-amber-200 flex items-center justify-between gap-3 text-xs text-amber-900">
+        <div className="p-4 rounded-xl metallic-card border border-white/20 flex items-center justify-between gap-3 text-xs text-white">
           <div className="flex items-center gap-2">
-            <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0" />
+            <AlertTriangle className="w-4 h-4 text-white shrink-0" />
             <span>{replanningNotes}</span>
           </div>
           <button
             onClick={() => setReplanningNotes(null)}
-            className="font-bold underline text-amber-800 hover:text-amber-950"
+            className="font-bold underline text-zinc-300 hover:text-white"
           >
             Dismiss
           </button>
@@ -183,25 +183,25 @@ export const EventDayPage: React.FC = () => {
 
       {/* AI Crisis & Incident Responder Modal */}
       {showIncidentModal && (
-        <div className="fixed inset-0 z-50 bg-slate-950/50 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
-          <div className="bg-white rounded-2xl border border-slate-200 shadow-2xl max-w-2xl w-full p-6 space-y-5 my-8">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
+          <div className="metallic-card rounded-2xl border border-white/20 max-w-2xl w-full p-6 space-y-5 my-8">
+            <div className="flex items-center justify-between pb-3 border-b border-white/10">
               <div className="flex items-center gap-2.5">
-                <div className="p-2 bg-rose-100 text-rose-700 rounded-xl">
+                <div className="p-2 bg-white/10 text-white rounded-xl">
                   <ShieldAlert className="w-5 h-5" />
                 </div>
                 <div>
-                  <h3 className="font-extrabold text-slate-950 text-base">
+                  <h3 className="font-extrabold text-white text-base">
                     Event Day Crisis & Incident Responder
                   </h3>
-                  <p className="text-xs text-slate-500">
+                  <p className="text-xs text-zinc-400">
                     Real-time AI triage, run-of-show delay math, emcee script, and coordinator guidance.
                   </p>
                 </div>
               </div>
               <button
                 onClick={() => setShowIncidentModal(false)}
-                className="text-slate-400 hover:text-slate-600 p-1 rounded-lg"
+                className="text-zinc-400 hover:text-white p-1 rounded-lg"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -209,7 +209,7 @@ export const EventDayPage: React.FC = () => {
 
             {/* Quick incident presets */}
             <div className="space-y-2">
-              <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">
+              <label className="text-xs font-bold text-zinc-300 uppercase tracking-wider">
                 Quick Scenario Presets
               </label>
               <div className="flex flex-wrap gap-2">
@@ -223,7 +223,7 @@ export const EventDayPage: React.FC = () => {
                     key={preset.label}
                     type="button"
                     onClick={() => handleTriageIncident(preset.text)}
-                    className="text-xs bg-slate-100 hover:bg-slate-200 text-slate-800 px-3 py-1.5 rounded-lg font-medium transition-colors"
+                    className="text-xs metallic-btn-secondary px-3 py-1.5 rounded-lg font-medium transition-all"
                   >
                     {preset.label}
                   </button>
@@ -234,15 +234,15 @@ export const EventDayPage: React.FC = () => {
             {/* Custom incident description */}
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <label className="text-xs font-bold text-slate-700">
+                <label className="text-xs font-bold text-zinc-300">
                   Or Describe the Live Incident:
                 </label>
                 <div className="flex items-center gap-2">
-                  <span className="text-[11px] text-slate-500 font-medium">Severity:</span>
+                  <span className="text-[11px] text-zinc-400 font-medium">Severity:</span>
                   <select
                     value={incidentSeverity}
                     onChange={e => setIncidentSeverity(e.target.value as any)}
-                    className="text-xs border border-slate-300 rounded-md px-2 py-1 bg-white font-semibold text-slate-700"
+                    className="text-xs metallic-input rounded-md px-2 py-1 font-semibold"
                   >
                     <option value="low">Low</option>
                     <option value="medium">Medium</option>
@@ -257,7 +257,7 @@ export const EventDayPage: React.FC = () => {
                 value={incidentText}
                 onChange={e => setIncidentText(e.target.value)}
                 placeholder="e.g. The priest arrived 30 mins late and stage spotlight bulb exploded..."
-                className="w-full p-3 text-xs bg-slate-50 border border-slate-300 rounded-xl focus:outline-none focus:ring-1 focus:ring-slate-900"
+                className="w-full p-3 text-xs metallic-input rounded-xl"
               />
 
               <div className="flex justify-end">
@@ -265,9 +265,9 @@ export const EventDayPage: React.FC = () => {
                   type="button"
                   onClick={() => handleTriageIncident()}
                   disabled={isAnalyzingIncident || !incidentText.trim()}
-                  className="inline-flex items-center gap-2 px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold rounded-xl shadow-xs disabled:opacity-50 transition-colors"
+                  className="metallic-btn-primary inline-flex items-center gap-2 px-4 py-2 text-xs font-bold rounded-xl disabled:opacity-50 transition-all"
                 >
-                  <Sparkles className="w-3.5 h-3.5" />
+                  <Sparkles className="w-3.5 h-3.5 text-black" />
                   {isAnalyzingIncident ? 'Triaging Incident...' : 'Analyze & Generate Recovery Plan'}
                 </button>
               </div>
@@ -275,28 +275,22 @@ export const EventDayPage: React.FC = () => {
 
             {/* Incident Analysis Results */}
             {incidentResult && (
-              <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-4 text-xs">
+              <div className="p-4 bg-zinc-900/90 rounded-xl border border-white/10 space-y-4 text-xs">
                 {/* Severity & Summary Header */}
-                <div className="flex items-start justify-between gap-3 pb-3 border-b border-slate-200">
+                <div className="flex items-start justify-between gap-3 pb-3 border-b border-white/10">
                   <div>
                     <div className="flex items-center gap-2">
-                      <span className={`px-2 py-0.5 rounded text-[10px] font-extrabold uppercase ${
-                        incidentResult.severity === 'critical'
-                          ? 'bg-red-100 text-red-800'
-                          : incidentResult.severity === 'high'
-                          ? 'bg-amber-100 text-amber-800'
-                          : 'bg-blue-100 text-blue-800'
-                      }`}>
+                      <span className="metallic-pill px-2 py-0.5 rounded text-[10px] font-extrabold uppercase">
                         {incidentResult.severity} Severity
                       </span>
-                      <span className="font-bold text-slate-900">
+                      <span className="font-bold text-white">
                         {incidentResult.incidentSummary}
                       </span>
                     </div>
                   </div>
                   <div className="text-right shrink-0">
-                    <span className="text-[11px] text-slate-500 block">Recommended Buffer</span>
-                    <span className="text-sm font-extrabold text-rose-600">
+                    <span className="text-[11px] text-zinc-400 block">Recommended Buffer</span>
+                    <span className="text-sm font-extrabold text-white">
                       +{incidentResult.recommendedDelayMinutes} Minutes
                     </span>
                   </div>
@@ -304,10 +298,10 @@ export const EventDayPage: React.FC = () => {
 
                 {/* Immediate Action Steps */}
                 <div>
-                  <h4 className="font-bold text-slate-900 uppercase text-[11px] tracking-wider mb-1.5 flex items-center gap-1.5">
-                    <Radio className="w-3.5 h-3.5 text-rose-600" /> Immediate Dispatch Steps
+                  <h4 className="font-bold text-white uppercase text-[11px] tracking-wider mb-1.5 flex items-center gap-1.5">
+                    <Radio className="w-3.5 h-3.5 text-white" /> Immediate Dispatch Steps
                   </h4>
-                  <ul className="space-y-1 text-slate-700 list-disc list-inside bg-white p-3 rounded-lg border border-slate-200">
+                  <ul className="space-y-1 text-zinc-300 list-disc list-inside bg-white/[0.02] p-3 rounded-lg border border-white/10">
                     {incidentResult.immediateActionSteps.map((step, idx) => (
                       <li key={idx} className="leading-relaxed">{step}</li>
                     ))}
@@ -315,47 +309,47 @@ export const EventDayPage: React.FC = () => {
                 </div>
 
                 {/* Emcee Script with Copy Button */}
-                <div className="p-3 bg-amber-50/70 border border-amber-200 rounded-xl space-y-2">
+                <div className="p-3 bg-white/[0.04] border border-white/15 rounded-xl space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="font-bold text-amber-950 text-xs">
+                    <span className="font-bold text-white text-xs">
                       🎤 Public Emcee / Host Script (Preserve Guest Poise)
                     </span>
                     <button
                       onClick={handleCopyEmcee}
-                      className="inline-flex items-center gap-1 text-[11px] font-semibold text-amber-900 bg-white hover:bg-amber-100 border border-amber-300 px-2.5 py-1 rounded-md transition-colors"
+                      className="metallic-btn-secondary inline-flex items-center gap-1 text-[11px] font-semibold px-2.5 py-1 rounded-md transition-colors"
                     >
                       {copiedEmcee ? (
                         <>
-                          <Check className="w-3 h-3 text-emerald-600" /> Copied!
+                          <Check className="w-3 h-3 text-white" /> Copied!
                         </>
                       ) : (
                         <>
-                          <Copy className="w-3 h-3 text-slate-600" /> Copy Script
+                          <Copy className="w-3 h-3 text-zinc-400" /> Copy Script
                         </>
                       )}
                     </button>
                   </div>
-                  <p className="text-xs text-amber-900 italic bg-white/80 p-2.5 rounded-lg border border-amber-200 leading-relaxed">
+                  <p className="text-xs text-zinc-200 italic bg-black/40 p-2.5 rounded-lg border border-white/10 leading-relaxed">
                     "{incidentResult.emceeScript}"
                   </p>
                 </div>
 
                 {/* Coordinator Notes */}
-                <div className="text-[11px] text-slate-600 bg-white p-2.5 rounded-lg border border-slate-200">
-                  <strong className="text-slate-800">Staff Note:</strong> {incidentResult.coordinatorNotes}
+                <div className="text-[11px] text-zinc-400 bg-white/[0.02] p-2.5 rounded-lg border border-white/10">
+                  <strong className="text-white">Staff Note:</strong> {incidentResult.coordinatorNotes}
                 </div>
 
                 {/* Apply Schedule Action CTA */}
-                <div className="flex justify-end gap-2 pt-2 border-t border-slate-200">
+                <div className="flex justify-end gap-2 pt-2 border-t border-white/10">
                   <button
                     onClick={() => setShowIncidentModal(false)}
-                    className="px-3 py-1.5 text-xs text-slate-600 hover:text-slate-800"
+                    className="px-3 py-1.5 text-xs text-zinc-400 hover:text-white"
                   >
                     Dismiss
                   </button>
                   <button
                     onClick={handleApplyIncidentDelay}
-                    className="inline-flex items-center gap-1.5 px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white font-semibold rounded-xl text-xs transition-colors"
+                    className="metallic-btn-primary inline-flex items-center gap-1.5 px-4 py-2 font-bold rounded-xl text-xs transition-all"
                   >
                     <Clock className="w-3.5 h-3.5" />
                     Apply +{incidentResult.recommendedDelayMinutes}m to Run-of-Show
@@ -369,15 +363,15 @@ export const EventDayPage: React.FC = () => {
 
       {/* Add Schedule Block Form */}
       {showAddItem && (
-        <form onSubmit={handleAddItem} className="p-5 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-4">
-          <h3 className="font-bold text-sm text-slate-900">Add Schedule Item</h3>
+        <form onSubmit={handleAddItem} className="p-5 metallic-card rounded-2xl border border-white/15 space-y-4">
+          <h3 className="font-bold text-sm text-white">Add Schedule Item</h3>
           <div className="grid grid-cols-1 sm:grid-cols-4 gap-3">
             <input
               type="text"
               placeholder="Time (e.g. 04:30 PM)"
               value={itemTime}
               onChange={e => setItemTime(e.target.value)}
-              className="px-3.5 py-2 text-xs bg-slate-50 border border-slate-300 rounded-lg"
+              className="px-3.5 py-2 text-xs metallic-input rounded-lg"
               required
             />
             <input
@@ -385,7 +379,7 @@ export const EventDayPage: React.FC = () => {
               placeholder="Item Title (e.g. Varmala Ceremony)"
               value={itemTitle}
               onChange={e => setItemTitle(e.target.value)}
-              className="px-3.5 py-2 text-xs bg-slate-50 border border-slate-300 rounded-lg sm:col-span-3"
+              className="px-3.5 py-2 text-xs metallic-input rounded-lg sm:col-span-3"
               required
             />
             <input
@@ -393,27 +387,27 @@ export const EventDayPage: React.FC = () => {
               placeholder="Location (e.g. Marble Pavilion)"
               value={itemLocation}
               onChange={e => setItemLocation(e.target.value)}
-              className="px-3.5 py-2 text-xs bg-slate-50 border border-slate-300 rounded-lg sm:col-span-2"
+              className="px-3.5 py-2 text-xs metallic-input rounded-lg sm:col-span-2"
             />
             <input
               type="text"
               placeholder="Responsible Person (e.g. Priest / Lead)"
               value={itemLead}
               onChange={e => setItemLead(e.target.value)}
-              className="px-3.5 py-2 text-xs bg-slate-50 border border-slate-300 rounded-lg sm:col-span-2"
+              className="px-3.5 py-2 text-xs metallic-input rounded-lg sm:col-span-2"
             />
           </div>
           <div className="flex justify-end gap-2 pt-1">
             <button
               type="button"
               onClick={() => setShowAddItem(false)}
-              className="px-3 py-1.5 text-xs text-slate-600 hover:text-slate-800"
+              className="px-3 py-1.5 text-xs text-zinc-400 hover:text-white"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-4 py-1.5 text-xs font-semibold bg-slate-900 text-white rounded-lg hover:bg-slate-800"
+              className="metallic-btn-primary px-4 py-1.5 text-xs font-bold rounded-lg"
             >
               Save Schedule Block
             </button>
@@ -428,57 +422,57 @@ export const EventDayPage: React.FC = () => {
             key={item.id}
             className={`p-5 rounded-2xl border transition-all ${
               item.status === 'current' 
-                ? 'bg-indigo-50/70 border-indigo-300 shadow-sm ring-1 ring-indigo-200'
+                ? 'metallic-card border-white/40 ring-1 ring-white/30 shadow-lg'
                 : item.status === 'done'
-                ? 'bg-slate-50 border-slate-200 opacity-60'
-                : 'bg-white border-slate-200 shadow-xs'
+                ? 'metallic-card opacity-50'
+                : 'metallic-card'
             }`}
           >
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div className="flex items-start gap-4">
                 <div className="text-center shrink-0 w-20">
-                  <div className="font-heading font-extrabold text-base text-slate-900">
+                  <div className="font-heading font-extrabold text-base text-white">
                     {item.time}
                   </div>
                   {item.delayMinutes ? (
-                    <span className="text-[10px] font-bold text-red-600 block mt-0.5">
+                    <span className="text-[10px] font-bold text-white block mt-0.5">
                       +{item.delayMinutes}m delay
                     </span>
                   ) : (
-                    <span className="text-[10px] text-slate-400 block mt-0.5">
+                    <span className="text-[10px] text-zinc-500 block mt-0.5">
                       Step #{index + 1}
                     </span>
                   )}
                 </div>
 
-                <div className="border-l border-slate-200 pl-4">
+                <div className="border-l border-white/10 pl-4">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <h3 className="font-bold text-slate-900 text-sm">
+                    <h3 className="font-bold text-white text-sm">
                       {item.title}
                     </h3>
-                    <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase ${
+                    <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase border ${
                       item.status === 'current'
-                        ? 'bg-indigo-100 text-indigo-800'
+                        ? 'border-white/50 bg-white/20 text-white'
                         : item.status === 'done'
-                        ? 'bg-emerald-100 text-emerald-800'
+                        ? 'border-zinc-700 bg-zinc-900 text-zinc-400'
                         : item.status === 'delayed'
-                        ? 'bg-red-100 text-red-700'
-                        : 'bg-slate-100 text-slate-700'
+                        ? 'border-zinc-500 bg-zinc-800 text-zinc-200'
+                        : 'border-zinc-700 bg-zinc-900 text-zinc-300'
                     }`}>
                       {item.status}
                     </span>
                   </div>
 
-                  <div className="flex items-center gap-4 text-xs text-slate-500 mt-2">
+                  <div className="flex items-center gap-4 text-xs text-zinc-400 mt-2">
                     {item.location && (
                       <span className="flex items-center gap-1">
-                        <MapPin className="w-3.5 h-3.5 text-slate-400" />
+                        <MapPin className="w-3.5 h-3.5 text-zinc-400" />
                         {item.location}
                       </span>
                     )}
                     {item.responsiblePerson && (
                       <span className="flex items-center gap-1">
-                        <User className="w-3.5 h-3.5 text-slate-400" />
+                        <User className="w-3.5 h-3.5 text-zinc-400" />
                         Lead: {item.responsiblePerson}
                       </span>
                     )}
@@ -490,19 +484,19 @@ export const EventDayPage: React.FC = () => {
               <div className="flex items-center gap-2 sm:self-center">
                 <button
                   onClick={() => handleUpdateStatus(item.id, 'current')}
-                  className="px-2.5 py-1 text-[11px] font-semibold rounded-md border border-slate-300 hover:bg-slate-100 text-slate-700"
+                  className="metallic-btn-secondary px-2.5 py-1 text-[11px] font-semibold rounded-md"
                 >
                   Set Live
                 </button>
                 <button
                   onClick={() => handleUpdateStatus(item.id, 'done')}
-                  className="px-2.5 py-1 text-[11px] font-semibold rounded-md bg-emerald-600 text-white hover:bg-emerald-700"
+                  className="metallic-btn-primary px-2.5 py-1 text-[11px] font-semibold rounded-md"
                 >
                   Done
                 </button>
                 <button
                   onClick={() => handleApplyDelay(item.id, 15)}
-                  className="px-2.5 py-1 text-[11px] font-semibold rounded-md bg-amber-50 border border-amber-200 text-amber-800 hover:bg-amber-100"
+                  className="metallic-btn-secondary px-2.5 py-1 text-[11px] font-semibold rounded-md"
                 >
                   +15m Delay
                 </button>

@@ -22,7 +22,7 @@ export const SignUpPage: React.FC = () => {
     setError(null);
 
     if (password !== confirmPassword) {
-      setError('Passwords do not match. Please re-enter.');
+      setError('Passwords do not match.');
       return;
     }
 
@@ -38,7 +38,7 @@ export const SignUpPage: React.FC = () => {
       await loadUserWorkspace();
       navigate('/app/overview');
     } catch (err: any) {
-      setError(err.message || 'Failed to create account. Please try again.');
+      setError(err.message || 'Failed to create account.');
     } finally {
       setLoading(false);
     }
@@ -54,9 +54,9 @@ export const SignUpPage: React.FC = () => {
       navigate('/app/overview');
     } catch (err: any) {
       if (err.code === 'auth/popup-closed-by-user') {
-        setError('Google sign-in popup was closed before completion.');
+        setError('Google sign-up popup was closed before completion.');
       } else if (err.code === 'auth/cancelled-popup-request') {
-        setError('Google sign-in popup request was cancelled.');
+        setError('Google sign-up popup request was cancelled.');
       } else {
         setError(err.message || 'Google account creation failed.');
       }
@@ -66,36 +66,38 @@ export const SignUpPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-[#090a0f] flex flex-col justify-center py-12 sm:px-6 lg:px-8 text-slate-100">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <Link
           to="/"
-          className="inline-flex items-center gap-2 text-xs font-semibold text-slate-500 hover:text-slate-800 mb-6 transition-colors"
+          className="inline-flex items-center gap-2 text-xs font-semibold text-zinc-400 hover:text-white mb-6 transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           Back to EventPilot
         </Link>
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-lg bg-slate-900 text-white flex items-center justify-center font-bold text-lg">
-            EP
-          </div>
-          <span className="font-heading text-2xl font-bold tracking-tight text-slate-900">
+          <img
+            src="/logo.png"
+            alt="EventPilot"
+            className="w-9 h-9 rounded-lg object-contain shadow-xs border border-white/15"
+          />
+          <span className="font-heading text-2xl font-bold tracking-tight metallic-chrome-text">
             EventPilot
           </span>
         </div>
-        <h1 className="mt-4 text-2xl font-bold tracking-tight text-slate-950">
+        <h1 className="mt-4 text-2xl font-bold tracking-tight text-white">
           Create your EventPilot account
         </h1>
-        <p className="mt-1 text-sm text-slate-600">
+        <p className="mt-1 text-sm text-zinc-400">
           Start with an isolated, secure event planning workspace.
         </p>
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white py-8 px-4 shadow-sm border border-slate-200 sm:rounded-2xl sm:px-10">
+        <div className="metallic-card py-8 px-4 border border-white/15 shadow-2xl sm:rounded-2xl sm:px-10">
           {error && (
-            <div className="mb-6 p-4 rounded-xl bg-red-50 border border-red-200 flex items-start gap-3 text-sm text-red-800">
-              <AlertCircle className="w-5 h-5 text-red-600 shrink-0 mt-0.5" />
+            <div className="mb-6 p-4 rounded-xl bg-zinc-900 border border-zinc-700 flex items-start gap-3 text-sm text-zinc-200">
+              <AlertCircle className="w-5 h-5 text-white shrink-0 mt-0.5" />
               <div>
                 <p className="font-semibold">{error}</p>
               </div>
@@ -104,11 +106,11 @@ export const SignUpPage: React.FC = () => {
 
           <form className="space-y-4" onSubmit={handleSubmit}>
             <div>
-              <label htmlFor="name" className="block text-xs font-semibold text-slate-700 uppercase tracking-wider">
+              <label htmlFor="name" className="block text-xs font-semibold text-zinc-300 uppercase tracking-wider">
                 Full Name
               </label>
               <div className="mt-1.5 relative">
-                <User className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
+                <User className="w-4 h-4 text-zinc-400 absolute left-3.5 top-3" />
                 <input
                   id="name"
                   type="text"
@@ -116,17 +118,17 @@ export const SignUpPage: React.FC = () => {
                   value={displayName}
                   onChange={(e) => setDisplayName(e.target.value)}
                   placeholder="Rahul Sharma"
-                  className="block w-full pl-10 pr-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900"
+                  className="block w-full pl-10 pr-3.5 py-2.5 metallic-input rounded-xl text-white text-sm placeholder:text-zinc-500"
                 />
               </div>
             </div>
 
             <div>
-              <label htmlFor="email" className="block text-xs font-semibold text-slate-700 uppercase tracking-wider">
+              <label htmlFor="email" className="block text-xs font-semibold text-zinc-300 uppercase tracking-wider">
                 Email address
               </label>
               <div className="mt-1.5 relative">
-                <Mail className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
+                <Mail className="w-4 h-4 text-zinc-400 absolute left-3.5 top-3" />
                 <input
                   id="email"
                   type="email"
@@ -135,17 +137,17 @@ export const SignUpPage: React.FC = () => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="organizer@event.com"
-                  className="block w-full pl-10 pr-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900"
+                  className="block w-full pl-10 pr-3.5 py-2.5 metallic-input rounded-xl text-white text-sm placeholder:text-zinc-500"
                 />
               </div>
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-xs font-semibold text-slate-700 uppercase tracking-wider">
+              <label htmlFor="password" className="block text-xs font-semibold text-zinc-300 uppercase tracking-wider">
                 Password
               </label>
               <div className="mt-1.5 relative">
-                <Lock className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
+                <Lock className="w-4 h-4 text-zinc-400 absolute left-3.5 top-3" />
                 <input
                   id="password"
                   type="password"
@@ -153,17 +155,17 @@ export const SignUpPage: React.FC = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="block w-full pl-10 pr-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900"
+                  className="block w-full pl-10 pr-3.5 py-2.5 metallic-input rounded-xl text-white text-sm placeholder:text-zinc-500"
                 />
               </div>
             </div>
 
             <div>
-              <label htmlFor="confirmPassword" className="block text-xs font-semibold text-slate-700 uppercase tracking-wider">
+              <label htmlFor="confirmPassword" className="block text-xs font-semibold text-zinc-300 uppercase tracking-wider">
                 Confirm Password
               </label>
               <div className="mt-1.5 relative">
-                <Lock className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
+                <Lock className="w-4 h-4 text-zinc-400 absolute left-3.5 top-3" />
                 <input
                   id="confirmPassword"
                   type="password"
@@ -171,7 +173,7 @@ export const SignUpPage: React.FC = () => {
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="block w-full pl-10 pr-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900"
+                  className="block w-full pl-10 pr-3.5 py-2.5 metallic-input rounded-xl text-white text-sm placeholder:text-zinc-500"
                 />
               </div>
             </div>
@@ -179,7 +181,7 @@ export const SignUpPage: React.FC = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full flex justify-center py-2.5 px-4 border border-transparent rounded-xl shadow-sm text-sm font-semibold text-white bg-slate-900 hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-900 disabled:opacity-50 transition-all mt-2"
+              className="w-full flex justify-center py-2.5 px-4 metallic-btn-primary rounded-xl text-sm font-bold disabled:opacity-50 mt-2"
             >
               {loading ? 'Creating account...' : 'Create Account'}
             </button>
@@ -188,10 +190,10 @@ export const SignUpPage: React.FC = () => {
           <div className="mt-6">
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-slate-200" />
+                <div className="w-full border-t border-white/10" />
               </div>
               <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-white px-2 text-slate-500 font-semibold tracking-wider">
+                <span className="bg-[#0e1015] px-2 text-zinc-400 font-semibold tracking-wider">
                   Or continue with
                 </span>
               </div>
@@ -202,7 +204,7 @@ export const SignUpPage: React.FC = () => {
                 type="button"
                 onClick={handleGoogleSignUp}
                 disabled={loading}
-                className="w-full inline-flex justify-center items-center gap-2 py-2.5 px-4 border border-slate-300 rounded-xl bg-white text-sm font-semibold text-slate-700 hover:bg-slate-50 focus:outline-none transition-colors"
+                className="w-full inline-flex justify-center items-center gap-2 py-2.5 px-4 metallic-btn-secondary rounded-xl text-sm font-semibold text-slate-200 transition-colors"
               >
                 <svg className="w-4 h-4" viewBox="0 0 24 24">
                   <path
@@ -222,14 +224,14 @@ export const SignUpPage: React.FC = () => {
                     d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"
                   />
                 </svg>
-                Sign up with Google
+                Continue with Google
               </button>
             </div>
           </div>
 
-          <div className="mt-8 text-center text-xs text-slate-600">
+          <div className="mt-8 text-center text-xs text-zinc-400">
             Already have an EventPilot account?{' '}
-            <Link to="/signin" className="font-bold text-slate-900 hover:underline">
+            <Link to="/signin" className="font-bold text-white hover:underline">
               Sign In
             </Link>
           </div>

@@ -5,8 +5,6 @@ import {
   ListTree, 
   CheckCircle2, 
   X, 
-  Calendar, 
-  ArrowRight,
   Clock 
 } from 'lucide-react';
 import { useEvent } from '../../context/EventContext';
@@ -154,17 +152,17 @@ export const TasksPage: React.FC = () => {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 text-slate-100">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-200">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-white/10">
         <div>
-          <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
+          <span className="text-xs font-bold uppercase tracking-wider text-zinc-400">
             Action Items & Deliverables
           </span>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-950 mt-1">
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-white mt-1">
             Task Management
           </h1>
-          <p className="text-xs sm:text-sm text-slate-600 mt-1">
+          <p className="text-xs sm:text-sm text-zinc-400 mt-1">
             Organized by priority, deadlines, and dependencies across event teams.
           </p>
         </div>
@@ -179,15 +177,15 @@ export const TasksPage: React.FC = () => {
               setSelectedSubtaskIds(new Set());
               setShowDecomposeModal(true);
             }}
-            className="inline-flex items-center gap-2 text-xs font-semibold bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 px-3.5 py-2.5 rounded-xl transition-colors shadow-xs"
+            className="metallic-btn-secondary inline-flex items-center gap-2 text-xs font-semibold px-3.5 py-2.5 rounded-xl transition-all"
           >
-            <ListTree className="w-3.5 h-3.5 text-indigo-600" />
+            <ListTree className="w-3.5 h-3.5 text-white" />
             AI Task Decomposer
           </button>
 
           <button
             onClick={() => setShowAddTask(true)}
-            className="inline-flex items-center gap-1.5 text-xs font-semibold bg-slate-900 hover:bg-slate-800 text-white px-4 py-2.5 rounded-xl shadow-xs transition-colors"
+            className="metallic-btn-primary inline-flex items-center gap-1.5 text-xs font-bold px-4 py-2.5 rounded-xl transition-all"
           >
             <Plus className="w-3.5 h-3.5" />
             Add Task
@@ -197,14 +195,14 @@ export const TasksPage: React.FC = () => {
 
       {/* Success alert */}
       {successNote && (
-        <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-between gap-3 text-xs text-emerald-900">
+        <div className="p-4 rounded-xl metallic-card border border-white/20 flex items-center justify-between gap-3 text-xs text-white">
           <div className="flex items-center gap-2">
-            <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+            <CheckCircle2 className="w-4 h-4 text-white shrink-0" />
             <span>{successNote}</span>
           </div>
           <button
             onClick={() => setSuccessNote(null)}
-            className="font-bold underline text-emerald-800 hover:text-emerald-950"
+            className="font-bold underline text-zinc-300 hover:text-white"
           >
             Dismiss
           </button>
@@ -213,25 +211,25 @@ export const TasksPage: React.FC = () => {
 
       {/* AI Task Decomposer Modal */}
       {showDecomposeModal && (
-        <div className="fixed inset-0 z-50 bg-slate-950/50 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
-          <div className="bg-white rounded-2xl border border-slate-200 shadow-2xl max-w-2xl w-full p-6 space-y-5 my-8">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
+          <div className="metallic-card rounded-2xl border border-white/20 max-w-2xl w-full p-6 space-y-5 my-8">
+            <div className="flex items-center justify-between pb-3 border-b border-white/10">
               <div className="flex items-center gap-2.5">
-                <div className="p-2 bg-indigo-100 text-indigo-700 rounded-xl">
+                <div className="p-2 bg-white/10 text-white rounded-xl">
                   <ListTree className="w-5 h-5" />
                 </div>
                 <div>
-                  <h3 className="font-extrabold text-slate-950 text-base">
+                  <h3 className="font-extrabold text-white text-base">
                     AI Smart Task Decomposer
                   </h3>
-                  <p className="text-xs text-slate-500">
+                  <p className="text-xs text-zinc-400">
                     Break down broad event milestones into sequential, operational subtasks.
                   </p>
                 </div>
               </div>
               <button
                 onClick={() => setShowDecomposeModal(false)}
-                className="text-slate-400 hover:text-slate-600 p-1 rounded-lg"
+                className="text-zinc-400 hover:text-white p-1 rounded-lg"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -240,7 +238,7 @@ export const TasksPage: React.FC = () => {
             {/* Inputs */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div className="sm:col-span-2">
-                <label className="text-[11px] font-bold text-slate-700 uppercase block mb-1">
+                <label className="text-[11px] font-bold text-zinc-300 uppercase block mb-1">
                   Task or Milestone to Break Down
                 </label>
                 <input
@@ -248,19 +246,19 @@ export const TasksPage: React.FC = () => {
                   value={decomposeTitle}
                   onChange={e => setDecomposeTitle(e.target.value)}
                   placeholder="e.g. Stage & Audio-Visual Production Setup"
-                  className="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-300 rounded-lg"
+                  className="w-full px-3 py-2 text-xs metallic-input rounded-lg"
                   required
                 />
               </div>
 
               <div>
-                <label className="text-[11px] font-bold text-slate-700 uppercase block mb-1">
+                <label className="text-[11px] font-bold text-zinc-300 uppercase block mb-1">
                   Category
                 </label>
                 <select
                   value={decomposeCategory}
                   onChange={e => setDecomposeCategory(e.target.value)}
-                  className="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-300 rounded-lg"
+                  className="w-full px-3 py-2 text-xs metallic-input rounded-lg"
                 >
                   <option value="Operations">Operations</option>
                   <option value="Venue">Venue</option>
@@ -277,21 +275,21 @@ export const TasksPage: React.FC = () => {
                 type="button"
                 onClick={handleRunDecomposition}
                 disabled={isDecomposing || !decomposeTitle.trim()}
-                className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold rounded-xl shadow-xs disabled:opacity-50 transition-colors"
+                className="metallic-btn-primary inline-flex items-center gap-2 px-4 py-2 text-xs font-bold rounded-xl disabled:opacity-50 transition-all"
               >
-                <Sparkles className="w-3.5 h-3.5" />
+                <Sparkles className="w-3.5 h-3.5 text-black" />
                 {isDecomposing ? 'Decomposing Task...' : 'Generate Subtasks with AI'}
               </button>
             </div>
 
             {/* Decomposition Results */}
             {decompositionResult && (
-              <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-4 text-xs">
-                <div className="flex items-center justify-between pb-2 border-b border-slate-200">
-                  <span className="font-bold text-slate-900 text-xs">
-                    Proposed Subtasks for: <span className="text-indigo-600 font-extrabold">{decompositionResult.parentTask}</span>
+              <div className="p-4 bg-zinc-900/90 rounded-xl border border-white/10 space-y-4 text-xs">
+                <div className="flex items-center justify-between pb-2 border-b border-white/10">
+                  <span className="font-bold text-white text-xs">
+                    Proposed Subtasks for: <span className="text-white font-extrabold">{decompositionResult.parentTask}</span>
                   </span>
-                  <span className="text-[11px] text-slate-500">
+                  <span className="text-[11px] text-zinc-400">
                     {selectedSubtaskIds.size} of {decompositionResult.subtasks.length} selected
                   </span>
                 </div>
@@ -305,41 +303,35 @@ export const TasksPage: React.FC = () => {
                         onClick={() => toggleSubtaskSelection(st.id)}
                         className={`p-3 rounded-xl border cursor-pointer transition-all flex items-start gap-3 ${
                           isSelected
-                            ? 'bg-white border-indigo-300 shadow-xs ring-1 ring-indigo-200'
-                            : 'bg-slate-100/70 border-slate-200 opacity-60'
+                            ? 'bg-white/[0.08] border-white/30 shadow-xs'
+                            : 'bg-zinc-900 border-white/10 opacity-60'
                         }`}
                       >
                         <input
                           type="checkbox"
                           checked={isSelected}
                           onChange={() => {}}
-                          className="h-4 w-4 mt-0.5 rounded border-slate-300 text-indigo-600 focus:ring-indigo-600 cursor-pointer shrink-0"
+                          className="h-4 w-4 mt-0.5 rounded border-zinc-700 bg-zinc-900 accent-white cursor-pointer shrink-0"
                         />
                         <div className="flex-1">
                           <div className="flex items-center justify-between gap-2">
-                            <span className="font-bold text-slate-900 text-xs">{st.title}</span>
+                            <span className="font-bold text-white text-xs">{st.title}</span>
                             <div className="flex items-center gap-2">
-                              <span className="text-[10px] text-slate-500 flex items-center gap-1 font-medium">
-                                <Clock className="w-3 h-3 text-slate-400" />
+                              <span className="text-[10px] text-zinc-400 flex items-center gap-1 font-medium">
+                                <Clock className="w-3 h-3 text-zinc-400" />
                                 T-{st.dueDateOffsetDays}d
                               </span>
-                              <span className={`px-1.5 py-0.5 rounded text-[9px] font-bold uppercase ${
-                                st.priority === 'critical'
-                                  ? 'bg-red-100 text-red-800'
-                                  : st.priority === 'high'
-                                  ? 'bg-amber-100 text-amber-800'
-                                  : 'bg-slate-100 text-slate-700'
-                              }`}>
+                              <span className="metallic-pill px-1.5 py-0.5 rounded text-[9px] font-bold uppercase">
                                 {st.priority}
                               </span>
                             </div>
                           </div>
                           {st.description && (
-                            <p className="text-[11px] text-slate-600 mt-1 leading-relaxed">
+                            <p className="text-[11px] text-zinc-300 mt-1 leading-relaxed">
                               {st.description}
                             </p>
                           )}
-                          <span className="text-[10px] text-slate-400 block mt-1">
+                          <span className="text-[10px] text-zinc-500 block mt-1">
                             Owner: {st.recommendedOwner}
                           </span>
                         </div>
@@ -348,17 +340,17 @@ export const TasksPage: React.FC = () => {
                   })}
                 </div>
 
-                <div className="flex justify-end gap-2 pt-2 border-t border-slate-200">
+                <div className="flex justify-end gap-2 pt-2 border-t border-white/10">
                   <button
                     onClick={() => setShowDecomposeModal(false)}
-                    className="px-3 py-1.5 text-xs text-slate-600 hover:text-slate-800"
+                    className="px-3 py-1.5 text-xs text-zinc-400 hover:text-white"
                   >
                     Cancel
                   </button>
                   <button
                     onClick={handleApplySubtasks}
                     disabled={selectedSubtaskIds.size === 0}
-                    className="inline-flex items-center gap-1.5 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white font-semibold rounded-xl text-xs transition-colors"
+                    className="metallic-btn-primary inline-flex items-center gap-1.5 px-4 py-2 disabled:opacity-50 font-bold rounded-xl text-xs transition-all"
                   >
                     <Plus className="w-3.5 h-3.5" />
                     Add Selected Subtasks ({selectedSubtaskIds.size}) to Plan
@@ -371,15 +363,15 @@ export const TasksPage: React.FC = () => {
       )}
 
       {/* Filter Tabs */}
-      <div className="flex items-center gap-2 border-b border-slate-200 pb-2">
+      <div className="flex items-center gap-2 border-b border-white/10 pb-2">
         {(['all', 'todo', 'in_progress', 'completed'] as const).map(tab => (
           <button
             key={tab}
             onClick={() => setFilter(tab)}
-            className={`px-3 py-1.5 text-xs font-semibold rounded-lg capitalize transition-colors ${
+            className={`px-3 py-1.5 text-xs font-semibold rounded-lg capitalize transition-all ${
               filter === tab
-                ? 'bg-slate-900 text-white'
-                : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+                ? 'metallic-btn-primary'
+                : 'text-zinc-400 hover:text-white hover:bg-white/[0.05]'
             }`}
           >
             {tab.replace('_', ' ')} ({tab === 'all' ? activeEvent.tasks.length : activeEvent.tasks.filter(t => t.status === tab).length})
@@ -389,28 +381,28 @@ export const TasksPage: React.FC = () => {
 
       {/* Add Task Form */}
       {showAddTask && (
-        <form onSubmit={handleAddTask} className="p-5 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-4">
-          <h3 className="font-bold text-sm text-slate-900">Add New Task</h3>
+        <form onSubmit={handleAddTask} className="p-5 metallic-card rounded-2xl border border-white/15 space-y-4">
+          <h3 className="font-bold text-sm text-white">Add New Task</h3>
           <div className="grid grid-cols-1 sm:grid-cols-4 gap-3">
             <input
               type="text"
               placeholder="Task Title (e.g. Schedule Priest Briefing)"
               value={taskTitle}
               onChange={e => setTaskTitle(e.target.value)}
-              className="px-3.5 py-2 text-xs bg-slate-50 border border-slate-300 rounded-lg sm:col-span-2"
+              className="px-3.5 py-2 text-xs metallic-input rounded-lg sm:col-span-2"
               required
             />
             <input
               type="date"
               value={dueDate}
               onChange={e => setDueDate(e.target.value)}
-              className="px-3.5 py-2 text-xs bg-slate-50 border border-slate-300 rounded-lg"
+              className="px-3.5 py-2 text-xs metallic-input rounded-lg"
               required
             />
             <select
               value={priority}
               onChange={e => setPriority(e.target.value as any)}
-              className="px-3.5 py-2 text-xs bg-slate-50 border border-slate-300 rounded-lg"
+              className="px-3.5 py-2 text-xs metallic-input rounded-lg"
             >
               <option value="low">Low</option>
               <option value="medium">Medium</option>
@@ -424,19 +416,19 @@ export const TasksPage: React.FC = () => {
               placeholder="Assignee (e.g. Event Lead)"
               value={owner}
               onChange={e => setOwner(e.target.value)}
-              className="px-3.5 py-2 text-xs bg-slate-50 border border-slate-300 rounded-lg max-w-xs"
+              className="px-3.5 py-2 text-xs metallic-input rounded-lg max-w-xs"
             />
             <div className="flex gap-2">
               <button
                 type="button"
                 onClick={() => setShowAddTask(false)}
-                className="px-3 py-1.5 text-xs text-slate-600 hover:text-slate-800"
+                className="px-3 py-1.5 text-xs text-zinc-400 hover:text-white"
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="px-4 py-1.5 text-xs font-semibold bg-slate-900 text-white rounded-lg hover:bg-slate-800"
+                className="metallic-btn-primary px-4 py-1.5 text-xs font-bold rounded-lg"
               >
                 Save Task
               </button>
@@ -446,9 +438,9 @@ export const TasksPage: React.FC = () => {
       )}
 
       {/* Tasks Table */}
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-xs divide-y divide-slate-100">
+      <div className="metallic-card rounded-2xl divide-y divide-white/10">
         {filteredTasks.length === 0 ? (
-          <div className="p-8 text-center text-xs text-slate-500">
+          <div className="p-8 text-center text-xs text-zinc-400">
             No tasks found in this view.
           </div>
         ) : (
@@ -463,31 +455,31 @@ export const TasksPage: React.FC = () => {
                     type="checkbox"
                     checked={task.status === 'completed'}
                     onChange={() => handleToggle(task.id)}
-                    className="h-4 w-4 rounded border-slate-300 text-slate-900 focus:ring-slate-900 cursor-pointer shrink-0"
+                    className="h-4 w-4 rounded border-zinc-700 bg-zinc-900 accent-white cursor-pointer shrink-0"
                   />
                   <div>
                     <div className="flex items-center gap-2 flex-wrap">
-                      <span className={`text-sm font-bold ${task.status === 'completed' ? 'line-through text-slate-400' : 'text-slate-900'}`}>
+                      <span className={`text-sm font-bold ${task.status === 'completed' ? 'line-through text-zinc-500' : 'text-white'}`}>
                         {task.title}
                       </span>
                       {isCritical && (
-                        <span className="px-1.5 py-0.5 rounded text-[10px] font-extrabold uppercase bg-amber-100 text-amber-900">
+                        <span className="px-1.5 py-0.5 rounded text-[10px] font-extrabold uppercase bg-white/15 text-white border border-white/30">
                           Critical
                         </span>
                       )}
                       {isOverdue && (
-                        <span className="px-1.5 py-0.5 rounded text-[10px] font-extrabold uppercase bg-red-100 text-red-700">
+                        <span className="px-1.5 py-0.5 rounded text-[10px] font-extrabold uppercase bg-zinc-800 text-zinc-200 border border-zinc-600">
                           Overdue
                         </span>
                       )}
                     </div>
                     {task.description && (
-                      <p className="text-[11px] text-slate-500 mt-0.5 leading-relaxed">
+                      <p className="text-[11px] text-zinc-400 mt-0.5 leading-relaxed">
                         {task.description}
                       </p>
                     )}
                     {task.owner && (
-                      <span className="text-[11px] text-slate-400 mt-0.5 block">
+                      <span className="text-[11px] text-zinc-500 mt-0.5 block">
                         Assigned to: {task.owner}
                       </span>
                     )}
@@ -495,24 +487,24 @@ export const TasksPage: React.FC = () => {
                 </div>
 
                 <div className="flex items-center gap-3 text-right">
-                  <span className="text-xs font-medium text-slate-600">
+                  <span className="text-xs font-medium text-zinc-400">
                     {task.dueDate}
                   </span>
-                  <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase ${
+                  <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase border ${
                     task.priority === 'critical' 
-                      ? 'bg-red-50 text-red-700' 
+                      ? 'border-white/50 bg-white/20 text-white' 
                       : task.priority === 'high' 
-                      ? 'bg-amber-50 text-amber-800' 
-                      : 'bg-slate-100 text-slate-700'
+                      ? 'border-zinc-500 bg-zinc-800 text-zinc-200' 
+                      : 'border-zinc-700 bg-zinc-900 text-zinc-300'
                   }`}>
                     {task.priority}
                   </span>
                   <button
                     onClick={() => openDecomposeForTask(task)}
-                    className="px-2 py-1 text-[11px] font-semibold rounded-lg bg-indigo-50 text-indigo-700 hover:bg-indigo-100 border border-indigo-200 transition-colors flex items-center gap-1 shrink-0"
+                    className="metallic-btn-secondary px-2 py-1 text-[11px] font-semibold rounded-lg transition-all flex items-center gap-1 shrink-0"
                     title="Decompose Task with AI"
                   >
-                    <ListTree className="w-3 h-3 text-indigo-600" />
+                    <ListTree className="w-3 h-3 text-white" />
                     Subtasks
                   </button>
                 </div>
