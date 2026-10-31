@@ -2,6 +2,7 @@
   "name": "eventpilot-monorepo",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "description": "EventPilot — GenAI-powered living event planning assistant",
   "workspaces": [
     "server",
