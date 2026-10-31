@@ -143,7 +143,7 @@ export const AppLayout: React.FC = () => {
     <div className="min-h-screen bg-[#08090d] flex flex-col md:flex-row text-slate-100">
       {/* Sidebar Navigation */}
       <aside className="w-full md:w-64 bg-[#0c0d12] border-r border-white/10 flex flex-col shrink-0">
-        <div className="h-16 px-6 border-b border-white/10 flex items-center justify-between">
+        <div className="h-16 px-6 border-b border-white/10 flex items-center">
           <div className="flex items-center gap-2.5">
             <img
               src="/logo.png"
@@ -154,9 +154,6 @@ export const AppLayout: React.FC = () => {
               EventPilot
             </span>
           </div>
-          <span className="metallic-pill text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded">
-            v1.0
-          </span>
         </div>
 
         {/* Active Event Card Summary / Quick Switcher in Sidebar */}

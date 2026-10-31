@@ -50,7 +50,7 @@ export const LandingPage: React.FC = () => {
           <div className="flex items-center gap-3">
             <Link
               to="/signin"
-              className="text-sm font-semibold text-zinc-300 hover:text-white px-3 py-2 rounded-md hover:bg-white/[0.06] transition-colors"
+              className="text-sm font-semibold text-zinc-300 hover:text-white px-3 py-2 rounded-md hover:bg-white/6 transition-colors"
             >
               Sign In
             </Link>
@@ -102,10 +102,7 @@ export const LandingPage: React.FC = () => {
         <div className="mt-16 metallic-card rounded-2xl shadow-2xl p-6 sm:p-8 max-w-5xl mx-auto text-left border border-white/15">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-6 border-b border-white/10 gap-4">
             <div>
-              <span className="text-xs font-bold uppercase tracking-wider metallic-pill px-2.5 py-1 rounded">
-                Live Simulation Demonstration
-              </span>
-              <h2 className="text-xl font-bold text-white mt-2">
+              <h2 className="text-xl font-bold text-white">
                 What happens when guest count increases from 180 to 220?
               </h2>
             </div>
@@ -155,22 +152,22 @@ export const LandingPage: React.FC = () => {
                 <AlertTriangle className="w-4 h-4 text-zinc-400" />
                 Generic AI Planning Apps
               </div>
-              <ul className="mt-4 space-y-3 text-sm text-zinc-400">
-                <li className="flex items-start gap-2">
-                  <span className="text-zinc-500 font-bold">✕</span>
-                  Asks LLM to guess budget arithmetic, producing hallucinations.
+              <ul className="mt-4 space-y-3.5 text-sm text-zinc-400">
+                <li className="flex items-start gap-2.5">
+                  <span className="text-zinc-500 font-bold shrink-0 mt-0.5">✕</span>
+                  <span className="leading-relaxed">Asks LLM to guess budget arithmetic, producing hallucinations.</span>
                 </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-zinc-500 font-bold">✕</span>
-                  Unconnected CRUD cards with no dependency awareness.
+                <li className="flex items-start gap-2.5">
+                  <span className="text-zinc-500 font-bold shrink-0 mt-0.5">✕</span>
+                  <span className="leading-relaxed">Unconnected CRUD cards with no dependency awareness.</span>
                 </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-zinc-500 font-bold">✕</span>
-                  Meaningless badges like "94% AI Accuracy".
+                <li className="flex items-start gap-2.5">
+                  <span className="text-zinc-500 font-bold shrink-0 mt-0.5">✕</span>
+                  <span className="leading-relaxed">Meaningless badges like "94% AI Accuracy".</span>
                 </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-zinc-500 font-bold">✕</span>
-                  AI directly mutates database without user confirmation.
+                <li className="flex items-start gap-2.5">
+                  <span className="text-zinc-500 font-bold shrink-0 mt-0.5">✕</span>
+                  <span className="leading-relaxed">AI directly mutates database without user confirmation.</span>
                 </li>
               </ul>
             </div>
@@ -180,22 +177,34 @@ export const LandingPage: React.FC = () => {
                 <CheckCircle2 className="w-4 h-4 text-white" />
                 EventPilot Architecture
               </div>
-              <ul className="mt-4 space-y-3 text-sm text-zinc-300">
-                <li className="flex items-start gap-2">
-                  <span className="text-white font-bold">✓</span>
-                  <strong>Deterministic Math:</strong> Pure engines calculate variances, forecast, and critical path.
+              <ul className="mt-4 space-y-3.5 text-sm">
+                <li className="flex items-start gap-2.5">
+                  <span className="text-white font-bold shrink-0 mt-0.5">✓</span>
+                  <div className="leading-relaxed">
+                    <strong className="text-white font-semibold">Deterministic Math:</strong>{' '}
+                    <span className="text-zinc-300">Pure engines calculate variances, forecast, and critical path.</span>
+                  </div>
                 </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-white font-bold">✓</span>
-                  <strong>Living Impact Engine:</strong> Change one variable and immediately see consequences across the whole plan.
+                <li className="flex items-start gap-2.5">
+                  <span className="text-white font-bold shrink-0 mt-0.5">✓</span>
+                  <div className="leading-relaxed">
+                    <strong className="text-white font-semibold">Living Impact Engine:</strong>{' '}
+                    <span className="text-zinc-300">Change one variable and immediately see consequences across the whole plan.</span>
+                  </div>
                 </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-white font-bold">✓</span>
-                  <strong>Human-in-the-Loop:</strong> Gemini proposes structured adjustments, user approves before applying.
+                <li className="flex items-start gap-2.5">
+                  <span className="text-white font-bold shrink-0 mt-0.5">✓</span>
+                  <div className="leading-relaxed">
+                    <strong className="text-white font-semibold">Human-in-the-Loop:</strong>{' '}
+                    <span className="text-zinc-300">Gemini proposes structured adjustments, user approves before applying.</span>
+                  </div>
                 </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-white font-bold">✓</span>
-                  <strong>Multi-Tenant Isolation:</strong> Zero data leakage between user event plans.
+                <li className="flex items-start gap-2.5">
+                  <span className="text-white font-bold shrink-0 mt-0.5">✓</span>
+                  <div className="leading-relaxed">
+                    <strong className="text-white font-semibold">Multi-Tenant Isolation:</strong>{' '}
+                    <span className="text-zinc-300">Zero data leakage between user event plans.</span>
+                  </div>
                 </li>
               </ul>
             </div>
