@@ -12,7 +12,6 @@ import {
   ShieldCheck, 
   Clock, 
   TrendingUp, 
-  ChevronRight,
   AlertTriangle,
   Menu,
   X
@@ -202,43 +201,6 @@ export const LandingPage: React.FC = () => {
             <Sparkles className="w-4 h-4 text-white" />
             {user ? "Manage Events" : "Open Existing Workspace"}
           </Link>
-        </div>
-
-        {/* Hero Interactive Teaser Card */}
-        <div className="mt-16 metallic-card rounded-2xl shadow-2xl p-6 sm:p-8 max-w-5xl mx-auto text-left border border-white/15">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-6 border-b border-white/10 gap-4">
-            <div>
-              <h2 className="text-xl font-bold text-white">
-                What happens when guest count increases from 180 to 220?
-              </h2>
-            </div>
-            <Link
-              to={user ? "/app/overview" : "/signup"}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-xs font-semibold text-zinc-300 metallic-btn-secondary px-3 py-1.5 rounded-lg"
-            >
-              Configure in Workspace <ChevronRight className="w-3.5 h-3.5" />
-            </Link>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-6">
-            <div className="bg-zinc-900/80 p-4 rounded-xl border border-white/10">
-              <span className="text-xs font-medium text-zinc-400">1. Fact: Headcount Delta</span>
-              <div className="text-2xl font-bold text-white mt-1">+40 Guests</div>
-              <p className="text-xs text-zinc-400 mt-1">Exceeds registered venue capacity (200) by 20 guests.</p>
-            </div>
-            <div className="bg-zinc-900/80 p-4 rounded-xl border border-zinc-600">
-              <span className="text-xs font-medium text-zinc-300">2. Deterministic Catering Delta</span>
-              <div className="text-2xl font-bold text-white mt-1">+₹72,000</div>
-              <p className="text-xs text-zinc-400 mt-1">₹1,800/guest creates a projected ₹31,000 budget overrun.</p>
-            </div>
-            <div className="bg-zinc-900/80 p-4 rounded-xl border border-white/20">
-              <span className="text-xs font-medium text-zinc-200">3. Gemini Trade-Off Reasoner</span>
-              <div className="text-base font-bold text-white mt-1">Curated Offset Proposal</div>
-              <p className="text-xs text-zinc-400 mt-1">Trim floral decor by ₹43K & streamline live counters to preserve total budget.</p>
-            </div>
-          </div>
         </div>
       </section>
 

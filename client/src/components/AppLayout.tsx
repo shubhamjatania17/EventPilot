@@ -18,6 +18,8 @@ import {
   AlertCircle,
   Plus,
   ChevronDown,
+  ChevronLeft,
+  ChevronRight,
   Check,
   Lock,
   Menu
@@ -56,6 +58,19 @@ export const AppLayout: React.FC = () => {
 
   // Mobile drawer state
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // Desktop sidebar collapse state (persisted)
+  const [sidebarCollapsed, setSidebarCollapsed] = useState<boolean>(() => {
+    return localStorage.getItem('eventpilot_sidebar_collapsed') === 'true';
+  });
+
+  const toggleSidebar = () => {
+    setSidebarCollapsed(prev => {
+      const next = !prev;
+      localStorage.setItem('eventpilot_sidebar_collapsed', String(next));
+      return next;
+    });
+  };
 
   // Event Switcher Dropdown
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -181,63 +196,100 @@ export const AppLayout: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen min-h-dvh bg-[#08090d] flex flex-col md:flex-row text-slate-100 overflow-x-hidden">
+    <div className="h-screen h-dvh max-h-screen max-h-dvh w-full bg-[#08090d] flex flex-col md:flex-row text-slate-100 overflow-hidden">
       {/* 1. Desktop Sidebar Navigation (Windows, Mac, Linux, iPad landscape, large foldables) */}
-      <aside className="hidden md:flex md:w-64 bg-[#0c0d12] border-r border-white/10 flex-col shrink-0 min-h-dvh sticky top-0 h-screen">
-        <div className="h-16 px-6 border-b border-white/10 flex items-center shrink-0">
-          <div className="flex items-center gap-2.5">
+      <aside className={`hidden md:flex ${sidebarCollapsed ? 'md:w-20' : 'md:w-64'} bg-[#0c0d12] border-r border-white/10 flex-col shrink-0 h-full overflow-hidden transition-all duration-300 ease-in-out select-none`}>
+        <div className={`h-16 border-b border-white/10 flex items-center shrink-0 ${sidebarCollapsed ? 'justify-center px-2' : 'justify-between px-5'}`}>
+          <div className="flex items-center gap-2.5 min-w-0">
             <img
               src="/logo.png"
               alt="EventPilot"
-              className="w-8 h-8 rounded-lg object-contain shadow-xs border border-white/15"
+              className="w-8 h-8 rounded-lg object-contain shadow-xs border border-white/15 shrink-0"
             />
-            <span className="font-heading font-extrabold text-lg metallic-chrome-text">
-              EventPilot
-            </span>
+            {!sidebarCollapsed && (
+              <span className="font-heading font-extrabold text-lg metallic-chrome-text truncate">
+                EventPilot
+              </span>
+            )}
           </div>
+          <button
+            type="button"
+            onClick={toggleSidebar}
+            className={`p-1.5 text-zinc-400 hover:text-white rounded-lg hover:bg-white/[0.08] transition-colors shrink-0 ${sidebarCollapsed ? 'hidden' : 'block'}`}
+            title="Collapse sidebar"
+            aria-label="Collapse sidebar"
+          >
+            <ChevronLeft className="w-4 h-4" />
+          </button>
         </div>
+
+        {/* If collapsed, show a mini expand button */}
+        {sidebarCollapsed && (
+          <div className="py-2 flex justify-center border-b border-white/10 bg-white/[0.02]">
+            <button
+              type="button"
+              onClick={toggleSidebar}
+              className="p-1.5 text-zinc-400 hover:text-white rounded-lg hover:bg-white/[0.08] transition-colors"
+              title="Expand sidebar"
+              aria-label="Expand sidebar"
+            >
+              <ChevronRight className="w-4 h-4" />
+            </button>
+          </div>
+        )}
 
         {/* Active Event Card Summary in Desktop Sidebar */}
-        <div className="p-4 border-b border-white/10 bg-white/[0.02] shrink-0">
-          {activeEvent ? (
-            <>
-              <div className="flex items-center justify-between text-xs text-zinc-400 font-medium">
-                <span>Active Living Plan</span>
-                <NavLink to="/app/events" className="text-zinc-200 hover:text-white font-bold text-[11px] transition-colors">
-                  All Events →
-                </NavLink>
-              </div>
-              <div className="font-bold text-sm text-white truncate mt-1">
-                {activeEvent.meta.name}
-              </div>
-              <div className="flex items-center gap-2 mt-2 text-xs">
-                <span className="metallic-pill px-2 py-0.5 font-semibold text-[11px] rounded">
-                  {timeline.daysRemaining > 0 ? `${timeline.daysRemaining} days left` : 'Event Day'}
-                </span>
-                {criticalRisksCount > 0 && (
-                  <span className="bg-zinc-900 border border-zinc-600 text-white px-2 py-0.5 font-bold rounded text-[11px] flex items-center gap-1">
-                    <AlertCircle className="w-3 h-3 text-zinc-300" />
-                    {criticalRisksCount} critical
+        {!sidebarCollapsed && (
+          <div className="p-4 border-b border-white/10 bg-white/[0.02] shrink-0">
+            {activeEvent ? (
+              <>
+                <div className="flex items-center justify-between text-xs text-zinc-400 font-medium">
+                  <span>Active Living Plan</span>
+                  <NavLink to="/app/events" className="text-zinc-200 hover:text-white font-bold text-[11px] transition-colors">
+                    All Events →
+                  </NavLink>
+                </div>
+                <div className="font-bold text-sm text-white truncate mt-1">
+                  {activeEvent.meta.name}
+                </div>
+                <div className="flex items-center gap-2 mt-2 text-xs">
+                  <span className="metallic-pill px-2 py-0.5 font-semibold text-[11px] rounded">
+                    {timeline.daysRemaining > 0 ? `${timeline.daysRemaining} days left` : 'Event Day'}
                   </span>
-                )}
+                  {criticalRisksCount > 0 && (
+                    <span className="bg-zinc-900 border border-zinc-600 text-white px-2 py-0.5 font-bold rounded text-[11px] flex items-center gap-1">
+                      <AlertCircle className="w-3 h-3 text-zinc-300" />
+                      {criticalRisksCount} critical
+                    </span>
+                  )}
+                </div>
+              </>
+            ) : (
+              <div className="space-y-2">
+                <div className="text-xs text-zinc-400">No active event selected</div>
+                <button
+                  onClick={() => setIsNewEventModalOpen(true)}
+                  className="w-full metallic-btn-primary inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold"
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                  New Event
+                </button>
               </div>
-            </>
-          ) : (
-            <div className="space-y-2">
-              <div className="text-xs text-zinc-400">No active event selected</div>
-              <button
-                onClick={() => setIsNewEventModalOpen(true)}
-                className="w-full metallic-btn-primary inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold"
-              >
-                <Plus className="w-3.5 h-3.5" />
-                New Event
-              </button>
-            </div>
-          )}
-        </div>
+            )}
+          </div>
+        )}
+
+        {/* If collapsed and active event exists, show compact icon */}
+        {sidebarCollapsed && activeEvent && (
+          <div className="p-3 border-b border-white/10 flex justify-center shrink-0" title={`${activeEvent.meta.name} (${timeline.daysRemaining > 0 ? `${timeline.daysRemaining}d left` : 'Event Day'})`}>
+            <NavLink to="/app/events" className="w-8 h-8 rounded-lg bg-white/5 hover:bg-white/10 border border-white/15 flex items-center justify-center text-white transition-colors">
+              <Layers className="w-4 h-4 text-white" />
+            </NavLink>
+          </div>
+        )}
 
         {/* Navigation links */}
-        <nav className="p-3 space-y-1 flex-1 overflow-y-auto">
+        <nav className={`p-2.5 space-y-1 flex-1 overflow-y-auto ${sidebarCollapsed ? 'px-2' : 'px-3'}`}>
           {navItems.map(item => {
             const Icon = item.icon;
             const isAllowed = hasEvents || isPageAllowedWithoutEvent(item.to);
@@ -247,14 +299,16 @@ export const AppLayout: React.FC = () => {
                 <div
                   key={item.to}
                   onClick={() => setIsNewEventModalOpen(true)}
-                  className="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold text-zinc-600 opacity-40 cursor-not-allowed select-none transition-all hover:opacity-70 hover:bg-white/[0.02]"
-                  title="Add an event first to unlock this section"
+                  className={`flex items-center rounded-xl font-semibold text-zinc-600 opacity-40 cursor-not-allowed select-none transition-all hover:opacity-70 hover:bg-white/[0.02] ${
+                    sidebarCollapsed ? 'justify-center p-3' : 'justify-between px-3.5 py-2.5 text-sm'
+                  }`}
+                  title={`${item.label} (Add an event first to unlock)`}
                 >
                   <div className="flex items-center gap-3">
                     <Icon className="w-4 h-4 shrink-0 text-zinc-600" />
-                    <span>{item.label}</span>
+                    {!sidebarCollapsed && <span>{item.label}</span>}
                   </div>
-                  <Lock className="w-3.5 h-3.5 text-zinc-600 shrink-0" />
+                  {!sidebarCollapsed && <Lock className="w-3.5 h-3.5 text-zinc-600 shrink-0" />}
                 </div>
               );
             }
@@ -263,8 +317,13 @@ export const AppLayout: React.FC = () => {
               <NavLink
                 key={item.to}
                 to={item.to}
+                title={sidebarCollapsed ? item.label : undefined}
                 className={({ isActive }) =>
-                  `flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all ${
+                  `flex items-center rounded-xl font-semibold transition-all ${
+                    sidebarCollapsed 
+                      ? 'justify-center p-3 text-sm' 
+                      : 'gap-3 px-3.5 py-2.5 text-sm'
+                  } ${
                     isActive
                       ? 'bg-white/[0.1] text-white font-bold border-l-2 border-white shadow-[inset_0_1px_0_rgba(255,255,255,0.12)]'
                       : 'text-zinc-400 hover:text-white hover:bg-white/[0.05]'
@@ -272,26 +331,33 @@ export const AppLayout: React.FC = () => {
                 }
               >
                 <Icon className="w-4 h-4 shrink-0" />
-                <span>{item.label}</span>
+                {!sidebarCollapsed && <span className="truncate">{item.label}</span>}
               </NavLink>
             );
           })}
         </nav>
 
         {/* User Profile & Sign Out Footer */}
-        <div className="p-4 border-t border-white/10 bg-[#090a0f] flex items-center justify-between shrink-0">
+        <div className={`p-3.5 border-t border-white/10 bg-[#090a0f] flex items-center shrink-0 ${
+          sidebarCollapsed ? 'flex-col justify-center gap-3' : 'justify-between'
+        }`}>
           <div className="flex items-center gap-2.5 overflow-hidden">
-            <div className="w-8 h-8 rounded-full bg-zinc-800 text-zinc-200 border border-white/15 flex items-center justify-center font-bold text-xs uppercase shrink-0">
+            <div
+              className="w-8 h-8 rounded-full bg-zinc-800 text-zinc-200 border border-white/15 flex items-center justify-center font-bold text-xs uppercase shrink-0"
+              title={user?.displayName || 'Organizer'}
+            >
               {user?.displayName ? user.displayName.slice(0, 2) : 'EP'}
             </div>
-            <div className="truncate text-xs">
-              <div className="font-bold text-white truncate">
-                {user?.displayName || 'Organizer'}
+            {!sidebarCollapsed && (
+              <div className="truncate text-xs">
+                <div className="font-bold text-white truncate">
+                  {user?.displayName || 'Organizer'}
+                </div>
+                <div className="text-zinc-400 truncate text-[11px]">
+                  {user?.email || ''}
+                </div>
               </div>
-              <div className="text-zinc-400 truncate text-[11px]">
-                {user?.email || ''}
-              </div>
-            </div>
+            )}
           </div>
           <button
             onClick={handleSignout}
@@ -342,15 +408,6 @@ export const AppLayout: React.FC = () => {
         </div>
 
         <div className="flex items-center gap-1.5 shrink-0">
-          <button
-            onClick={() => setIsNewEventModalOpen(true)}
-            className="metallic-btn-primary p-2 sm:px-3 sm:py-1.5 rounded-xl text-xs font-bold flex items-center gap-1"
-            title="Create New Event"
-          >
-            <Plus className="w-4 h-4" />
-            <span className="hidden sm:inline">New</span>
-          </button>
-
           {activeEvent && (
             <button
               onClick={() => setCopilotOpen(true)}
@@ -479,9 +536,9 @@ export const AppLayout: React.FC = () => {
       )}
 
       {/* 4. Main Desktop & Mobile Content Area */}
-      <div className="flex-1 flex flex-col min-w-0 overflow-y-auto">
+      <div className="flex-1 flex flex-col min-w-0 h-full overflow-hidden">
         {/* Desktop Top Header Bar */}
-        <header className="hidden md:flex h-16 bg-[#0c0d12]/90 backdrop-blur-md border-b border-white/10 px-4 sm:px-6 items-center justify-between shrink-0">
+        <header className="hidden md:flex h-16 bg-[#0c0d12]/95 backdrop-blur-md border-b border-white/10 px-4 sm:px-6 items-center justify-between shrink-0 z-20">
           {/* Left: Interactive Event Selector Dropdown */}
           <div className="relative" ref={dropdownRef}>
             {activeEvent ? (
@@ -560,14 +617,6 @@ export const AppLayout: React.FC = () => {
 
           {/* Right Desktop Header Action Buttons */}
           <div className="flex items-center gap-2.5">
-            <button
-              onClick={() => setIsNewEventModalOpen(true)}
-              className="metallic-btn-primary inline-flex items-center gap-1.5 text-xs font-bold px-3.5 py-2 rounded-xl"
-            >
-              <Plus className="w-3.5 h-3.5" />
-              <span>New Event</span>
-            </button>
-
             {activeEvent && (
               <button
                 onClick={() => setCopilotOpen(true)}
@@ -580,8 +629,8 @@ export const AppLayout: React.FC = () => {
           </div>
         </header>
 
-        {/* Page Content Outlet with Mobile Safe Margin for Bottom Navigation */}
-        <main className="flex-1 p-3.5 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto pb-[calc(5rem+env(safe-area-inset-bottom,0px))] md:pb-8 min-w-0">
+        {/* Page Content Outlet with Mobile Safe Margin for Bottom Navigation - ONLY THIS SCROLLS */}
+        <main className="flex-1 overflow-y-auto p-3.5 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto pb-[calc(5rem+env(safe-area-inset-bottom,0px))] md:pb-8 min-w-0">
           <Outlet />
         </main>
       </div>
