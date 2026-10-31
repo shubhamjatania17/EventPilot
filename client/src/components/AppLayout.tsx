@@ -24,13 +24,13 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useEvent } from '../context/EventContext';
-import { api } from '../services/api';
+import { api, getAuthToken } from '../services/api';
 import { NewEventModal } from './NewEventModal';
 
 export const AppLayout: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { user, signout } = useAuth();
+  const { user, loading: authLoading, signout } = useAuth();
   const { 
     activeEvent, 
     eventsList, 
@@ -44,6 +44,15 @@ export const AppLayout: React.FC = () => {
     setIsNewEventModalOpen,
     newEventDefaultType,
   } = useEvent();
+
+  const token = getAuthToken();
+
+  // Route protection: redirect to sign-in if no valid session
+  useEffect(() => {
+    if (!authLoading && !token && !user) {
+      navigate('/signin', { replace: true });
+    }
+  }, [user, authLoading, token, navigate]);
 
   // Mobile drawer state
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -158,6 +167,18 @@ export const AppLayout: React.FC = () => {
   };
 
   const criticalRisksCount = risks.filter(r => r.severity === 'critical').length;
+
+  if (authLoading && !user) {
+    return (
+      <div className="min-h-screen min-h-dvh bg-[#08090d] flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+      </div>
+    );
+  }
+
+  if (!token && !user) {
+    return null;
+  }
 
   return (
     <div className="min-h-screen min-h-dvh bg-[#08090d] flex flex-col md:flex-row text-slate-100 overflow-x-hidden">

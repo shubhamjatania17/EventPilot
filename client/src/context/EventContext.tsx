@@ -182,6 +182,22 @@ export const EventProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       setActiveEvent(null);
       setLoading(false);
     }
+
+    const handleStorage = (e: StorageEvent) => {
+      if (e.key === 'eventpilot_token' || e.key === 'eventpilot_active_event_id') {
+        const currentToken = getAuthToken();
+        if (currentToken) {
+          loadUserWorkspace();
+        } else {
+          setEventsList([]);
+          setActiveEvent(null);
+          setLoading(false);
+        }
+      }
+    };
+
+    window.addEventListener('storage', handleStorage);
+    return () => window.removeEventListener('storage', handleStorage);
   }, []);
 
   return (

@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useEvent } from '../../context/EventContext';
+import { getAuthToken } from '../../services/api';
 import { signInWithGooglePopup } from '../../config/firebase';
 import { ArrowLeft, AlertCircle, Lock, Mail, User } from 'lucide-react';
 
 export const SignUpPage: React.FC = () => {
   const navigate = useNavigate();
-  const { signup, googleAuth } = useAuth();
+  const { user, signup, googleAuth, loading: authLoading } = useAuth();
   const { loadUserWorkspace } = useEvent();
 
   const [displayName, setDisplayName] = useState('');
@@ -16,6 +17,13 @@ export const SignUpPage: React.FC = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+
+  // If already authenticated on this device, jump straight to active dashboard
+  useEffect(() => {
+    if (!authLoading && (user || getAuthToken())) {
+      navigate('/app/overview', { replace: true });
+    }
+  }, [user, authLoading, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

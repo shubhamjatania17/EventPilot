@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 import { 
   Sparkles, 
   ArrowRight, 
@@ -18,12 +19,13 @@ import {
 } from 'lucide-react';
 
 export const LandingPage: React.FC = () => {
+  const { user } = useAuth();
   const [showVideoModal, setShowVideoModal] = useState(false);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const currentYear = new Date().getFullYear();
 
   return (
-    <div className="min-h-screen min-h-dvh bg-[#090a0f] flex flex-col text-slate-100 overflow-x-hidden">
+    <div className="min-h-screen bg-[#090a0f] flex flex-col text-slate-100 overflow-x-hidden">
       {/* 1. Navbar */}
       <header className="sticky top-0 z-40 bg-[#0c0d12]/95 backdrop-blur-md border-b border-white/10 pt-[env(safe-area-inset-top,0px)]">
         <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
@@ -43,7 +45,9 @@ export const LandingPage: React.FC = () => {
             <a href="#capabilities" className="hover:text-white transition-colors">Capabilities</a>
             <a href="#demo-video" className="hover:text-white transition-colors">Product Walkthrough</a>
             <Link 
-              to="/signup"
+              to={user ? "/app/events" : "/signup"}
+              target="_blank"
+              rel="noopener noreferrer"
               className="text-zinc-200 hover:text-white font-semibold transition-colors"
             >
               New Event
@@ -51,24 +55,42 @@ export const LandingPage: React.FC = () => {
           </nav>
 
           <div className="flex items-center gap-2 sm:gap-3">
-            <Link
-              to="/signin"
-              className="text-xs sm:text-sm font-semibold text-zinc-300 hover:text-white px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-md hover:bg-white/6 transition-colors"
-            >
-              Sign In
-            </Link>
-            <Link
-              to="/signup"
-              className="metallic-btn-primary inline-flex items-center gap-1 sm:gap-1.5 text-xs sm:text-sm font-bold px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl"
-            >
-              <span>Get Started</span>
-              <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-            </Link>
+            {user ? (
+              <Link
+                to="/app/overview"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="metallic-btn-primary inline-flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm font-bold px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-xl"
+              >
+                <span>Dashboard</span>
+                <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+              </Link>
+            ) : (
+              <>
+                <Link
+                  to="/signin"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-xs sm:text-sm font-semibold text-zinc-300 hover:text-white px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-md hover:bg-white/6 transition-colors"
+                >
+                  Sign In
+                </Link>
+                <Link
+                  to="/signup"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="metallic-btn-primary inline-flex items-center gap-1 sm:gap-1.5 text-xs sm:text-sm font-bold px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl"
+                >
+                  <span>Get Started</span>
+                  <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                </Link>
+              </>
+            )}
 
             {/* Mobile Nav Toggle */}
             <button
               onClick={() => setMobileNavOpen(prev => !prev)}
-              className="md:hidden p-2 text-zinc-300 hover:text-white rounded-lg hover:bg-white/[0.08]"
+              className="md:hidden p-2 text-zinc-300 hover:text-white rounded-lg hover:bg-white/8"
               aria-label="Toggle navigation menu"
             >
               {mobileNavOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -101,12 +123,46 @@ export const LandingPage: React.FC = () => {
               Product Walkthrough
             </a>
             <Link 
-              to="/signup"
+              to={user ? "/app/events" : "/signup"}
+              target="_blank"
+              rel="noopener noreferrer"
               onClick={() => setMobileNavOpen(false)}
               className="block py-2 text-white font-bold"
             >
               New Event
             </Link>
+            {user ? (
+              <Link 
+                to="/app/overview"
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => setMobileNavOpen(false)}
+                className="block py-2 text-zinc-200 font-bold"
+              >
+                Dashboard →
+              </Link>
+            ) : (
+              <div className="pt-2 border-t border-white/10 flex items-center gap-3">
+                <Link
+                  to="/signin"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => setMobileNavOpen(false)}
+                  className="py-1.5 text-zinc-300 hover:text-white font-medium"
+                >
+                  Sign In
+                </Link>
+                <Link
+                  to="/signup"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => setMobileNavOpen(false)}
+                  className="metallic-btn-primary px-3 py-1 rounded-lg text-xs font-bold"
+                >
+                  Get Started →
+                </Link>
+              </div>
+            )}
           </div>
         )}
       </header>
@@ -129,18 +185,22 @@ export const LandingPage: React.FC = () => {
 
         <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
           <Link
-            to="/signup"
+            to={user ? "/app/overview" : "/signup"}
+            target="_blank"
+            rel="noopener noreferrer"
             className="w-full sm:w-auto metallic-btn-primary inline-flex items-center justify-center gap-2 text-base font-bold px-6 py-3.5 rounded-xl shadow-lg"
           >
-            Create Your Event Plan
+            {user ? "Open Your Dashboard" : "Create Your Event Plan"}
             <ArrowRight className="w-4 h-4" />
           </Link>
           <Link
-            to="/signin"
+            to={user ? "/app/events" : "/signin"}
+            target="_blank"
+            rel="noopener noreferrer"
             className="w-full sm:w-auto metallic-btn-secondary inline-flex items-center justify-center gap-2 text-base font-semibold px-6 py-3.5 rounded-xl shadow-sm"
           >
             <Sparkles className="w-4 h-4 text-white" />
-            Open Existing Workspace
+            {user ? "Manage Events" : "Open Existing Workspace"}
           </Link>
         </div>
 
@@ -153,7 +213,9 @@ export const LandingPage: React.FC = () => {
               </h2>
             </div>
             <Link
-              to="/signup"
+              to={user ? "/app/overview" : "/signup"}
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex items-center gap-1.5 text-xs font-semibold text-zinc-300 metallic-btn-secondary px-3 py-1.5 rounded-lg"
             >
               Configure in Workspace <ChevronRight className="w-3.5 h-3.5" />
@@ -394,10 +456,12 @@ export const LandingPage: React.FC = () => {
                   Close
                 </button>
                 <Link
-                  to="/signup"
+                  to={user ? "/app/overview" : "/signup"}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="metallic-btn-primary px-4 py-2 text-sm font-bold rounded-xl"
                 >
-                  Get Started Free
+                  {user ? "Open Dashboard" : "Get Started Free"}
                 </Link>
               </div>
             </div>
@@ -418,9 +482,23 @@ export const LandingPage: React.FC = () => {
           </div>
 
           <div className="flex items-center gap-6 text-xs">
-            <Link to="/signin" className="hover:text-white transition-colors">Sign In</Link>
-            <Link to="/signup" className="hover:text-white transition-colors">Sign Up</Link>
-            <Link to="/signup" className="hover:text-white transition-colors">New Event</Link>
+            {user ? (
+              <Link to="/app/overview" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">
+                Dashboard
+              </Link>
+            ) : (
+              <>
+                <Link to="/signin" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">
+                  Sign In
+                </Link>
+                <Link to="/signup" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">
+                  Sign Up
+                </Link>
+              </>
+            )}
+            <Link to={user ? "/app/events" : "/signup"} target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">
+              New Event
+            </Link>
           </div>
 
           <div className="text-xs text-zinc-500">
