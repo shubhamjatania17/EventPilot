@@ -146,7 +146,7 @@ export const EventDayPage: React.FC = () => {
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3">
           <button
             onClick={() => setShowIncidentModal(true)}
             className="metallic-btn-secondary inline-flex items-center gap-2 text-xs font-semibold px-3.5 py-2.5 rounded-xl transition-all"
@@ -183,8 +183,8 @@ export const EventDayPage: React.FC = () => {
 
       {/* AI Crisis & Incident Responder Modal */}
       {showIncidentModal && (
-        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
-          <div className="metallic-card rounded-2xl border border-white/20 max-w-2xl w-full p-6 space-y-5 my-8">
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 overflow-y-auto pt-[max(0.75rem,env(safe-area-inset-top,0px))] pb-[max(0.75rem,env(safe-area-inset-bottom,0px))]">
+          <div className="metallic-card rounded-2xl border border-white/20 max-w-2xl w-full p-4 sm:p-6 space-y-5 my-auto max-h-[92dvh] overflow-y-auto">
             <div className="flex items-center justify-between pb-3 border-b border-white/10">
               <div className="flex items-center gap-2.5">
                 <div className="p-2 bg-white/10 text-white rounded-xl">
@@ -481,22 +481,22 @@ export const EventDayPage: React.FC = () => {
               </div>
 
               {/* Status & Replanning Buttons */}
-              <div className="flex items-center gap-2 sm:self-center">
+              <div className="flex flex-wrap items-center gap-2 sm:self-center">
                 <button
                   onClick={() => handleUpdateStatus(item.id, 'current')}
-                  className="metallic-btn-secondary px-2.5 py-1 text-[11px] font-semibold rounded-md"
+                  className="metallic-btn-secondary px-2.5 py-1 text-[11px] font-semibold rounded-md flex-1 sm:flex-initial text-center"
                 >
                   Set Live
                 </button>
                 <button
                   onClick={() => handleUpdateStatus(item.id, 'done')}
-                  className="metallic-btn-primary px-2.5 py-1 text-[11px] font-semibold rounded-md"
+                  className="metallic-btn-primary px-2.5 py-1 text-[11px] font-semibold rounded-md flex-1 sm:flex-initial text-center"
                 >
                   Done
                 </button>
                 <button
                   onClick={() => handleApplyDelay(item.id, 15)}
-                  className="metallic-btn-secondary px-2.5 py-1 text-[11px] font-semibold rounded-md"
+                  className="metallic-btn-secondary px-2.5 py-1 text-[11px] font-semibold rounded-md flex-1 sm:flex-initial text-center"
                 >
                   +15m Delay
                 </button>

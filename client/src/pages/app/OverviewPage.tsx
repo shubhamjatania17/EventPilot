@@ -54,10 +54,10 @@ export const OverviewPage: React.FC = () => {
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3">
           <Link
             to="/app/budget"
-            className="metallic-btn-secondary inline-flex items-center gap-2 text-xs font-semibold px-3.5 py-2 rounded-xl transition-colors shadow-xs"
+            className="metallic-btn-secondary inline-flex items-center justify-center gap-2 text-xs font-semibold px-3 py-2 rounded-xl transition-colors shadow-xs flex-1 sm:flex-initial"
           >
             <TrendingUp className="w-3.5 h-3.5 text-white" />
             What-If Simulator
@@ -65,7 +65,7 @@ export const OverviewPage: React.FC = () => {
           <button
             onClick={handleRunAnalysis}
             disabled={analyzing}
-            className="metallic-btn-primary inline-flex items-center gap-2 text-xs font-bold px-3.5 py-2 rounded-xl transition-colors disabled:opacity-50"
+            className="metallic-btn-primary inline-flex items-center justify-center gap-2 text-xs font-bold px-3 py-2 rounded-xl transition-colors disabled:opacity-50 flex-1 sm:flex-initial"
           >
             <Sparkles className="w-3.5 h-3.5 text-black" />
             {analyzing ? 'Analyzing Plan...' : 'Analyze Event'}

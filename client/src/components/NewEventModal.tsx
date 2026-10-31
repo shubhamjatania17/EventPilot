@@ -180,33 +180,34 @@ export const NewEventModal: React.FC<NewEventModalProps> = ({ isOpen, onClose, d
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
-      <div className="metallic-card rounded-2xl max-w-2xl w-full max-h-[92vh] flex flex-col shadow-2xl border border-white/15 my-auto overflow-hidden text-slate-100">
+    <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-2.5 sm:p-6 overflow-y-auto pt-[max(0.75rem,env(safe-area-inset-top,0px))] pb-[max(0.75rem,env(safe-area-inset-bottom,0px))]">
+      <div className="metallic-card rounded-2xl max-w-2xl w-full max-h-[92vh] max-h-[92dvh] flex flex-col shadow-2xl border border-white/15 my-auto overflow-hidden text-slate-100">
         {/* Header */}
-        <div className="px-6 py-4 border-b border-white/10 flex items-center justify-between bg-white/[0.02]">
+        <div className="px-4 sm:px-6 py-3.5 sm:py-4 border-b border-white/10 flex items-center justify-between bg-white/[0.02] shrink-0">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-zinc-800 border border-white/15 text-white flex items-center justify-center font-bold text-sm shadow-xs">
+            <div className="w-8 h-8 rounded-lg bg-zinc-800 border border-white/15 text-white flex items-center justify-center font-bold text-sm shadow-xs shrink-0">
               <Sparkles className="w-4 h-4 text-white" />
             </div>
             <div>
-              <h2 className="text-base sm:text-lg font-bold text-white leading-tight">
+              <h2 className="text-sm sm:text-base md:text-lg font-bold text-white leading-tight">
                 Configure New Event Plan
               </h2>
-              <p className="text-xs text-zinc-400">
+              <p className="text-[11px] sm:text-xs text-zinc-400">
                 EventPilot adapts budgets, timeline tasks, and logistics to your event type.
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 text-zinc-400 hover:text-white rounded-lg hover:bg-white/[0.08] transition-colors"
+            className="p-1.5 text-zinc-400 hover:text-white rounded-lg hover:bg-white/[0.08] transition-colors shrink-0"
+            aria-label="Close modal"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Scrollable Form Body */}
-        <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-6 space-y-6 text-xs sm:text-sm">
+        <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-5 sm:space-y-6 text-xs sm:text-sm">
           {error && (
             <div className="p-3 bg-zinc-900 border border-zinc-700 text-zinc-200 rounded-xl text-xs flex items-center gap-2">
               <ShieldAlert className="w-4 h-4 shrink-0 text-white" />

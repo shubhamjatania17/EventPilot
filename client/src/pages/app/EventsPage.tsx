@@ -307,8 +307,8 @@ export const EventsPage: React.FC = () => {
 
       {/* Edit Event Details Modal */}
       {editingEvent && (
-        <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
-          <div className="metallic-card rounded-2xl max-w-xl w-full shadow-2xl border border-white/15 overflow-hidden my-auto text-white">
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 overflow-y-auto pt-[max(0.75rem,env(safe-area-inset-top,0px))] pb-[max(0.75rem,env(safe-area-inset-bottom,0px))]">
+          <div className="metallic-card rounded-2xl max-w-xl w-full shadow-2xl border border-white/15 overflow-hidden my-auto max-h-[92dvh] overflow-y-auto text-white">
             <div className="px-6 py-4 border-b border-white/10 flex items-center justify-between bg-white/[0.02]">
               <div className="flex items-center gap-2">
                 <Edit3 className="w-4 h-4 text-white" />
@@ -440,7 +440,7 @@ export const EventsPage: React.FC = () => {
                 />
               </div>
 
-              <div className="pt-4 border-t border-white/10 flex items-center justify-between">
+              <div className="pt-4 border-t border-white/10 flex flex-wrap items-center justify-between gap-3">
                 <button
                   type="button"
                   onClick={() => {
@@ -478,8 +478,8 @@ export const EventsPage: React.FC = () => {
 
       {/* Delete Event Confirmation Modal */}
       {deletingId && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="metallic-card rounded-2xl max-w-sm w-full p-6 shadow-2xl space-y-4 border border-white/15 text-white">
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 overflow-y-auto pt-[max(0.75rem,env(safe-area-inset-top,0px))] pb-[max(0.75rem,env(safe-area-inset-bottom,0px))]">
+          <div className="metallic-card rounded-2xl max-w-sm w-full p-5 sm:p-6 shadow-2xl space-y-4 border border-white/15 text-white my-auto max-h-[92dvh] overflow-y-auto">
             <div className="w-10 h-10 rounded-full bg-zinc-900 border border-zinc-600 text-white flex items-center justify-center">
               <AlertTriangle className="w-5 h-5" />
             </div>

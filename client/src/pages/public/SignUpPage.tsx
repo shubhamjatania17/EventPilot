@@ -66,7 +66,7 @@ export const SignUpPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#090a0f] flex flex-col justify-center py-12 sm:px-6 lg:px-8 text-slate-100">
+    <div className="min-h-dvh bg-[#090a0f] flex flex-col justify-center py-8 sm:py-12 px-4 sm:px-6 lg:px-8 text-slate-100 safe-area-top safe-area-bottom">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <Link
           to="/"
@@ -94,7 +94,7 @@ export const SignUpPage: React.FC = () => {
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="metallic-card py-8 px-4 border border-white/15 shadow-2xl sm:rounded-2xl sm:px-10">
+        <div className="metallic-card py-6 sm:py-8 px-5 sm:px-10 border border-white/15 shadow-2xl rounded-2xl">
           {error && (
             <div className="mb-6 p-4 rounded-xl bg-zinc-900 border border-zinc-700 flex items-start gap-3 text-sm text-zinc-200">
               <AlertCircle className="w-5 h-5 text-white shrink-0 mt-0.5" />

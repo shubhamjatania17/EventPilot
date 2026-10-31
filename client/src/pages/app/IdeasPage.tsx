@@ -172,7 +172,7 @@ export const IdeasPage: React.FC = () => {
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3">
           <button
             onClick={() => {
               setStudioTheme(`${activeEvent.meta.name} Aesthetic`);
@@ -198,8 +198,8 @@ export const IdeasPage: React.FC = () => {
 
       {/* AI Theme & Invitation Studio Modal */}
       {showStudioModal && (
-        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
-          <div className="metallic-card rounded-2xl border border-white/20 max-w-3xl w-full p-6 space-y-5 my-8">
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 overflow-y-auto pt-[max(0.75rem,env(safe-area-inset-top,0px))] pb-[max(0.75rem,env(safe-area-inset-bottom,0px))]">
+          <div className="metallic-card rounded-2xl border border-white/20 max-w-3xl w-full p-4 sm:p-6 space-y-4 sm:space-y-5 my-auto max-h-[92dvh] overflow-y-auto">
             <div className="flex items-center justify-between pb-3 border-b border-white/10">
               <div className="flex items-center gap-2.5">
                 <div className="p-2 bg-white/10 text-white rounded-xl">

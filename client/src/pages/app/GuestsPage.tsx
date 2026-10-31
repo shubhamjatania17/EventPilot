@@ -80,8 +80,8 @@ export const GuestsPage: React.FC = () => {
       </div>
 
       {/* Headcount Stat Cards */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <div className="p-5 rounded-2xl metallic-card-interactive">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+        <div className="p-3.5 sm:p-5 rounded-2xl metallic-card-interactive">
           <span className="text-xs font-semibold text-zinc-400">Confirmed Attendees</span>
           <div className="text-2xl font-extrabold text-white mt-1">
             {confirmedGuests}
@@ -89,7 +89,7 @@ export const GuestsPage: React.FC = () => {
           <span className="text-[11px] text-zinc-400 mt-1 block">RSVP Attending</span>
         </div>
 
-        <div className="p-5 rounded-2xl metallic-card-interactive">
+        <div className="p-3.5 sm:p-5 rounded-2xl metallic-card-interactive">
           <span className="text-xs font-semibold text-zinc-400">Pending RSVPs</span>
           <div className="text-2xl font-extrabold text-white mt-1">
             {pendingGuests}
@@ -97,7 +97,7 @@ export const GuestsPage: React.FC = () => {
           <span className="text-[11px] text-zinc-400 mt-1 block">Awaiting response</span>
         </div>
 
-        <div className="p-5 rounded-2xl metallic-card-interactive">
+        <div className="p-3.5 sm:p-5 rounded-2xl metallic-card-interactive">
           <span className="text-xs font-semibold text-zinc-400">Venue Capacity</span>
           <div className="text-2xl font-extrabold text-white mt-1">
             {activeEvent.meta.venueCapacity || '200'}
@@ -105,7 +105,7 @@ export const GuestsPage: React.FC = () => {
           <span className="text-[11px] text-zinc-500 mt-1 block">Registered hall limit</span>
         </div>
 
-        <div className="p-5 rounded-2xl metallic-card-interactive">
+        <div className="p-3.5 sm:p-5 rounded-2xl metallic-card-interactive">
           <span className="text-xs font-semibold text-zinc-400">Catering Headcount</span>
           <div className="text-2xl font-extrabold text-white mt-1">
             {activeEvent.meta.guestCount}
@@ -155,7 +155,7 @@ export const GuestsPage: React.FC = () => {
               />
             </div>
           </div>
-          <div className="flex items-center gap-6 text-xs text-zinc-300">
+          <div className="flex flex-wrap items-center gap-4 sm:gap-6 text-xs text-zinc-300">
             <label className="flex items-center gap-2 cursor-pointer">
               <input
                 type="checkbox"
@@ -196,9 +196,9 @@ export const GuestsPage: React.FC = () => {
       {/* Guests Table */}
       <div className="metallic-card rounded-2xl divide-y divide-white/10">
         {activeEvent.guests.map(guest => (
-          <div key={guest.id} className="p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs">
+          <div key={guest.id} className="p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 text-xs">
             <div>
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2">
                 <span className="font-bold text-white text-sm">{guest.name}</span>
                 <span className="metallic-pill px-2 py-0.5 rounded text-[10px] font-semibold uppercase">
                   {guest.group}
@@ -213,7 +213,7 @@ export const GuestsPage: React.FC = () => {
                   {guest.rsvp}
                 </span>
               </div>
-              <div className="text-[11px] text-zinc-400 mt-1 flex items-center gap-3">
+              <div className="text-[11px] text-zinc-400 mt-1 flex flex-wrap items-center gap-2 sm:gap-3">
                 <span>{guest.adults} Adults, {guest.children} Children</span>
                 {guest.accommodationNeeded && (
                   <span className="flex items-center gap-1 text-zinc-300">
@@ -228,10 +228,10 @@ export const GuestsPage: React.FC = () => {
               </div>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
               <button
                 onClick={() => handleUpdateRSVP(guest.id, 'attending')}
-                className={`px-2.5 py-1 text-[11px] font-semibold rounded-md border transition-all ${
+                className={`px-2.5 py-1 text-[11px] font-semibold rounded-md border transition-all flex-1 sm:flex-initial text-center ${
                   guest.rsvp === 'attending' 
                     ? 'metallic-btn-primary' 
                     : 'metallic-btn-secondary'
@@ -241,7 +241,7 @@ export const GuestsPage: React.FC = () => {
               </button>
               <button
                 onClick={() => handleUpdateRSVP(guest.id, 'declined')}
-                className={`px-2.5 py-1 text-[11px] font-semibold rounded-md border transition-all ${
+                className={`px-2.5 py-1 text-[11px] font-semibold rounded-md border transition-all flex-1 sm:flex-initial text-center ${
                   guest.rsvp === 'declined' 
                     ? 'metallic-btn-primary' 
                     : 'metallic-btn-secondary'

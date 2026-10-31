@@ -201,7 +201,7 @@ export const TimelinePage: React.FC = () => {
                 </div>
               </div>
 
-              <div className="flex items-center gap-4 text-zinc-400 text-right sm:self-center">
+              <div className="flex flex-wrap items-center justify-between sm:justify-end gap-2 sm:gap-4 text-zinc-400 sm:self-center">
                 <span className="text-xs font-semibold">
                   Due: {task.dueDate}
                 </span>

@@ -450,7 +450,7 @@ export const BudgetPage: React.FC = () => {
                 </div>
               </div>
 
-              <div className="flex items-center gap-6 text-right">
+              <div className="grid grid-cols-3 sm:flex sm:items-center gap-2 sm:gap-6 text-left sm:text-right pt-2 sm:pt-0 border-t sm:border-t-0 border-white/5">
                 <div>
                   <span className="text-zinc-500 text-[11px] block">Allocated</span>
                   <span className="font-semibold text-zinc-300">₹{cat.allocated.toLocaleString('en-IN')}</span>

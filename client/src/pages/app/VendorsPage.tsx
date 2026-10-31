@@ -204,7 +204,7 @@ export const VendorsPage: React.FC = () => {
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3">
           <button
             onClick={() => {
               setTargetVendorId(null);
@@ -345,8 +345,8 @@ export const VendorsPage: React.FC = () => {
 
       {/* AI Negotiator Modal */}
       {showNegotiator && (
-        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="metallic-card border border-white/20 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 space-y-6">
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 pt-[max(0.75rem,env(safe-area-inset-top,0px))] pb-[max(0.75rem,env(safe-area-inset-bottom,0px))]">
+          <div className="metallic-card border border-white/20 rounded-2xl max-w-2xl w-full max-h-[92vh] max-h-[92dvh] overflow-y-auto p-4 sm:p-6 space-y-5 sm:space-y-6">
             <div className="flex items-center justify-between pb-4 border-b border-white/10">
               <div className="flex items-center gap-2.5">
                 <div className="p-2 bg-white/10 border border-white/20 rounded-xl text-white">
@@ -648,7 +648,7 @@ export const VendorsPage: React.FC = () => {
                 </div>
               </div>
 
-              <div className="flex items-center gap-4 sm:gap-6 text-right">
+              <div className="flex flex-wrap items-center justify-between sm:justify-end gap-3 sm:gap-6 text-left sm:text-right pt-2 sm:pt-0 border-t sm:border-t-0 border-white/5">
                 <div>
                   <span className="text-zinc-500 text-[11px] block">Contract Amount</span>
                   <span className="font-bold text-white text-sm">₹{vendor.quoteAmount.toLocaleString('en-IN')}</span>

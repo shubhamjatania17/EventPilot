@@ -232,16 +232,16 @@ export const SettingsPage: React.FC = () => {
               </div>
             </div>
 
-            <div className="flex items-center gap-2 shrink-0">
+            <div className="flex flex-wrap items-center gap-2">
               <button
                 onClick={() => navigate('/app/events')}
-                className="metallic-btn-secondary px-3.5 py-2 rounded-xl text-xs font-semibold transition-all"
+                className="metallic-btn-secondary px-3.5 py-2 rounded-xl text-xs font-semibold transition-all flex-1 sm:flex-initial text-center"
               >
                 Switch / Edit
               </button>
               <button
                 onClick={() => setShowEventDeleteModal(true)}
-                className="metallic-btn-secondary px-3.5 py-2 rounded-xl text-xs font-semibold transition-all inline-flex items-center gap-1.5"
+                className="metallic-btn-secondary px-3.5 py-2 rounded-xl text-xs font-semibold transition-all inline-flex items-center justify-center gap-1.5 flex-1 sm:flex-initial text-center"
               >
                 <Trash2 className="w-3.5 h-3.5 text-zinc-400" />
                 Delete Event
@@ -272,8 +272,8 @@ export const SettingsPage: React.FC = () => {
 
       {/* Account Deletion Confirmation Modal */}
       {showDeleteModal && (
-        <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="metallic-card border border-white/25 rounded-2xl max-w-md w-full p-6 space-y-4">
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 overflow-y-auto pt-[max(0.75rem,env(safe-area-inset-top,0px))] pb-[max(0.75rem,env(safe-area-inset-bottom,0px))]">
+          <div className="metallic-card border border-white/25 rounded-2xl max-w-md w-full p-4 sm:p-6 space-y-4 my-auto max-h-[92dvh] overflow-y-auto">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-full bg-white/10 border border-white/20 flex items-center justify-center shrink-0">
                 <AlertTriangle className="w-5 h-5 text-white" />
@@ -320,8 +320,8 @@ export const SettingsPage: React.FC = () => {
 
       {/* Active Event Deletion Confirmation Modal */}
       {showEventDeleteModal && activeEvent && (
-        <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="metallic-card border border-white/25 rounded-2xl max-w-sm w-full p-6 space-y-4">
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 overflow-y-auto pt-[max(0.75rem,env(safe-area-inset-top,0px))] pb-[max(0.75rem,env(safe-area-inset-bottom,0px))]">
+          <div className="metallic-card border border-white/25 rounded-2xl max-w-sm w-full p-4 sm:p-6 space-y-4 my-auto max-h-[92dvh] overflow-y-auto">
             <div className="w-10 h-10 rounded-full bg-white/10 border border-white/20 text-white flex items-center justify-center">
               <AlertTriangle className="w-5 h-5" />
             </div>

@@ -12,25 +12,28 @@ import {
   Clock, 
   TrendingUp, 
   ChevronRight,
-  AlertTriangle
+  AlertTriangle,
+  Menu,
+  X
 } from 'lucide-react';
 
 export const LandingPage: React.FC = () => {
   const [showVideoModal, setShowVideoModal] = useState(false);
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const currentYear = new Date().getFullYear();
 
   return (
-    <div className="min-h-screen bg-[#090a0f] flex flex-col text-slate-100">
+    <div className="min-h-screen min-h-dvh bg-[#090a0f] flex flex-col text-slate-100 overflow-x-hidden">
       {/* 1. Navbar */}
-      <header className="sticky top-0 z-40 bg-[#0c0d12]/90 backdrop-blur-md border-b border-white/10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-3">
+      <header className="sticky top-0 z-40 bg-[#0c0d12]/95 backdrop-blur-md border-b border-white/10 pt-[env(safe-area-inset-top,0px)]">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+          <div className="flex items-center gap-2.5">
             <img
               src="/logo.png"
               alt="EventPilot"
-              className="w-9 h-9 rounded-lg object-contain shadow-xs border border-white/15"
+              className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg object-contain border border-white/15"
             />
-            <span className="font-heading text-xl font-bold tracking-tight metallic-chrome-text">
+            <span className="font-heading text-lg sm:text-xl font-bold tracking-tight metallic-chrome-text">
               EventPilot
             </span>
           </div>
@@ -47,22 +50,65 @@ export const LandingPage: React.FC = () => {
             </Link>
           </nav>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
             <Link
               to="/signin"
-              className="text-sm font-semibold text-zinc-300 hover:text-white px-3 py-2 rounded-md hover:bg-white/6 transition-colors"
+              className="text-xs sm:text-sm font-semibold text-zinc-300 hover:text-white px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-md hover:bg-white/6 transition-colors"
             >
               Sign In
             </Link>
             <Link
               to="/signup"
-              className="metallic-btn-primary inline-flex items-center gap-1.5 text-sm font-bold px-4 py-2 rounded-xl"
+              className="metallic-btn-primary inline-flex items-center gap-1 sm:gap-1.5 text-xs sm:text-sm font-bold px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl"
             >
-              Get Started
-              <ArrowRight className="w-4 h-4" />
+              <span>Get Started</span>
+              <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             </Link>
+
+            {/* Mobile Nav Toggle */}
+            <button
+              onClick={() => setMobileNavOpen(prev => !prev)}
+              className="md:hidden p-2 text-zinc-300 hover:text-white rounded-lg hover:bg-white/[0.08]"
+              aria-label="Toggle navigation menu"
+            >
+              {mobileNavOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
           </div>
         </div>
+
+        {/* Mobile Dropdown Menu for phones & foldables */}
+        {mobileNavOpen && (
+          <div className="md:hidden border-t border-white/10 bg-[#0c0d12] px-4 py-3 space-y-2 text-sm animate-in fade-in duration-150">
+            <a 
+              href="#how-it-works" 
+              onClick={() => setMobileNavOpen(false)}
+              className="block py-2 text-zinc-300 hover:text-white font-medium"
+            >
+              How It Works
+            </a>
+            <a 
+              href="#capabilities" 
+              onClick={() => setMobileNavOpen(false)}
+              className="block py-2 text-zinc-300 hover:text-white font-medium"
+            >
+              Capabilities
+            </a>
+            <a 
+              href="#demo-video" 
+              onClick={() => setMobileNavOpen(false)}
+              className="block py-2 text-zinc-300 hover:text-white font-medium"
+            >
+              Product Walkthrough
+            </a>
+            <Link 
+              to="/signup"
+              onClick={() => setMobileNavOpen(false)}
+              className="block py-2 text-white font-bold"
+            >
+              New Event
+            </Link>
+          </div>
+        )}
       </header>
 
       {/* 2. Hero Section */}
