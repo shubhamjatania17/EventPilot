@@ -240,7 +240,7 @@ export const AppLayout: React.FC = () => {
 
         {/* Active Event Card Summary in Desktop Sidebar */}
         {!sidebarCollapsed && (
-          <div className="p-4 border-b border-white/10 bg-white/[0.02] shrink-0">
+          <div className="p-4 border-b border-white/10 bg-white/2 shrink-0">
             {activeEvent ? (
               <>
                 <div className="flex items-center justify-between text-xs text-zinc-400 font-medium">
@@ -299,7 +299,7 @@ export const AppLayout: React.FC = () => {
                 <div
                   key={item.to}
                   onClick={() => setIsNewEventModalOpen(true)}
-                  className={`flex items-center rounded-xl font-semibold text-zinc-600 opacity-40 cursor-not-allowed select-none transition-all hover:opacity-70 hover:bg-white/[0.02] ${
+                  className={`flex items-center rounded-xl font-semibold text-zinc-600 opacity-40 cursor-not-allowed select-none transition-all hover:opacity-70 hover:bg-white/2 ${
                     sidebarCollapsed ? 'justify-center p-3' : 'justify-between px-3.5 py-2.5 text-sm'
                   }`}
                   title={`${item.label} (Add an event first to unlock)`}
@@ -325,8 +325,8 @@ export const AppLayout: React.FC = () => {
                       : 'gap-3 px-3.5 py-2.5 text-sm'
                   } ${
                     isActive
-                      ? 'bg-white/[0.1] text-white font-bold border-l-2 border-white shadow-[inset_0_1px_0_rgba(255,255,255,0.12)]'
-                      : 'text-zinc-400 hover:text-white hover:bg-white/[0.05]'
+                      ? 'bg-white/10 text-white font-bold border-l-2 border-white shadow-[inset_0_1px_0_rgba(255,255,255,0.12)]'
+                      : 'text-zinc-400 hover:text-white hover:bg-white/5'
                   }`
                 }
               >
@@ -361,7 +361,7 @@ export const AppLayout: React.FC = () => {
           </div>
           <button
             onClick={handleSignout}
-            className="p-1.5 text-zinc-400 hover:text-white rounded-lg hover:bg-white/[0.08] transition-colors"
+            className="p-1.5 text-zinc-400 hover:text-white rounded-lg hover:bg-white/8 transition-colors"
             title="Sign out"
           >
             <LogOut className="w-4 h-4" />
@@ -375,7 +375,7 @@ export const AppLayout: React.FC = () => {
           <button
             type="button"
             onClick={() => setMobileMenuOpen(true)}
-            className="p-2 -ml-1 text-zinc-300 hover:text-white rounded-xl hover:bg-white/[0.08] active:scale-95 transition-all shrink-0"
+            className="p-2 -ml-1 text-zinc-300 hover:text-white rounded-xl hover:bg-white/8 active:scale-95 transition-all shrink-0"
             aria-label="Open mobile menu"
           >
             <Menu className="w-5 h-5" />
@@ -392,7 +392,7 @@ export const AppLayout: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setDropdownOpen(prev => !prev)}
-                className="flex items-center gap-1 px-1.5 py-1 text-left rounded-lg hover:bg-white/[0.06] transition-colors max-w-[140px] xs:max-w-[180px] sm:max-w-xs"
+                className="flex items-center gap-1 px-1.5 py-1 text-left rounded-lg hover:bg-white/6 transition-colors max-w-35 xs:max-w-[180px] sm:max-w-xs"
               >
                 <span className="font-bold text-xs sm:text-sm text-white truncate">
                   {activeEvent.meta.name}
@@ -438,7 +438,7 @@ export const AppLayout: React.FC = () => {
               </div>
               <button
                 onClick={() => setMobileMenuOpen(false)}
-                className="p-1.5 text-zinc-400 hover:text-white rounded-lg hover:bg-white/[0.08]"
+                className="p-1.5 text-zinc-400 hover:text-white rounded-lg hover:bg-white/8"
                 aria-label="Close menu"
               >
                 <X className="w-5 h-5" />
@@ -446,7 +446,7 @@ export const AppLayout: React.FC = () => {
             </div>
 
             {/* Active Event Banner in Mobile Drawer */}
-            <div className="p-4 border-b border-white/10 bg-white/[0.02]">
+            <div className="p-4 border-b border-white/10 bg-white/2">
               {activeEvent ? (
                 <>
                   <div className="text-[11px] text-zinc-400 font-medium">Active Event</div>
@@ -503,8 +503,8 @@ export const AppLayout: React.FC = () => {
                     className={({ isActive }) =>
                       `flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all ${
                         isActive
-                          ? 'bg-white/[0.1] text-white font-bold border-l-2 border-white'
-                          : 'text-zinc-400 hover:text-white hover:bg-white/[0.05]'
+                          ? 'bg-white/10 text-white font-bold border-l-2 border-white'
+                          : 'text-zinc-400 hover:text-white hover:bg-white/5'
                       }`
                     }
                   >
@@ -523,7 +523,7 @@ export const AppLayout: React.FC = () => {
               </div>
               <button
                 onClick={handleSignout}
-                className="p-2 text-zinc-400 hover:text-white rounded-lg hover:bg-white/[0.08]"
+                className="p-2 text-zinc-400 hover:text-white rounded-lg hover:bg-white/8"
                 title="Sign out"
               >
                 <LogOut className="w-4 h-4" />
@@ -545,7 +545,7 @@ export const AppLayout: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setDropdownOpen(prev => !prev)}
-                className="flex items-center gap-2 px-3 py-1.5 rounded-xl hover:bg-white/[0.06] text-left transition-colors max-w-xs sm:max-w-md"
+                className="flex items-center gap-2 px-3 py-1.5 rounded-xl hover:bg-white/6 text-left transition-colors max-w-xs sm:max-w-md"
               >
                 <div className="truncate">
                   <div className="font-heading text-sm sm:text-base font-bold text-white truncate flex items-center gap-1.5">
@@ -581,8 +581,8 @@ export const AppLayout: React.FC = () => {
                           switchEvent(ev.id);
                           setDropdownOpen(false);
                         }}
-                        className={`w-full text-left px-4 py-2.5 hover:bg-white/[0.06] transition-colors flex items-center justify-between gap-3 text-xs ${
-                          isSelected ? 'bg-white/[0.08] font-bold text-white' : 'text-zinc-300'
+                        className={`w-full text-left px-4 py-2.5 hover:bg-white/6 transition-colors flex items-center justify-between gap-3 text-xs ${
+                          isSelected ? 'bg-white/8 font-bold text-white' : 'text-zinc-300'
                         }`}
                       >
                         <div className="truncate">
@@ -646,7 +646,7 @@ export const AppLayout: React.FC = () => {
               <button
                 key={item.to}
                 onClick={() => setIsNewEventModalOpen(true)}
-                className="flex flex-col items-center justify-center py-1 px-2 text-zinc-600 opacity-40 min-w-[56px]"
+                className="flex flex-col items-center justify-center py-1 px-2 text-zinc-600 opacity-40 min-w-14"
               >
                 <Icon className="w-5 h-5 mb-0.5" />
                 <span className="text-[10px] font-medium">{item.label}</span>
@@ -659,7 +659,7 @@ export const AppLayout: React.FC = () => {
               key={item.to}
               to={item.to}
               className={({ isActive }) =>
-                `flex flex-col items-center justify-center py-1 px-2 transition-colors min-w-[56px] ${
+                `flex flex-col items-center justify-center py-1 px-2 transition-colors min-w-14 ${
                   isActive ? 'text-white font-bold' : 'text-zinc-400 hover:text-zinc-200'
                 }`
               }
