@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: eventpilot
+    runtime: node
+    plan: free
+    region: singapore
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: JWT_SECRET
+        generateValue: true
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: GEMINI_MODEL
+        value: gemini-2.5-flash
+      - key: FIREBASE_PROJECT_ID
+        value: eventpilot-vpwc5
+      - key: FIREBASE_DATABASE_URL
+        value: https://eventpilot-vpwc5-default-rtdb.asia-southeast1.firebasedatabase.app

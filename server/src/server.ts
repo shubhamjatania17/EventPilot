@@ -8,6 +8,7 @@ import { authRouter } from './routes/authRoutes.js';
 import { eventRouter } from './routes/eventRoutes.js';
 import { aiRouter } from './routes/aiRoutes.js';
 import path from 'path';
+import fs from 'fs';
 
 dotenv.config();
 dotenv.config({ path: path.resolve(process.cwd(), '../.env') });
@@ -46,10 +47,39 @@ app.use('/auth', authRouter);
 app.use('/events', eventRouter);
 app.use('/ai', aiRouter);
 
-// 404 Route Handler
-app.use((_req: Request, res: Response) => {
-  res.status(404).json({ error: 'Endpoint not found.' });
-});
+// Serve Client Static Build & SPA Routing Fallback
+const clientDistCandidates = [
+  path.resolve(process.cwd(), 'client/dist'),
+  path.resolve(process.cwd(), '../client/dist'),
+  path.resolve(path.dirname(new URL(import.meta.url).pathname.replace(/^\/([a-zA-Z]:)/, '$1')), '../../client/dist'),
+];
+
+const clientDistPath = clientDistCandidates.find(
+  (dir) => fs.existsSync(dir) && fs.existsSync(path.join(dir, 'index.html'))
+);
+
+if (clientDistPath) {
+  console.log(`✓ Serving client SPA build from: ${clientDistPath}`);
+  app.use(express.static(clientDistPath));
+
+  app.get('*', (req: Request, res: Response) => {
+    // API route requests that were not matched should return JSON 404
+    if (
+      req.path.startsWith('/api/') ||
+      req.path.startsWith('/auth/') ||
+      req.path.startsWith('/events/') ||
+      req.path.startsWith('/ai/')
+    ) {
+      return res.status(404).json({ error: 'Endpoint not found.' });
+    }
+    res.sendFile(path.join(clientDistPath, 'index.html'));
+  });
+} else {
+  // 404 Route Handler when client dist is not built
+  app.use((_req: Request, res: Response) => {
+    res.status(404).json({ error: 'Endpoint not found.' });
+  });
+}
 
 // Global Error Handler
 app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
