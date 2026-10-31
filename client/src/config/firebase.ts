@@ -1,5 +1,12 @@
 import { initializeApp, getApps, getApp } from 'firebase/app';
-import { getAuth, GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth';
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  signInWithRedirect,
+  getRedirectResult,
+  signOut,
+} from 'firebase/auth';
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY || 'AIzaSyC-PUdpSjyFh7B94DGPB7xYOD6Y6UHmgyg',
@@ -41,6 +48,37 @@ export async function signInWithGooglePopup(): Promise<{ idToken: string; user: 
       photoURL: result.user.photoURL,
     },
   };
+}
+
+/**
+ * Trigger full-page Google Redirect
+ * Useful for strict privacy browsers (Brave Shields, mobile browsers) that block OAuth popups
+ */
+export async function signInWithGoogleRedirect(): Promise<void> {
+  await signInWithRedirect(auth, googleProvider);
+}
+
+/**
+ * Check if the user is returning from a Google Redirect authentication flow
+ */
+export async function checkGoogleRedirectResult(): Promise<{ idToken: string; user: any } | null> {
+  try {
+    const result = await getRedirectResult(auth);
+    if (!result || !result.user) return null;
+    const idToken = await result.user.getIdToken();
+    return {
+      idToken,
+      user: {
+        uid: result.user.uid,
+        email: result.user.email,
+        displayName: result.user.displayName,
+        photoURL: result.user.photoURL,
+      },
+    };
+  } catch (err: any) {
+    console.warn('Google redirect result check:', err);
+    throw err;
+  }
 }
 
 export { signOut };

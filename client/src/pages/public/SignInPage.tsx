@@ -3,7 +3,11 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useEvent } from '../../context/EventContext';
 import { getAuthToken } from '../../services/api';
-import { signInWithGooglePopup } from '../../config/firebase';
+import {
+  signInWithGooglePopup,
+  signInWithGoogleRedirect,
+  checkGoogleRedirectResult,
+} from '../../config/firebase';
 import { ArrowLeft, AlertCircle, Lock, Mail } from 'lucide-react';
 
 export const SignInPage: React.FC = () => {
@@ -15,6 +19,7 @@ export const SignInPage: React.FC = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [showRedirectOption, setShowRedirectOption] = useState(false);
 
   // If already authenticated on this device, jump straight to active dashboard
   useEffect(() => {
@@ -22,6 +27,32 @@ export const SignInPage: React.FC = () => {
       navigate('/app/overview', { replace: true });
     }
   }, [user, authLoading, navigate]);
+
+  // Check if returning from Google OAuth redirect flow
+  useEffect(() => {
+    checkGoogleRedirectResult()
+      .then(async (res) => {
+        if (res) {
+          setLoading(true);
+          try {
+            await googleAuth(res.idToken, 'signin');
+            await loadUserWorkspace();
+            navigate('/app/overview');
+          } catch (err: any) {
+            setError(err.message || 'No existing EventPilot account associated with this Google identity. Please sign up first.');
+          } finally {
+            setLoading(false);
+          }
+        }
+      })
+      .catch((err: any) => {
+        if (err.code === 'auth/unauthorized-domain') {
+          setError(`Domain not authorized: Please add '${window.location.hostname}' to Firebase Console -> Authentication -> Settings -> Authorized domains.`);
+        } else {
+          setError(err.message || 'Google authentication redirect failed.');
+        }
+      });
+  }, [googleAuth, loadUserWorkspace, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -48,14 +79,39 @@ export const SignInPage: React.FC = () => {
       await loadUserWorkspace();
       navigate('/app/overview');
     } catch (err: any) {
-      if (err.code === 'auth/popup-closed-by-user') {
-        setError('Google sign-in popup was closed before completion.');
+      console.error('Google Sign-In Error:', err);
+      if (err.code === 'auth/unauthorized-domain') {
+        setError(
+          `Domain not authorized: Please add '${window.location.hostname}' to Firebase Console -> Authentication -> Settings -> Authorized domains.`
+        );
+      } else if (err.code === 'auth/popup-closed-by-user' || err.code === 'auth/popup-blocked') {
+        setShowRedirectOption(true);
+        setError(
+          `Google sign-in popup was blocked or closed before completion. If using Brave Browser, please turn Brave Shields OFF for this site, ensure '${window.location.hostname}' is in Firebase Authorized Domains, or try the Redirect button below.`
+        );
       } else if (err.code === 'auth/cancelled-popup-request') {
         setError('Google sign-in popup request was cancelled.');
       } else {
         setError(err.message || 'No existing EventPilot account associated with this Google identity. Please sign up first.');
       }
     } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGoogleRedirectSignIn = async () => {
+    setError(null);
+    setLoading(true);
+    try {
+      await signInWithGoogleRedirect();
+    } catch (err: any) {
+      if (err.code === 'auth/unauthorized-domain') {
+        setError(
+          `Domain not authorized: Please add '${window.location.hostname}' to Firebase Console -> Authentication -> Settings -> Authorized domains.`
+        );
+      } else {
+        setError(err.message || 'Failed to initialize Google redirect.');
+      }
       setLoading(false);
     }
   };
@@ -166,7 +222,7 @@ export const SignInPage: React.FC = () => {
               </div>
             </div>
 
-            <div className="mt-6">
+            <div className="mt-6 flex flex-col gap-2">
               <button
                 type="button"
                 onClick={handleGoogleSignIn}
@@ -193,6 +249,17 @@ export const SignInPage: React.FC = () => {
                 </svg>
                 Continue with Google
               </button>
+
+              {showRedirectOption && (
+                <button
+                  type="button"
+                  onClick={handleGoogleRedirectSignIn}
+                  disabled={loading}
+                  className="w-full inline-flex justify-center items-center gap-2 py-2 px-3 border border-zinc-700 bg-zinc-800/80 hover:bg-zinc-700/80 rounded-xl text-xs font-semibold text-zinc-300 transition-colors"
+                >
+                  Alternative: Sign In with Redirect (Brave / Popup-Blocked)
+                </button>
+              )}
             </div>
           </div>
 
