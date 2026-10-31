@@ -168,7 +168,7 @@ export const NewEventModal: React.FC<NewEventModalProps> = ({ isOpen, onClose, d
         selectedSafetyNeeds,
       });
 
-      const newId = await createNewUserEvent(generatedEvent);
+      await createNewUserEvent(generatedEvent);
       onClose();
       navigate('/app/overview');
     } catch (err: any) {
@@ -181,9 +181,9 @@ export const NewEventModal: React.FC<NewEventModalProps> = ({ isOpen, onClose, d
 
   return (
     <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-2.5 sm:p-6 overflow-y-auto pt-[max(0.75rem,env(safe-area-inset-top,0px))] pb-[max(0.75rem,env(safe-area-inset-bottom,0px))]">
-      <div className="metallic-card rounded-2xl max-w-2xl w-full max-h-[92vh] max-h-[92dvh] flex flex-col shadow-2xl border border-white/15 my-auto overflow-hidden text-slate-100">
+      <div className="metallic-card rounded-2xl max-w-2xl w-full max-h-[92dvh] flex flex-col shadow-2xl border border-white/15 my-auto overflow-hidden text-slate-100">
         {/* Header */}
-        <div className="px-4 sm:px-6 py-3.5 sm:py-4 border-b border-white/10 flex items-center justify-between bg-white/[0.02] shrink-0">
+        <div className="px-4 sm:px-6 py-3.5 sm:py-4 border-b border-white/10 flex items-center justify-between bg-white/2 shrink-0">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-lg bg-zinc-800 border border-white/15 text-white flex items-center justify-center font-bold text-sm shadow-xs shrink-0">
               <Sparkles className="w-4 h-4 text-white" />
@@ -199,7 +199,7 @@ export const NewEventModal: React.FC<NewEventModalProps> = ({ isOpen, onClose, d
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 text-zinc-400 hover:text-white rounded-lg hover:bg-white/[0.08] transition-colors shrink-0"
+            className="p-1.5 text-zinc-400 hover:text-white rounded-lg hover:bg-white/8 transition-colors shrink-0"
             aria-label="Close modal"
           >
             <X className="w-5 h-5" />
@@ -282,7 +282,7 @@ export const NewEventModal: React.FC<NewEventModalProps> = ({ isOpen, onClose, d
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-zinc-300 mb-1 flex items-center gap-1.5">
+                <label className="text-xs font-semibold text-zinc-300 mb-1 flex items-center gap-1.5">
                   <Calendar className="w-3.5 h-3.5 text-zinc-400" />
                   Target Event Date
                 </label>
@@ -296,7 +296,7 @@ export const NewEventModal: React.FC<NewEventModalProps> = ({ isOpen, onClose, d
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-zinc-300 mb-1 flex items-center gap-1.5">
+                <label className="text-xs font-semibold text-zinc-300 mb-1 flex items-center gap-1.5">
                   <MapPin className="w-3.5 h-3.5 text-zinc-400" />
                   Venue City / Location
                 </label>
@@ -311,7 +311,7 @@ export const NewEventModal: React.FC<NewEventModalProps> = ({ isOpen, onClose, d
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-zinc-300 mb-1 flex items-center gap-1.5">
+                <label className="text-xs font-semibold text-zinc-300 mb-1 flex items-center gap-1.5">
                   <Users className="w-3.5 h-3.5 text-zinc-400" />
                   Expected Guest Count
                 </label>
@@ -327,7 +327,7 @@ export const NewEventModal: React.FC<NewEventModalProps> = ({ isOpen, onClose, d
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-zinc-300 mb-1 flex items-center gap-1.5">
+                <label className="text-xs font-semibold text-zinc-300 mb-1 flex items-center gap-1.5">
                   <IndianRupee className="w-3.5 h-3.5 text-zinc-400" />
                   Total Budget (₹)
                 </label>
@@ -390,6 +390,19 @@ export const NewEventModal: React.FC<NewEventModalProps> = ({ isOpen, onClose, d
                     value={coupleNames}
                     onChange={e => setCoupleNames(e.target.value)}
                     placeholder="e.g. Ananya & Rohan"
+                    className="w-full px-3 py-2 text-xs metallic-input rounded-lg placeholder:text-zinc-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-zinc-300 mb-1">
+                    Wedding Aesthetics / Theme
+                  </label>
+                  <input
+                    type="text"
+                    value={theme}
+                    onChange={e => setTheme(e.target.value)}
+                    placeholder="e.g. Royal Rajputana, Bohemian Pastel"
                     className="w-full px-3 py-2 text-xs metallic-input rounded-lg placeholder:text-zinc-500"
                   />
                 </div>
@@ -469,6 +482,19 @@ export const NewEventModal: React.FC<NewEventModalProps> = ({ isOpen, onClose, d
                       className="w-full px-3 py-2 text-xs metallic-input rounded-lg placeholder:text-zinc-500"
                     />
                   </div>
+
+                  <div className="sm:col-span-2">
+                    <label className="block text-xs font-semibold text-zinc-300 mb-1">
+                      Party Theme / Vibe
+                    </label>
+                    <input
+                      type="text"
+                      value={birthdayTheme}
+                      onChange={e => setBirthdayTheme(e.target.value)}
+                      placeholder="e.g. Neon & Retro Chic, Superhero, Masquerade"
+                      className="w-full px-3 py-2 text-xs metallic-input rounded-lg placeholder:text-zinc-500"
+                    />
+                  </div>
                 </div>
 
                 <div>
@@ -484,7 +510,7 @@ export const NewEventModal: React.FC<NewEventModalProps> = ({ isOpen, onClose, d
                       'Personalized Return Hampers',
                       'Magician / Entertainer',
                     ].map(item => (
-                      <label key={item} className="flex items-center gap-2 cursor-pointer p-1.5 rounded hover:bg-white/[0.04]">
+                      <label key={item} className="flex items-center gap-2 cursor-pointer p-1.5 rounded hover:bg-white/4">
                         <input
                           type="checkbox"
                           checked={selectedHighlights.includes(item)}
@@ -545,7 +571,7 @@ export const NewEventModal: React.FC<NewEventModalProps> = ({ isOpen, onClose, d
                       'Dedicated High-Speed WiFi',
                       'Stage Lighting & Teleprompters',
                     ].map(item => (
-                      <label key={item} className="flex items-center gap-2 cursor-pointer p-1.5 rounded hover:bg-white/[0.04]">
+                      <label key={item} className="flex items-center gap-2 cursor-pointer p-1.5 rounded hover:bg-white/4">
                         <input
                           type="checkbox"
                           checked={selectedTechNeeds.includes(item)}
@@ -602,7 +628,7 @@ export const NewEventModal: React.FC<NewEventModalProps> = ({ isOpen, onClose, d
                       'Sanitation & Waste Disposal Bins',
                       'Traffic & Parking Marshals',
                     ].map(item => (
-                      <label key={item} className="flex items-center gap-2 cursor-pointer p-1.5 rounded hover:bg-white/[0.04]">
+                      <label key={item} className="flex items-center gap-2 cursor-pointer p-1.5 rounded hover:bg-white/4">
                         <input
                           type="checkbox"
                           checked={selectedSafetyNeeds.includes(item)}

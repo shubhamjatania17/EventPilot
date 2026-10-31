@@ -17,11 +17,12 @@ import {
   X
 } from 'lucide-react';
 
+const CURRENT_YEAR = new Date().getFullYear();
+
 export const LandingPage: React.FC = () => {
   const { user } = useAuth();
   const [showVideoModal, setShowVideoModal] = useState(false);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
-  const currentYear = new Date().getFullYear();
 
   return (
     <div className="min-h-screen bg-[#090a0f] flex flex-col text-slate-100 overflow-x-hidden">
@@ -170,7 +171,7 @@ export const LandingPage: React.FC = () => {
       <section className="pt-20 pb-16 md:pt-28 md:pb-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center">
         <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full metallic-pill text-xs font-semibold text-slate-200 mb-8">
           <Sparkles className="w-3.5 h-3.5 text-white" />
-          Living Event Intelligence
+          Event Planning Intelligence
         </div>
 
         <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white max-w-4xl mx-auto tracking-tight leading-[1.12]">
@@ -464,7 +465,7 @@ export const LandingPage: React.FC = () => {
           </div>
 
           <div className="text-xs text-zinc-500">
-            © {currentYear} EventPilot. All rights reserved.
+            © {CURRENT_YEAR} EventPilot. All rights reserved.
           </div>
         </div>
       </footer>

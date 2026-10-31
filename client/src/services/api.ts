@@ -6,7 +6,6 @@ import {
   TaskDecomposition, 
   ConceptStudio 
 } from '../types';
-import { simulateGuestCountChange } from '../engines/impactEngine';
 
 const API_BASE = import.meta.env.VITE_API_URL || '/api';
 

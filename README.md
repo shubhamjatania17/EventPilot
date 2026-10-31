@@ -1,4 +1,4 @@
-# EventPilot — Living Event Intelligence
+# EventPilot — Event Planning Intelligence
 
 > **GenAI-Powered Living Event Planning Assistant**  
 > *Deterministic calculations own the facts. Google Gemini owns the reasoning. Firebase Realtime Database owns persistence. The user owns decisions.*

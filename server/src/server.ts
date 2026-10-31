@@ -34,6 +34,35 @@ app.use(
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
+// In-Memory Rate Limiter for Brute-Force & AI Quota Protection
+const rateLimitStore = new Map<string, { count: number; resetAt: number }>();
+
+function createRateLimiter(maxRequests: number, windowMs: number) {
+  return (req: Request, res: Response, next: NextFunction) => {
+    if (process.env.NODE_ENV === 'test') {
+      return next();
+    }
+    const ip = req.ip || req.socket.remoteAddress || 'unknown';
+    const now = Date.now();
+    const clientRecord = rateLimitStore.get(ip);
+
+    if (!clientRecord || now > clientRecord.resetAt) {
+      rateLimitStore.set(ip, { count: 1, resetAt: now + windowMs });
+      return next();
+    }
+
+    if (clientRecord.count >= maxRequests) {
+      return res.status(429).json({
+        error: 'Too many requests. Please slow down and try again later.',
+        retryAfterMs: clientRecord.resetAt - now,
+      });
+    }
+
+    clientRecord.count++;
+    return next();
+  };
+}
+
 // Health Check Endpoint
 app.get(['/health', '/api/health'], (_req: Request, res: Response) => {
   res.status(200).json({
@@ -44,14 +73,17 @@ app.get(['/health', '/api/health'], (_req: Request, res: Response) => {
   });
 });
 
-// API Routes (supports both /api/* and direct /* paths)
-app.use('/api/auth', authRouter);
-app.use('/api/events', eventRouter);
-app.use('/api/ai', aiRouter);
+const authLimiter = createRateLimiter(60, 15 * 60 * 1000);
+const aiLimiter = createRateLimiter(45, 60 * 1000);
 
-app.use('/auth', authRouter);
+// API Routes (supports both /api/* and direct /* paths)
+app.use('/api/auth', authLimiter, authRouter);
+app.use('/api/events', eventRouter);
+app.use('/api/ai', aiLimiter, aiRouter);
+
+app.use('/auth', authLimiter, authRouter);
 app.use('/events', eventRouter);
-app.use('/ai', aiRouter);
+app.use('/ai', aiLimiter, aiRouter);
 
 // Serve Client Static Build & SPA Routing Fallback
 const clientDistCandidates = [
@@ -66,7 +98,12 @@ const clientDistPath = clientDistCandidates.find(
 
 if (clientDistPath) {
   console.log(`✓ Serving client SPA build from: ${clientDistPath}`);
-  app.use(express.static(clientDistPath));
+  app.use(
+    express.static(clientDistPath, {
+      maxAge: '1d',
+      etag: true,
+    })
+  );
 
   app.get('*', (req: Request, res: Response) => {
     // API route requests that were not matched should return JSON 404

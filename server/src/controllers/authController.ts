@@ -33,6 +33,11 @@ export class AuthController {
       }
 
       const normalizedEmail = email.toLowerCase().trim();
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(normalizedEmail)) {
+        res.status(400).json({ error: 'Please enter a valid email address.' });
+        return;
+      }
       const existingUser = await UserRepository.findByEmail(normalizedEmail);
 
       if (existingUser) {
@@ -83,6 +88,11 @@ export class AuthController {
       }
 
       const normalizedEmail = email.toLowerCase().trim();
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(normalizedEmail)) {
+        res.status(400).json({ error: 'Please enter a valid email address.' });
+        return;
+      }
       const user = await UserRepository.findByEmail(normalizedEmail);
 
       if (!user) {

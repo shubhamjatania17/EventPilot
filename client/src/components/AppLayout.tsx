@@ -97,7 +97,7 @@ export const AppLayout: React.FC = () => {
         },
       ]);
     }
-  }, [activeEvent?.id]);
+  }, [activeEvent?.id, activeEvent?.meta.name, timeline.daysRemaining, budget.remaining]);
 
   // Close dropdown on click outside
   useEffect(() => {
@@ -185,7 +185,7 @@ export const AppLayout: React.FC = () => {
 
   if (authLoading && !user) {
     return (
-      <div className="min-h-screen min-h-dvh bg-[#08090d] flex items-center justify-center">
+      <div className="min-h-screen bg-[#08090d] flex items-center justify-center">
         <div className="w-8 h-8 border-2 border-white/20 border-t-white rounded-full animate-spin" />
       </div>
     );
@@ -196,7 +196,7 @@ export const AppLayout: React.FC = () => {
   }
 
   return (
-    <div className="h-screen h-dvh max-h-screen max-h-dvh w-full bg-[#08090d] flex flex-col md:flex-row text-slate-100 overflow-hidden">
+    <div className="h-dvh max-h-screen w-full bg-[#08090d] flex flex-col md:flex-row text-slate-100 overflow-hidden">
       {/* 1. Desktop Sidebar Navigation (Windows, Mac, Linux, iPad landscape, large foldables) */}
       <aside className={`hidden md:flex ${sidebarCollapsed ? 'md:w-20' : 'md:w-64'} bg-[#0c0d12] border-r border-white/10 flex-col shrink-0 h-full overflow-hidden transition-all duration-300 ease-in-out select-none`}>
         <div className={`h-16 border-b border-white/10 flex items-center shrink-0 ${sidebarCollapsed ? 'justify-center px-2' : 'justify-between px-5'}`}>
@@ -215,7 +215,7 @@ export const AppLayout: React.FC = () => {
           <button
             type="button"
             onClick={toggleSidebar}
-            className={`p-1.5 text-zinc-400 hover:text-white rounded-lg hover:bg-white/[0.08] transition-colors shrink-0 ${sidebarCollapsed ? 'hidden' : 'block'}`}
+            className={`p-1.5 text-zinc-400 hover:text-white rounded-lg hover:bg-white/8 transition-colors shrink-0 ${sidebarCollapsed ? 'hidden' : 'block'}`}
             title="Collapse sidebar"
             aria-label="Collapse sidebar"
           >
@@ -225,11 +225,11 @@ export const AppLayout: React.FC = () => {
 
         {/* If collapsed, show a mini expand button */}
         {sidebarCollapsed && (
-          <div className="py-2 flex justify-center border-b border-white/10 bg-white/[0.02]">
+          <div className="py-2 flex justify-center border-b border-white/10 bg-white/2">
             <button
               type="button"
               onClick={toggleSidebar}
-              className="p-1.5 text-zinc-400 hover:text-white rounded-lg hover:bg-white/[0.08] transition-colors"
+              className="p-1.5 text-zinc-400 hover:text-white rounded-lg hover:bg-white/8 transition-colors"
               title="Expand sidebar"
               aria-label="Expand sidebar"
             >
@@ -673,7 +673,7 @@ export const AppLayout: React.FC = () => {
         {/* 'More' Button to Open Full Mobile Drawer */}
         <button
           onClick={() => setMobileMenuOpen(true)}
-          className="flex flex-col items-center justify-center py-1 px-2 text-zinc-400 hover:text-white transition-colors min-w-[56px]"
+          className="flex flex-col items-center justify-center py-1 px-2 text-zinc-400 hover:text-white transition-colors min-w-14"
           aria-label="More navigation options"
         >
           <Menu className="w-5 h-5 mb-0.5" />
@@ -691,15 +691,15 @@ export const AppLayout: React.FC = () => {
       {/* Copilot Drawer / Modal with Mobile Safe Areas */}
       {copilotOpen && activeEvent && (
         <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex justify-end">
-          <div className="bg-[#0c0d12] w-full sm:max-w-md h-full h-dvh max-h-dvh shadow-2xl flex flex-col border-l border-white/15 pt-[env(safe-area-inset-top,0px)] pb-[env(safe-area-inset-bottom,0px)]">
-            <div className="h-14 sm:h-16 px-4 sm:px-6 border-b border-white/10 flex items-center justify-between bg-white/[0.02] shrink-0">
+          <div className="bg-[#0c0d12] w-full sm:max-w-md h-dvh max-h-dvh shadow-2xl flex flex-col border-l border-white/15 pt-[env(safe-area-inset-top,0px)] pb-[env(safe-area-inset-bottom,0px)]">
+            <div className="h-14 sm:h-16 px-4 sm:px-6 border-b border-white/10 flex items-center justify-between bg-white/2 shrink-0">
               <div className="flex items-center gap-2">
                 <Sparkles className="w-4 h-4 text-white" />
                 <h3 className="font-bold text-sm text-white">Ask EventPilot</h3>
               </div>
               <button
                 onClick={() => setCopilotOpen(false)}
-                className="p-1.5 text-zinc-400 hover:text-white rounded-lg hover:bg-white/[0.06] transition-colors"
+                className="p-1.5 text-zinc-400 hover:text-white rounded-lg hover:bg-white/6 transition-colors"
                 aria-label="Close copilot"
               >
                 <X className="w-4 h-4" />
