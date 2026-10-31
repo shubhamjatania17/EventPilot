@@ -8,7 +8,6 @@ import {
   GitFork, 
   FileText, 
   CheckCircle2, 
-  Play, 
   ShieldCheck, 
   Clock, 
   TrendingUp, 
@@ -21,7 +20,6 @@ const CURRENT_YEAR = new Date().getFullYear();
 
 export const LandingPage: React.FC = () => {
   const { user } = useAuth();
-  const [showVideoModal, setShowVideoModal] = useState(false);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
   return (
@@ -43,7 +41,6 @@ export const LandingPage: React.FC = () => {
           <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-zinc-400">
             <a href="#how-it-works" className="hover:text-white transition-colors">How It Works</a>
             <a href="#capabilities" className="hover:text-white transition-colors">Capabilities</a>
-            <a href="#demo-video" className="hover:text-white transition-colors">Product Walkthrough</a>
             <Link 
               to={user ? "/app/events" : "/signup"}
               target="_blank"
@@ -114,13 +111,6 @@ export const LandingPage: React.FC = () => {
               className="block py-2 text-zinc-300 hover:text-white font-medium"
             >
               Capabilities
-            </a>
-            <a 
-              href="#demo-video" 
-              onClick={() => setMobileNavOpen(false)}
-              className="block py-2 text-zinc-300 hover:text-white font-medium"
-            >
-              Product Walkthrough
             </a>
             <Link 
               to={user ? "/app/events" : "/signup"}
@@ -283,41 +273,7 @@ export const LandingPage: React.FC = () => {
         </div>
       </section>
 
-      {/* 4. Product Walkthrough / Demo Advert Video */}
-      <section id="demo-video" className="py-20 bg-[#090a0f] text-white border-t border-white/10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <span className="text-xs font-bold uppercase tracking-widest text-zinc-400 metallic-pill px-3 py-1 rounded-full">
-            Product Walkthrough
-          </span>
-          <h2 className="text-3xl font-bold tracking-tight mt-3 text-white">
-            Watch the Living Plan in Action
-          </h2>
-          <p className="mt-3 text-zinc-400 max-w-2xl mx-auto text-sm sm:text-base">
-            From initial event setup to quote extraction and real-time What-If replanning.
-          </p>
-
-          <div className="mt-10 max-w-4xl mx-auto metallic-card border border-white/15 rounded-2xl overflow-hidden shadow-2xl relative aspect-video flex items-center justify-center group">
-            {/* Playable Video Poster */}
-            <div className="absolute inset-0 bg-linear-to-tr from-black via-zinc-950 to-zinc-900/60 flex flex-col items-center justify-center p-8 text-center">
-              <button
-                onClick={() => setShowVideoModal(true)}
-                className="w-20 h-20 rounded-full metallic-btn-primary flex items-center justify-center shadow-2xl transition-transform transform group-hover:scale-105"
-                aria-label="Play Product Walkthrough Video"
-              >
-                <Play className="w-8 h-8 fill-current ml-1 text-black" />
-              </button>
-              <h3 className="mt-6 text-xl font-bold text-white">
-                Interactive Guided Walkthrough
-              </h3>
-              <p className="text-xs text-zinc-400 mt-2 max-w-md">
-                Click to explore the step-by-step hero flow: Add 40 guests, observe budget impact, review Gemini trade-off suggestions, and confirm plan adaptation.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 5. Core Capabilities */}
+      {/* 4. Core Capabilities */}
       <section id="capabilities" className="py-20 bg-[#0c0d12] border-t border-white/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto">
@@ -393,46 +349,7 @@ export const LandingPage: React.FC = () => {
         </div>
       </section>
 
-      {/* 6. Video Walkthrough Modal */}
-      {showVideoModal && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="metallic-card rounded-2xl max-w-2xl w-full p-6 shadow-2xl border border-white/15 text-white">
-            <div className="flex items-center justify-between pb-4 border-b border-white/10">
-              <h3 className="text-lg font-bold text-white">EventPilot Guided Tour</h3>
-              <button
-                onClick={() => setShowVideoModal(false)}
-                className="text-zinc-400 hover:text-white font-bold text-xl px-2"
-              >
-                ✕
-              </button>
-            </div>
-            <div className="mt-4 space-y-4">
-              <div className="p-4 rounded-xl bg-zinc-900 border border-white/10 text-sm text-zinc-300">
-                <p className="font-semibold text-white mb-1">Interactive Event Architecture</p>
-                To experience the complete responsive flow directly in your browser, configure your own event plan. EventPilot generates real-time budgets, critical path dependency trees, and run-of-show schedules.
-              </div>
-              <div className="flex justify-end gap-3 pt-2">
-                <button
-                  onClick={() => setShowVideoModal(false)}
-                  className="px-4 py-2 text-sm font-semibold text-zinc-400 hover:text-white"
-                >
-                  Close
-                </button>
-                <Link
-                  to={user ? "/app/overview" : "/signup"}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="metallic-btn-primary px-4 py-2 text-sm font-bold rounded-xl"
-                >
-                  {user ? "Open Dashboard" : "Get Started Free"}
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* 7. Footer */}
+      {/* 5. Footer */}
       <footer className="mt-auto bg-[#07080b] text-zinc-400 py-12 border-t border-white/10 text-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-6">
           <div className="flex items-center gap-3">
