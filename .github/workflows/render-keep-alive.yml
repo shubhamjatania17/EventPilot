@@ -15,7 +15,7 @@ jobs:
         env:
           # Set RENDER_APP_URL in your GitHub Repo -> Settings -> Secrets and variables -> Actions
           # If not set, it defaults to the URL below
-          RENDER_URL: ${{ secrets.RENDER_APP_URL || 'https://eventpilot.onrender.com' }}
+          RENDER_URL: ${{ secrets.RENDER_APP_URL || 'https://eventpilot-4t4j.onrender.com/' }}
         run: |
           # Strip trailing slash if present
           CLEAN_URL="${RENDER_URL%/}"
