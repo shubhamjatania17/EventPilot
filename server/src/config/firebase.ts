@@ -27,13 +27,30 @@ export function initializeFirebase(): Database {
     if (getApps().length === 0) {
       let cred: any = null;
       if (serviceAccountKey) {
-        if (serviceAccountKey.trim().startsWith('{')) {
-          cred = JSON.parse(serviceAccountKey);
-        } else {
+        // Try parsing directly as JSON string
+        try {
+          if (serviceAccountKey.trim().startsWith('{')) {
+            cred = JSON.parse(serviceAccountKey);
+          }
+        } catch {}
+
+        // Try base64 decoding if not direct JSON
+        if (!cred) {
+          try {
+            const decoded = Buffer.from(serviceAccountKey, 'base64').toString('utf-8');
+            if (decoded.trim().startsWith('{')) {
+              cred = JSON.parse(decoded);
+            }
+          } catch {}
+        }
+
+        // Try reading as file path
+        if (!cred) {
           const candidatePaths = [
             serviceAccountKey,
             path.resolve(process.cwd(), serviceAccountKey),
             path.resolve(process.cwd(), 'server', serviceAccountKey),
+            path.resolve('/etc/secrets', serviceAccountKey),
           ];
           for (const p of candidatePaths) {
             if (fs.existsSync(p)) {
@@ -43,10 +60,12 @@ export function initializeFirebase(): Database {
           }
         }
       } else {
-        // Automatic discovery for serviceAccountKey.json
+        // Automatic discovery for serviceAccountKey.json (including Render secret files at /etc/secrets)
         const defaultCandidatePaths = [
           path.resolve(process.cwd(), 'serviceAccountKey.json'),
           path.resolve(process.cwd(), 'server', 'serviceAccountKey.json'),
+          '/etc/secrets/serviceAccountKey.json',
+          '/etc/secrets/server/serviceAccountKey.json',
         ];
         for (const p of defaultCandidatePaths) {
           if (fs.existsSync(p)) {
@@ -57,12 +76,21 @@ export function initializeFirebase(): Database {
       }
 
       if (cred) {
+        // Sanitize escaped newlines in private key if set via environment variables
+        if (cred.private_key && typeof cred.private_key === 'string') {
+          cred.private_key = cred.private_key.replace(/\\n/g, '\n');
+        }
+
         appInstance = initializeApp({
           credential: cert(cred),
           databaseURL,
           projectId,
         });
+        console.log(`✓ Firebase Admin authenticated with Service Account (${cred.client_email})`);
       } else {
+        console.warn(
+          '⚠️ WARNING: No Firebase Service Account Key found! Provide FIREBASE_SERVICE_ACCOUNT_KEY or add serviceAccountKey.json as a Secret File on Render to enable database read/write access.'
+        );
         appInstance = initializeApp({
           projectId,
           databaseURL,
